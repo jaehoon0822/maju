@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { ConflictError } from "@/errors/conflict-error";
 import { userService } from "@/services/User";
+import passport, { AuthenticateCallback } from "passport";
 
 /***
  *
@@ -56,5 +57,27 @@ export class AuthController {
    * - express.Response 객체
    *  @returns Promise<Response> | unefined
    */
-  async login(req: Request, res: Response) {}
+  async login(req: Request, res: Response, next: NextFunction) {
+    // passport
+    passport.authenticate(
+      "local",
+      (authError: any, user: Express.User, info?: { message: string }) => {
+        if (authError) {
+          console.error(authError);
+          throw new ConflictError(authError.message);
+        }
+
+        if (info) {
+          console.error(info);
+          throw new ConflictError(info.message);
+        }
+
+        return req.login(user, (loginError) => {
+          if (loginError) {
+            throw new Error(loginError.message);
+          }
+        });
+      }
+    )(req, res, next);
+  }
 }
