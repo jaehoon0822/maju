@@ -45,9 +45,11 @@ app.use(
 // passport 초기화
 app.use(passport.initialize());
 // passport session 활성화
-// middleware 특성상
-// express session 다음에 있어야함
 app.use(passport.session());
+// passport config 적용
+passportConfig(passport);
+
+// routes
 app.use(auth);
 
 // 해당하는 Router 없을시 NotFoundError 발생

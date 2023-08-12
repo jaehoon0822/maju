@@ -55,7 +55,7 @@ export class AuthController {
    * - express.Request 객체
    * @param res
    * - express.Response 객체
-   *  @returns Promise<Response> | unefined
+   * @returns Promise<Response> | unefined
    */
   async login(req: Request, res: Response, next: NextFunction) {
     // passport
@@ -79,5 +79,19 @@ export class AuthController {
         });
       }
     )(req, res, next);
+  }
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    req.logout((error) => {
+      if (error) {
+        throw new Error(error.message);
+      }
+    });
+    req.session.destroy((error) => {
+      if (error) {
+        throw new Error(error.message);
+      }
+      return res.send("로그아웃 되었습니다.");
+    });
   }
 }
