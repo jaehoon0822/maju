@@ -1,11 +1,6 @@
-import { DataSource } from "typeorm";
-// typeORM 의 config 파일
-import { config } from "./config/ormconfig";
 // express app
 import { app } from "./app";
-
-// typeORM 의 DataSource 로 DB 연결
-export const AppDataSource = new DataSource(config);
+import { AppDataSource } from "./config/dataSource";
 
 // startUp 을 사용하여 app 과 분리
 const startUp = () => {

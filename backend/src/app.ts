@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/errorr-handler";
 import { notFoundError } from "./errors/not-found-error";
 import { getEnv } from "@/utilities/getEnv";
 import passport from "passport";
+import { auth } from "./routes/auth";
 
 // env 파일 호출
 // development 혹은 production 환경인지에 따라
@@ -47,6 +48,7 @@ app.use(passport.initialize());
 // middleware 특성상
 // express session 다음에 있어야함
 app.use(passport.session());
+app.use(auth);
 
 // 해당하는 Router 없을시 NotFoundError 발생
 app.get("*", (_req: Request, _res: Response, _next: NextFunction) => {

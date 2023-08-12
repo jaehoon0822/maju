@@ -33,12 +33,12 @@ export const local = (passport: PassportStatic) => {
       async (email, password, done) => {
         try {
           // user 가 있는지 확인
-          const user = await userService.find(email);
+          const user = await userService.find({ email });
 
           // user 가 없다면 done 으로 error message 전달
           if (!user) {
             return done(null, false, {
-              message: "비밀번호 및 가입되지 않은 회원입니다.",
+              message: "이메일 혹은 비밀번호가 일치하지 않습니다",
             });
           }
 
@@ -48,7 +48,7 @@ export const local = (passport: PassportStatic) => {
           // result 가 없다면 done 으로 error message 전달
           if (!result) {
             return done(null, false, {
-              message: "비밀번호 및 가입되지 않은 회원입니다.",
+              message: "이메일 혹은 비밀번호가 일치하지 않습니다",
             });
           }
 
