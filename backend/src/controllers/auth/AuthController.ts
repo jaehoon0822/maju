@@ -28,7 +28,7 @@ export class AuthController {
     const { email, password, nick } = req.body;
 
     // user 검색
-    const user = await userService.findByEmail(email);
+    const user = await userService.findByEmail(email, true);
 
     // user 가 있다면 ConflictError 발생
     if (user) {

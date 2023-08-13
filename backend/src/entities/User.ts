@@ -13,7 +13,7 @@ export class User extends BaseDate {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column("varchar", { length: 255, unique: true })
+  @Column("varchar", { length: 255 })
   email: string;
 
   @Column("varchar", { length: 255 })

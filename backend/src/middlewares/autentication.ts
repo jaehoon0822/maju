@@ -21,7 +21,7 @@ export const isLoggedIn = (
   // passport 에서 req 에 생성해준 isAuthenticated 를 사용하여
   // 인증된 user 인지 확인
   if (req.isAuthenticated()) {
-    next();
+    return next();
   } else {
     throw new ForbiddenError("로그인되지 않은 회원입니다.");
   }
@@ -47,7 +47,7 @@ export const isNotLoggedIn = (
   // passport 에서 req 에 생성해준 isAuthenticated 를 사용하여
   // 인증된 user 인지 확인
   if (!req.isAuthenticated()) {
-    next();
+    return next();
   } else {
     throw new ForbiddenError("이미 로그인된 회원입니다.");
   }

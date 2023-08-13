@@ -15,6 +15,7 @@ router.post("/logout", isLoggedIn, auth.logout);
 
 /** @remarks local login service */
 router.get("/kakao", isNotLoggedIn, passport.authenticate("kakao"));
+
 router.get(
   "/kakao/callback",
   isNotLoggedIn,

@@ -49,6 +49,9 @@ app.use(passport.session());
 // passport config 적용
 passportConfig(passport);
 
+app.get("/", (req, res) => {
+  return res.status(200).send(req.user);
+});
 // routes
 app.use("/auth", auth);
 
