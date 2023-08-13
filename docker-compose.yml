@@ -1,0 +1,22 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./DockerFiles/backend/DockerFile.dev
+    ports:
+      - 8080:8080
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    env_file:
+      - "./mariadb/env/.env"
+    volumes:
+      - ./mariadb/db/data:/var/lib/mysql
+      - ./mariadb/db/config:/etc/mysql/conf.d
+    
