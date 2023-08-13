@@ -1,7 +1,7 @@
 import { getEnv } from "@/utilities/getEnv";
 import { DataSourceOptions } from "typeorm";
 
-getEnv();
+// getEnv();
 const config: DataSourceOptions = {
   type: "mariadb",
   host: process.env.DB_HOST,

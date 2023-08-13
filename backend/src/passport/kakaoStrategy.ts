@@ -1,10 +1,10 @@
 import { userService } from "@/services/User";
 import { PassportStatic } from "passport";
-import { Strategy as KakaoStrategy, Profile } from "passport-kakao";
+import { Strategy, Profile } from "passport-kakao";
 
 export const kakao = (passport: PassportStatic) => {
   passport.use(
-    new KakaoStrategy(
+    new Strategy(
       {
         clientID: process.env.KAKAO_ID!,
         callbackURL: "/auth/kakao/callback",

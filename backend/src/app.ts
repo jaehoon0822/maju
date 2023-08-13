@@ -13,7 +13,7 @@ import { auth } from "./routes/auth";
 // env 파일 호출
 // development 혹은 production 환경인지에 따라
 // 적용할 env 를 선택해주는 함수
-getEnv();
+// getEnv();
 
 const app = express();
 // port 설정

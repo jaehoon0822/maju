@@ -6,6 +6,8 @@ services:
       dockerfile: ./DockerFiles/backend/DockerFile.dev
     ports:
       - 8080:8080
+    env_file:
+      ./env/backend/.env.dev
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -13,10 +15,10 @@ services:
     image: mariadb
     restart: always
     ports:
-      - 3306:3306
+      - 11027:3306
     env_file:
-      - "./mariadb/env/.env"
+      - "./env/mariadb/.env"
     volumes:
       - ./mariadb/db/data:/var/lib/mysql
       - ./mariadb/db/config:/etc/mysql/conf.d
-    
+      - ./db/inidb.d:/docker-entrypoint-initdb.d
