@@ -2,17 +2,6 @@ import { AppDataSource } from "@/config/dataSource";
 import { User } from "@/entities/User";
 import { Repository } from "typeorm";
 
-/**
- *  @remarks
- *  - 공통적으로 사용될 UserParams Interface
- */
-interface UserParams {
-  id: string;
-  email: string;
-  password: string;
-  nick: string;
-}
-
 // TypeORM 의 repository 생성
 export const UserRepo: Repository<User> = AppDataSource.getRepository(User);
 
@@ -22,19 +11,17 @@ class UserService {
   /***
    *
    * @remarks
-   * email 로 user 를 찾는 서비스
+   * local email 로 user 를 찾는 서비스
    *
-   * @param params
-   * - email 을 가진 객체 Pick<UserParmas, 'email'>
-   * @example
-   * - params = { email: string }
+   * @param email
+   * - User 의 email 티입인 string
    *
    * @returns Promise<User | null | undefined>
    *  - User 를 반환 혹은 null or undefined 반환
    *
    */
 
-  public async findByEmail(email: UserParams["email"]) {
+  public async findByEmail(email: User["email"]) {
     try {
       const result = await UserRepo.createQueryBuilder("user")
         .where("user.email = :email", { email })
@@ -50,19 +37,17 @@ class UserService {
   /***
    *
    * @remarks
-   * id 로 user 를 찾는 서비스
+   * local id 로 user 를 찾는 서비스
    *
-   * @param UserParams
-   * - id 를 가진 객체 Pick<UserParmas, 'id'>
-   * @example
-   * - Userparams = { id: string }
+   * @param id
+   * - User 의 id 타입인 string
    *
    * @returns Promise<User | null | undefined>
    *  - User 를 반환 혹은 null or undefined 반환
    *
    */
 
-  public async findById(id: UserParams["id"]) {
+  public async findById(id: User["id"]) {
     try {
       const result = await UserRepo.createQueryBuilder("user")
         .where("user.id = :id", { id })
@@ -78,11 +63,38 @@ class UserService {
   /***
    *
    * @remarks
-   * user 를 생성하는 서비스
+   * kakao id 로 user 를 찾는 서비스
    *
-   * @param UserParams[]
-   * - UserParams 혹은 UserParams[] 중 하나
    * @param UserParams
+   * - id 를 가진 객체 Pick<UserParmas, 'id'>
+   *
+   * @returns Promise<User | null | undefined>
+   *  - User 를 반환 혹은 null or undefined 반환
+   *
+   */
+
+  public async findKakao(snsId: User["snsId"], provider: User["provider"]) {
+    try {
+      const result = await UserRepo.createQueryBuilder("user")
+        .where("user.snsId = :snsId", { snsId })
+        .andWhere("user.provider = :provider", { provider })
+        .getOne();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  /***
+   *
+   * @remarks
+   * local user 를 생성하는 서비스
+   *
+   * @param Omit<User, "id" | "snsId" | "provider">[]
+   * - UserParams 혹은 UserParams[] 중 하나
+   * @param Omit<User, "id" | "snsId" | "provider">
    * - UserParams 혹은 UserParams[] 중 하나
    *
    * @returns Promise<InsertResult | null | undefined>
@@ -90,7 +102,42 @@ class UserService {
    *
    */
   public async create(
-    parmas: Omit<UserParams, "id">[] | Omit<UserParams, "id">
+    parmas:
+      | Omit<User, "id" | "snsId" | "provider">[]
+      | Omit<User, "id" | "snsId" | "provider">
+  ) {
+    try {
+      const result = await UserRepo.createQueryBuilder("user")
+        .insert()
+        .into(User)
+        .values(parmas)
+        .execute();
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  /***
+   *
+   * @remarks
+   * kakao user 를 생성하는 서비스
+   *
+   * @param Omit<User, "id" | "snsId" | "provider">[]
+   * - UserParams 혹은 UserParams[] 중 하나
+   * @param Omit<User, "id" | "snsId" | "provider">
+   * - UserParams 혹은 UserParams[] 중 하나
+   *
+   * @returns Promise<InsertResult | null | undefined>
+   *  - Promise 인 InsertResult 및 null, undeffined 반환
+   *
+   */
+  public async createKakao(
+    parmas:
+      | Pick<User, "snsId" | "provider">[]
+      | Pick<User, "snsId" | "provider">
   ) {
     try {
       const result = await UserRepo.createQueryBuilder("user")

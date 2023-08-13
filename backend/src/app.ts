@@ -50,7 +50,7 @@ app.use(passport.session());
 passportConfig(passport);
 
 // routes
-app.use(auth);
+app.use("/auth", auth);
 
 // 해당하는 Router 없을시 NotFoundError 발생
 app.get("*", (_req: Request, _res: Response, _next: NextFunction) => {

@@ -109,4 +109,8 @@ export class AuthController {
     });
     return res.status(200).send("로그아웃 되었습니다.");
   }
+
+  async kakaoLogin(req: Request, res: Response) {
+    res.status(200).send("로그인 되었습니다.");
+  }
 }
