@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { ConflictError } from "@/errors/conflict-error";
 import { userService } from "@/services/User";
-import passport, { AuthenticateCallback } from "passport";
+import passport from "passport";
+import { User } from "@/entities/User";
 
 /***
  *
@@ -27,7 +28,7 @@ export class AuthController {
     const { email, password, nick } = req.body;
 
     // user 검색
-    const user = await userService.find({ email });
+    const user = await userService.findByEmail(email);
 
     // user 가 있다면 ConflictError 발생
     if (user) {
@@ -63,7 +64,7 @@ export class AuthController {
     // passport
     passport.authenticate(
       "local",
-      (authError: any, user: Express.User, info?: { message: string }) => {
+      (authError: any, user: User, info?: { message: string }) => {
         if (authError) {
           console.error(authError);
           throw new ConflictError(authError.message);
@@ -78,6 +79,7 @@ export class AuthController {
           if (loginError) {
             throw new Error(loginError.message);
           }
+          return res.status(200).send("로그인 되었습니다");
         });
       }
     )(req, res, next);
