@@ -4,6 +4,7 @@ import { kakao } from "./kakaoStrategy";
 import { userService } from "@/services/User";
 import { User } from "@/entities/User";
 
+const sessionUser: { [id: string]: User } | null = {};
 export const passportConfig = (passport: PassportStatic) => {
   // passport.login 시 user 를 serializeUser 로 보냄
   passport.serializeUser((user: Express.User | any, done) => {
@@ -15,8 +16,13 @@ export const passportConfig = (passport: PassportStatic) => {
   passport.deserializeUser<User["id"]>(async (id, done) => {
     // session 에 있는 user.id 를 가져옴
     try {
+      if (sessionUser[id]) {
+        done(null, sessionUser[id]);
+      }
       // user.id 를 사용하여 user 정보 find
       const user = await userService.findById(id);
+
+      sessionUser[user!.id] = user!;
       // 찾은 user 정보를 req.user 에 저장
       done(null, user); // <-- req.user 에 저장
     } catch (error) {

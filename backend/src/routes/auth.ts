@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import { AuthController } from "@/controllers/auth/AuthController";
 import { isLoggedIn, isNotLoggedIn } from "@/middlewares/autentication";
 
