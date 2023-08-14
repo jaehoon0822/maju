@@ -4,7 +4,7 @@ import morgan from "morgan";
 import "express-async-errors";
 import session from "express-session";
 import { passportConfig } from "./passport";
-import { errorHandler } from "./middlewares/errorr-handler";
+import { errorHandler } from "./middlewares/error-handler";
 import { notFoundError } from "./errors/not-found-error";
 import passport from "passport";
 import { auth } from "./routes/auth";
