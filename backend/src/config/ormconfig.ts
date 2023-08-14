@@ -1,7 +1,5 @@
-import { getEnv } from "@/utilities/getEnv";
 import { DataSourceOptions } from "typeorm";
 
-// getEnv();
 const config: DataSourceOptions = {
   type: "mariadb",
   host: process.env.DB_HOST,
@@ -10,7 +8,7 @@ const config: DataSourceOptions = {
   database: process.env.DB_DATABASE,
   port: Number(process.env.DB_PORT),
   synchronize: process.env.DB_SYNCHRONIZE === "true",
-  logging: process.env.DB_LOGGING === "true",
+  logging: process.env.NODE_ENV === "test" ? false : true,
   entities: [process.env.DB_ENTITIES || ""],
   migrations: [process.env.DB_MIGRATIONS || ""],
   subscribers: [process.env.DB_SUBSCRIVERS || ""],

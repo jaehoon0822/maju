@@ -1,9 +1,9 @@
-import { AppDataSource } from "@/config/dataSource";
+import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { User } from "@/entities/User";
-import { Repository } from "typeorm";
 
-// TypeORM 의 repository 생성
-export const UserRepo: Repository<User> = AppDataSource.getRepository(User);
+export const UserRepo = appDataSourceManager
+  .getDataSource()
+  .getRepository(User);
 
 // User 를 위한 서비스 로직을 가진 Class 생성
 /** @public */
@@ -114,7 +114,11 @@ class UserService {
    *
    */
 
-  public async findKakao(snsId: User["snsId"], provider: User["provider"], isPassword = false) {
+  public async findKakao(
+    snsId: User["snsId"],
+    provider: User["provider"],
+    isPassword = false
+  ) {
     try {
       if (isPassword) {
         const result = await UserRepo.createQueryBuilder("user")

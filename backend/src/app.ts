@@ -6,21 +6,14 @@ import session from "express-session";
 import { passportConfig } from "./passport";
 import { errorHandler } from "./middlewares/errorr-handler";
 import { notFoundError } from "./errors/not-found-error";
-import { getEnv } from "@/utilities/getEnv";
 import passport from "passport";
 import { auth } from "./routes/auth";
-
-// env 파일 호출
-// development 혹은 production 환경인지에 따라
-// 적용할 env 를 선택해주는 함수
-// getEnv();
 
 const app = express();
 // port 설정
 app.set("PORT", process.env.PORT || 8080);
-
 // morgan logger 설정
-app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : ""));
+app.use(morgan(process.env.NODE_ENV === "development" ? "combined" : ""));
 // static 폴더 설정
 app.use(express.static(path.join(__dirname, "public")));
 // http 요청 메시지 형식(body)을 JSON 으로 해석

@@ -1,4 +1,5 @@
 *.env*
+env
+mariadb
 node_modules
 db
-mariadb

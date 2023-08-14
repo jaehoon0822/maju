@@ -44,7 +44,7 @@ export class User extends BaseDate {
   })
   followings: User[];
 
-  @ManyToMany(() => Post, (post) => post.id)
+  @ManyToMany(() => Post, (post) => post.id, { cascade: true })
   @JoinTable({
     name: "like",
     joinColumn: {
