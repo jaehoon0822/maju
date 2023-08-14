@@ -2,6 +2,8 @@ import { Router } from "express";
 import passport from "passport";
 import { AuthController } from "@/controllers/auth/AuthController";
 import { isLoggedIn, isNotLoggedIn } from "@/middlewares/autentication";
+import { validationSignup } from "@/validation/auth/validationSignUp";
+import { errorValidation } from "@/middlewares/error-validation";
 
 /** @remarks - Auth 라우트 */
 const router = Router();
@@ -9,7 +11,13 @@ const router = Router();
 const auth = new AuthController();
 
 /** @remarks local login service */
-router.post("/signup", isNotLoggedIn, auth.signUp);
+router.post(
+  "/signup",
+  isNotLoggedIn,
+  validationSignup,
+  errorValidation,
+  auth.signUp
+);
 router.post("/login", isNotLoggedIn, auth.login);
 router.post("/logout", isLoggedIn, auth.logout);
 
