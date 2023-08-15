@@ -22,8 +22,6 @@ export const kakao = (passport: PassportStatic) => {
             return done(null, user);
           }
 
-          console.log(profile);
-
           const newUser = await userService.createKakao({
             email: profile._json && profile._json.kakao_account.email,
             nick: profile.displayName,

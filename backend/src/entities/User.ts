@@ -28,7 +28,9 @@ export class User extends BaseDate {
   @Column("varchar", { length: 255, nullable: true })
   snsId: string;
 
-  @ManyToMany(() => User, (user) => user.followers)
+  @ManyToMany(() => User, (user) => user.followers, {
+    onDelete: "CASCADE",
+  })
   @JoinTable({
     name: "follows",
     joinColumn: { name: "follower_id", referencedColumnName: "id" },
@@ -36,7 +38,7 @@ export class User extends BaseDate {
   })
   followers: User[];
 
-  @ManyToMany(() => User, (user) => user.followings)
+  @ManyToMany(() => User, (user) => user.followings, { onDelete: "CASCADE" })
   @JoinTable({
     name: "follows",
     joinColumn: { name: "following_id", referencedColumnName: "id" },
@@ -44,7 +46,7 @@ export class User extends BaseDate {
   })
   followings: User[];
 
-  @ManyToMany(() => Post, (post) => post.id, { cascade: true })
+  @ManyToMany(() => Post, (post) => post.id, { onDelete: "CASCADE" })
   @JoinTable({
     name: "like",
     joinColumn: {

@@ -1,4 +1,4 @@
-import { DataSource } from "typeorm";
+import { DataSource, QueryRunner } from "typeorm";
 import { AppDataSource } from "./AppDatasource";
 
 /**
@@ -21,6 +21,7 @@ class AppDataSourceManager {
    * - TypeORM 의 DataSource
    */
   private dataSource: DataSource = AppDataSource;
+  private queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
   /**
    * @remarks
@@ -41,7 +42,15 @@ class AppDataSourceManager {
    * - DB 접속을 끊음
    */
   async close() {
-    await this.dataSource.destroy();
+    if (this.queryRunner?.isTransactionActive) {
+      await this.queryRunner.commitTransaction();
+    }
+    if (this.queryRunner) {
+      await this.queryRunner.release();
+    }
+    if (this.dataSource.isInitialized) {
+      await this.dataSource.destroy();
+    }
   }
   /**
    * @remarks

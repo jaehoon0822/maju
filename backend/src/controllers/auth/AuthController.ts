@@ -60,7 +60,7 @@ export class AuthController {
    * @returns Promise<Response> | unefined
    *
    */
-  async login(req: Request, res: Response, next: NextFunction) {
+  async login(req: Request, res: Response) {
     // passport
     passport.authenticate(
       "local",
@@ -82,7 +82,7 @@ export class AuthController {
           return res.status(200).send("로그인 되었습니다");
         });
       }
-    )(req, res, next);
+    )(req, res);
   }
 
   /***
@@ -106,8 +106,8 @@ export class AuthController {
       if (error) {
         throw new Error(error.message);
       }
+      return res.status(200).send("로그아웃 되었습니다.");
     });
-    return res.status(200).send("로그아웃 되었습니다.");
   }
 
   async kakaoLogin(req: Request, res: Response) {

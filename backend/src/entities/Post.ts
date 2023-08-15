@@ -30,7 +30,7 @@ export class Post extends BaseDate {
   @JoinColumn({ name: "hashtag_id" })
   hashtag: Hashtag[];
 
-  @ManyToMany(() => User, (user) => user.id, { cascade: true })
+  @ManyToMany(() => User, (user) => user.id, { onDelete: "CASCADE" })
   @JoinTable({
     name: "like",
     joinColumn: {
