@@ -249,27 +249,61 @@ describe("AuthController.ts", () => {
   /********** "logout 호출" *********/
   describe("logout 호출", () => {
     it("Success", async () => {
+      // req.logout mock 함수
       req.logout = jest.fn();
+      // req.session mock 함수
       req.session = {
         destroy: jest.fn((callback: (error?: any) => void) => {
           callback(null);
         }) as any,
       } as Session & Partial<SessionData>;
 
+      // auth.logout 호출
       await auth.logout(req, res);
+      // auth.logout 에서의 response 값 비교
       expect(res._getData()).toBe("로그아웃 되었습니다.");
     });
 
     it("Error: logout Error", async () => {
+      // req.logout 시 error 발생시키는 Mock 함수
       req.logout = jest.fn((callback: (err: any) => void) => {
         callback(new Error("예기치 못한 에러!"));
       }) as any;
 
       try {
+        // auth.logout 호출
         await auth.logout(req, res);
       } catch (err: any) {
+        // err 가 Error 의 Instance 인지 확인
         expect(err).toBeInstanceOf(Error);
+        // err.message 확인
         expect(err.message).toBe("예기치 못한 에러!");
+      }
+    });
+
+    it("Error: session destroy", async () => {
+      // error message
+      const errorMsg = "예기치 못한 Session 에러!";
+      // req.log 구현 mock 함수
+      req.logout = jest.fn((callback: (err: any) => void) => {
+        callback(null);
+      }) as any;
+      // req.session 구현 mock 함수
+      req.session = {
+        destroy: jest.fn((callback: (error?: any) => void) => {
+          // Error 발생 처리
+          callback(new Error(errorMsg));
+        }) as any,
+      } as Session & Partial<SessionData>;
+
+      try {
+        // auth.logout 호출
+        await auth.logout(req, res);
+      } catch (err: any) {
+        // err 가 Error 의 Instance 인지 확인
+        expect(err).toBeInstanceOf(Error);
+        // err.message 확인
+        expect(err.message).toBe(errorMsg);
       }
     });
   });
