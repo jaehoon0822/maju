@@ -10,7 +10,7 @@ import * as userService from "@/services/User";
 import { Request, Response } from "express";
 import { InsertResult } from "typeorm";
 import { User } from "@/entities/User";
-import passport from "passport";
+import passport, { LogOutOptions } from "passport";
 import { ConflictError } from "@/errors/conflict-error";
 import { SessionData, Session } from "express-session";
 
@@ -258,6 +258,19 @@ describe("AuthController.ts", () => {
 
       await auth.logout(req, res);
       expect(res._getData()).toBe("로그아웃 되었습니다.");
+    });
+
+    it("Error: logout Error", async () => {
+      req.logout = jest.fn((callback: (err: any) => void) => {
+        callback(new Error("예기치 못한 에러!"));
+      }) as any;
+
+      try {
+        await auth.logout(req, res);
+      } catch (err: any) {
+        expect(err).toBeInstanceOf(Error);
+        expect(err.message).toBe("예기치 못한 에러!");
+      }
     });
   });
 });
