@@ -1,4 +1,4 @@
-import { DataSource, EntityMetadata } from "typeorm";
+import { DataSource } from "typeorm";
 import { AppDataSource } from "./AppDatasource";
 
 /**
@@ -47,47 +47,35 @@ class AppDataSourceManager {
    * @remarks
    * - DB 의 Entity( -- table -- )을 삭제
    * - 주 용도: testing 시 각 test 수행후 table 초기화처리
-   * @example
-   * // testing 실행이후 모든 table 삭제
-   * global.afterEach(async () => {
-   *  await connection.clear();
-   * })
+   * - transactionEntityManger 를 사용하려고 했으나
+   *   모종의 이유로 처리가 안됨..
+   * - 이보다 더 저수준으로 작동하는 queryRunner 로 수행
+   *
    */
+
   async clear() {
-    // entity 의 metadata 들을 가져온다.
-    const entities = this.dataSource.entityMetadatas;
+    const queryRunner = appDataSourceManager
+      .getDataSource()
+      .createQueryRunner();
+    try {
+      await queryRunner.connect();
+      const entities = appDataSourceManager.getDataSource().entityMetadatas;
 
-    // truncate error 로 인해 forign key checks 제약조건을 해제
-    await this.dataSource.query("SET FOREIGN_KEY_CHECKS = 0;");
+      await queryRunner.query(`SET FOREIGN_KEY_CHECKS=0;`);
 
-    // entities 에서 각 entity 를 가져옴
-    // truncate 전에 연관되어 있는 table 먼저 삭제
-    for (const entity of entities) {
-      // entity.relations 내부안의 table 간의 relation 객체를 가져온다.
-      for (const relation of entity.relations) {
-        // relation 의 타입이 many-to-many 인지 확인
-        if (relation.relationType === "many-to-many") {
-          // relation 의 joinTalbeName 이 있다면,
-          if (relation.joinTableName) {
-            // 해당 joinTableName 을 truncate
-            await this.dataSource.query(
-              `truncate table \`${relation.joinTableName}\``
-            );
-          }
-        }
+      for (const entity of entities) {
+        await queryRunner.startTransaction();
+        await queryRunner.query(`TRUNCATE TABLE \`${entity.tableName}\`;`);
+        await queryRunner.commitTransaction();
       }
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await appDataSourceManager
+        .getDataSource()
+        .query(`SET FOREIGN_KEY_CHECKS=1;`);
+      await queryRunner.release();
     }
-
-    // 각 entity 를 가져온다.
-    for (const entity of entities) {
-      // 해당 entity 의 이름을 사용하여 repository 화 시킴
-      const repo = this.dataSource.getRepository(entity.name);
-      // 해당 repository 를 clear 시켜 truncate 시킨다.
-      await repo.clear();
-    }
-
-    // foreing key checks 제약조건 활성화
-    await this.dataSource.query("SET FOREIGN_KEY_CHECKS = 1;");
   }
 }
 

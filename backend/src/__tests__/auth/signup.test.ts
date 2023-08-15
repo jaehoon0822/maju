@@ -131,7 +131,7 @@ describe("[POST] /auth/signup/", () => {
     const maxNickRes = await request(app).post("/auth/signup").send({
       email: "test@test.com",
       password: "12341234",
-      nick: "ThisIsNicName!!!",
+      nick: "ThisIsNickName!!!",
     });
 
     // statusCode 확인 == 400
