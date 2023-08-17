@@ -3,13 +3,6 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("/:id/follow", isLoggedIn, () => {
-  try {
-    const { id } =
-    const user = await;
-  } catch (error) {
-    if (error instanceof Error) throw new Error(error.message);
-  }
-});
+router.get("/:id/follow", isLoggedIn, () => {});
 
 export { router as userRouter };

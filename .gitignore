@@ -3,3 +3,4 @@ env
 mariadb
 node_modules
 db
+coverage

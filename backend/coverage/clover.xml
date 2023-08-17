@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692272076039" clover="3.2.0">
-  <project timestamp="1692272076039" name="All files">
-    <metrics statements="383" coveredstatements="204" conditionals="74" coveredconditionals="16" methods="81" coveredmethods="31" elements="538" coveredelements="251" complexity="0" loc="383" ncloc="383" packages="11" files="28" classes="28"/>
+<coverage generated="1692272847290" clover="3.2.0">
+  <project timestamp="1692272847290" name="All files">
+    <metrics statements="386" coveredstatements="204" conditionals="75" coveredconditionals="16" methods="80" coveredmethods="31" elements="541" coveredelements="251" complexity="0" loc="386" ncloc="386" packages="11" files="28" classes="28"/>
     <package name="src">
       <metrics statements="27" coveredstatements="26" conditionals="6" coveredconditionals="3" methods="1" coveredmethods="0"/>
       <file name="app.ts" path="/app/src/app.ts">
@@ -407,7 +407,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="76" coveredstatements="12" conditionals="17" coveredconditionals="0" methods="21" coveredmethods="1"/>
+      <metrics statements="79" coveredstatements="12" conditionals="18" coveredconditionals="0" methods="20" coveredmethods="1"/>
       <file name="Hashtag.ts" path="/app/src/services/Hashtag.ts">
         <metrics statements="19" coveredstatements="4" conditionals="1" coveredconditionals="0" methods="7" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -447,7 +447,7 @@
         <line num="79" count="1" type="stmt"/>
       </file>
       <file name="User.ts" path="/app/src/services/User.ts">
-        <metrics statements="44" coveredstatements="4" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="47" coveredstatements="4" conditionals="17" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
@@ -487,11 +487,14 @@
         <line num="234" count="0" type="stmt"/>
         <line num="237" count="0" type="stmt"/>
         <line num="243" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="263" count="0" type="stmt"/>
-        <line num="266" count="0" type="stmt"/>
-        <line num="272" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="275" count="0" type="stmt"/>
-        <line num="278" count="1" type="stmt"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="267" count="0" type="stmt"/>
+        <line num="273" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="277" count="0" type="stmt"/>
+        <line num="279" count="0" type="stmt"/>
+        <line num="284" count="0" type="stmt"/>
+        <line num="287" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="292" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.validation.auth">

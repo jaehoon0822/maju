@@ -33,16 +33,16 @@ export class User extends BaseDate {
   })
   @JoinTable({
     name: "follows",
-    joinColumn: { name: "follower_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "following_id", referencedColumnName: "id" },
+    joinColumn: { name: "following_id", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "follower_id", referencedColumnName: "id" },
   })
   followers: User[];
 
   @ManyToMany(() => User, (user) => user.followings, { onDelete: "CASCADE" })
   @JoinTable({
     name: "follows",
-    joinColumn: { name: "following_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "follower_id", referencedColumnName: "id" },
+    joinColumn: { name: "follower_id", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "following_id", referencedColumnName: "id" },
   })
   followings: User[];
 

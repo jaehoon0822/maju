@@ -273,7 +273,20 @@ class UserService {
       if (error instanceof Error) throw new Error(error.message);
     }
   }
-  public async followedUser(params: FollowParams) {}
+  public async getFollower(params: Pick<FollowParams, "followId">) {
+    try {
+      // User 에 relation 된 follower 를 쿼리
+      const results: User[] = await UserRepo.createQueryBuilder()
+        .relation(User, "follows")
+        .of(params.followId)
+        .loadMany();
+
+      return results;
+    } catch (error) {
+      // 예기치 못한 에러처리
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
 }
 
 export const userService = new UserService();
