@@ -1,32 +1,11 @@
 import { DataSource, QueryRunner } from "typeorm";
 import { AppDataSource } from "./AppDatasource";
 
-/**
- *
- * @remarks
- * - TypeORM 의 Singleton class 생성
- * @class
- * - Connection
- * @public
- *
- */
 class AppDataSourceManager {
-  /**
-   * @remarks
-   * - AppDataSOurceManager 의 instance
-   */
   private static instance: AppDataSourceManager;
-  /**
-   * @remarks
-   * - TypeORM 의 DataSource
-   */
   private dataSource: DataSource = AppDataSource;
-  private queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+  private queryRunner: QueryRunner | null = null; // Initialize as null
 
-  /**
-   * @remarks
-   * - instance 생성이후 instance 반환하는 statinc method
-   */
   public static getInstance() {
     if (this.instance === undefined) {
       this.instance = new AppDataSourceManager();
@@ -37,53 +16,48 @@ class AppDataSourceManager {
   getDataSource() {
     return this.dataSource;
   }
-  /**
-   * @remarks
-   * - DB 접속을 끊음
-   */
-  async close() {
-    if (this.queryRunner?.isTransactionActive) {
-      await this.queryRunner.commitTransaction();
+
+  async connectQueryRunner() {
+    if (!this.queryRunner) {
+      this.queryRunner = this.dataSource.createQueryRunner();
+      await this.queryRunner.connect();
     }
+  }
+
+  async closeQueryRunner() {
     if (this.queryRunner) {
       await this.queryRunner.release();
+      this.queryRunner = null;
     }
+  }
+
+  async close() {
+    await this.closeQueryRunner();
     if (this.dataSource.isInitialized) {
       await this.dataSource.destroy();
     }
   }
-  /**
-   * @remarks
-   * - DB 의 Entity( -- table -- )을 삭제
-   * - 주 용도: testing 시 각 test 수행후 table 초기화처리
-   * - transactionEntityManger 를 사용하려고 했으나
-   *   모종의 이유로 처리가 안됨..
-   * - 이보다 더 저수준으로 작동하는 queryRunner 로 수행
-   *
-   */
 
   async clear() {
-    const queryRunner = appDataSourceManager
-      .getDataSource()
-      .createQueryRunner();
     try {
-      await queryRunner.connect();
-      const entities = appDataSourceManager.getDataSource().entityMetadatas;
+      await this.connectQueryRunner();
+      const entities = this.dataSource.entityMetadatas;
 
-      await queryRunner.query(`SET FOREIGN_KEY_CHECKS=0;`);
+      await this.queryRunner!.query(`SET FOREIGN_KEY_CHECKS=0;`);
+      await this.queryRunner!.startTransaction();
 
       for (const entity of entities) {
-        await queryRunner.startTransaction();
-        await queryRunner.query(`TRUNCATE TABLE \`${entity.tableName}\`;`);
-        await queryRunner.commitTransaction();
+        await this.queryRunner!.query(
+          `TRUNCATE TABLE \`${entity.tableName}\`;`
+        );
       }
+
+      await this.queryRunner!.commitTransaction();
     } catch (err) {
-      await queryRunner.rollbackTransaction();
+      await this.queryRunner!.rollbackTransaction();
     } finally {
-      await appDataSourceManager
-        .getDataSource()
-        .query(`SET FOREIGN_KEY_CHECKS=1;`);
-      await queryRunner.release();
+      await this.queryRunner!.query(`SET FOREIGN_KEY_CHECKS=1;`);
+      await this.closeQueryRunner();
     }
   }
 }

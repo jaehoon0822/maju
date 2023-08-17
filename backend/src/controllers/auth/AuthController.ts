@@ -26,8 +26,8 @@ export class AuthController {
   async signUp(req: Request, res: Response) {
     // email, password 를 request.body 에서 받음
     const { email, password, nick } = req.body;
-
     // user 검색
+
     const user = await userService.findByEmail(email, true);
 
     // user 가 있다면 ConflictError 발생
@@ -66,12 +66,12 @@ export class AuthController {
       "local",
       (authError: any, user: User, info?: { message: string }) => {
         if (authError) {
-          console.error(authError);
+          // console.error(authError);
           throw new ConflictError(authError.message);
         }
 
         if (info) {
-          console.error(info);
+          // console.error(info);
           throw new ConflictError(info.message);
         }
 

@@ -1,4 +1,9 @@
 import { DataSourceOptions } from "typeorm";
+import dotenv from "dotenv";
+
+if (process.env.NODE_NEV) {
+  dotenv.config({ path: "@/env/.env.test" });
+}
 
 const config: DataSourceOptions = {
   type: "mariadb",
@@ -12,6 +17,7 @@ const config: DataSourceOptions = {
   entities: [process.env.DB_ENTITIES || ""],
   migrations: [process.env.DB_MIGRATIONS || ""],
   subscribers: [process.env.DB_SUBSCRIVERS || ""],
+  poolSize: 50,
 };
 
 export { config };

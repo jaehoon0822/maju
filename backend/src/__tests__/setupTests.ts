@@ -6,7 +6,7 @@ global.beforeAll(async () => {
   await appDataSourceManager.getDataSource().initialize();
 });
 
-global.beforeEach(async () => {
+global.afterEach(async () => {
   await appDataSourceManager.clear();
 });
 

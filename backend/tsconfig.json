@@ -108,8 +108,8 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["./src/**/*"],
-  "exclude": ["**/__mocks__/*"],
+  "include": ["./src/**/*", "types"],
+  // "exclude": ["**/__mocks__/*"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   }

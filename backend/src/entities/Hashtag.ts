@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -17,6 +18,16 @@ export class Hashtag extends BaseDate {
   title: string;
 
   @ManyToMany(() => Post, (post) => post.id)
-  @JoinColumn({ name: "post_id" })
+  @JoinTable({
+    name: "post_hashtag",
+    joinColumn: {
+      name: "post_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "hashtag_id",
+      referencedColumnName: "id",
+    },
+  })
   post: Post[];
 }

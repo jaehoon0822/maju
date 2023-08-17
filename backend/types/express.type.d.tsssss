@@ -4,5 +4,8 @@ import { Express } from "express";
 declare global {
   namespace Express {
     interface User extends UserEntity {}
+    export interface Request {
+      user?: UserEntity;
+    }
   }
 }

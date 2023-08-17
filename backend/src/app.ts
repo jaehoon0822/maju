@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/error-handler";
 import { notFoundError } from "./errors/not-found-error";
 import passport from "passport";
 import { auth } from "./routes/auth";
+import { post } from "./routes/post";
 
 const app = express();
 // port 설정
@@ -45,8 +46,11 @@ passportConfig(passport);
 app.get("/", (req, res) => {
   return res.status(200).send(req.user);
 });
-// routes
+/************ Routes *************/
+// auth route
 app.use("/auth", auth);
+app.use("/post", post);
+/************ Routes *************/
 
 // 해당하는 Router 없을시 NotFoundError 발생
 app.get("*", (_req: Request, _res: Response, _next: NextFunction) => {

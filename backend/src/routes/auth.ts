@@ -1,9 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
 import { AuthController } from "@/controllers/auth/AuthController";
-import { isLoggedIn, isNotLoggedIn } from "@/middlewares/autentication";
 import { validationSignup } from "@/validation/auth/validationSignUp";
 import { errorValidation } from "@/middlewares/error-validation";
+import { isLoggedIn, isNotLoggedIn } from "@/middlewares/authentication";
 
 /** @remarks - Auth 라우트 */
 const router = Router();

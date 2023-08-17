@@ -19,7 +19,7 @@ export class Post extends BaseDate {
   @Column("varchar", { length: 255 })
   content: string;
 
-  @Column("varchar", { length: 255 })
+  @Column("varchar", { length: 255, nullable: true })
   img: string;
 
   @ManyToOne(() => User, (user) => user.id, { cascade: true })
@@ -27,7 +27,17 @@ export class Post extends BaseDate {
   user: User;
 
   @ManyToMany(() => Hashtag, (hashtags) => hashtags.id)
-  @JoinColumn({ name: "hashtag_id" })
+  @JoinTable({
+    name: "post_hashtag",
+    joinColumn: {
+      name: "hashtag_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "post_id",
+      referencedColumnName: "id",
+    },
+  })
   hashtag: Hashtag[];
 
   @ManyToMany(() => User, (user) => user.id, { onDelete: "CASCADE" })
