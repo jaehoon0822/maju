@@ -192,9 +192,9 @@ class UserService {
    * @remarks
    * kakao user 를 생성하는 서비스
    *
-   * @param Pick<User, "snsId" | "provider">
+   * @param - Pick\<User, "snsId" | "provider"\>
    * - Pick<User, "snsId" | "provider"> 혹은 Pick<User, "snsId" | "provider">[]
-   * @param Pick<User, "snsId" | "provider">[]
+   * @param - Pick\<User, "snsId" | "provider"\>[]
    * - Pick<User, "snsId" | "provider"> 혹은 Pick<User, "snsId" | "provider">[]
    *
    * @returns Promise<InsertResult | null | undefined>
@@ -228,7 +228,7 @@ class UserService {
    * - followId: 팔로우 아이디
    * - followerId: 팔로워 아이디
    *
-   * @returns Promise<void>
+   * @returns Promise\<void\>
    */
   public async follow(params: FollowParams) {
     try {
@@ -243,18 +243,22 @@ class UserService {
       if (error instanceof Error) throw new Error(error.message);
     }
   }
-
   /***
    *
    * @remarks
    * Follow 에 취소하는 서비스
    *
    * @param params
-   * - parmas: { followId: User['id'], followerId['id']}
+   * - parmas: FollowParams
+   * - Interface FollowParams {
+   *    followId: User['id],
+   *    followerId: User['id']
+   * }
    * - followId: 팔로우 아이디
    * - followerId: 팔로워 아이디
    *
-   * @returns Promise<void>
+   * @returns
+   * - Promise\<void\>
    */
   public async UnFollow(params: FollowParams) {
     try {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692271890909" clover="3.2.0">
-  <project timestamp="1692271890910" name="All files">
+<coverage generated="1692272076039" clover="3.2.0">
+  <project timestamp="1692272076039" name="All files">
     <metrics statements="383" coveredstatements="204" conditionals="74" coveredconditionals="16" methods="81" coveredmethods="31" elements="538" coveredelements="251" complexity="0" loc="383" ncloc="383" packages="11" files="28" classes="28"/>
     <package name="src">
       <metrics statements="27" coveredstatements="26" conditionals="6" coveredconditionals="3" methods="1" coveredmethods="0"/>
@@ -487,11 +487,11 @@
         <line num="234" count="0" type="stmt"/>
         <line num="237" count="0" type="stmt"/>
         <line num="243" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="260" count="0" type="stmt"/>
         <line num="263" count="0" type="stmt"/>
-        <line num="269" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="272" count="0" type="stmt"/>
-        <line num="275" count="1" type="stmt"/>
+        <line num="266" count="0" type="stmt"/>
+        <line num="272" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="275" count="0" type="stmt"/>
+        <line num="278" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.validation.auth">
