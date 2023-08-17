@@ -1,6 +1,11 @@
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { User } from "@/entities/User";
 
+interface FollowParams {
+  followId: User["id"];
+  followerId: User["id"];
+}
+
 export const UserRepo = appDataSourceManager
   .getDataSource()
   .getRepository(User);
@@ -225,10 +230,7 @@ class UserService {
    *
    * @returns Promise<void>
    */
-  public async userFollowing(params: {
-    followId: User["id"];
-    followerId: User["id"];
-  }) {
+  public async follow(params: FollowParams) {
     try {
       // User 에 relation 된 follows 등록
       // 결과값이 Promise<void> 이므로 결과값을 받아서 반환하지 않음
@@ -241,6 +243,33 @@ class UserService {
       if (error instanceof Error) throw new Error(error.message);
     }
   }
+
+  /***
+   *
+   * @remarks
+   * Follow 에 취소하는 서비스
+   *
+   * @param params
+   * - parmas: { followId: User['id'], followerId['id']}
+   * - followId: 팔로우 아이디
+   * - followerId: 팔로워 아이디
+   *
+   * @returns Promise<void>
+   */
+  public async UnFollow(params: FollowParams) {
+    try {
+      // User 에 relation 된 follows 제거
+      // 결과값이 Promise<void> 이므로 결과값을 받아서 반환하지 않음
+      await UserRepo.createQueryBuilder()
+        .relation(User, "follows")
+        .of(params.followId)
+        .remove(params.followerId);
+    } catch (error) {
+      // 예기치 못한 에러처리
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+  public async followedUser(params: FollowParams) {}
 }
 
 export const userService = new UserService();
