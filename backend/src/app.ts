@@ -5,10 +5,11 @@ import "express-async-errors";
 import session from "express-session";
 import { passportConfig } from "./passport";
 import { errorHandler } from "./middlewares/error-handler";
-import { notFoundError } from "./errors/not-found-error";
+import { NotFoundError } from "./errors/not-found-error";
 import passport from "passport";
 import { auth } from "./routes/auth";
 import { post } from "./routes/post";
+import { isLoggedIn } from "./middlewares/authentication";
 
 const app = express();
 // port 설정
@@ -22,7 +23,6 @@ app.use(express.json());
 // http 요청 시 URL-encoded 형식을 해석하여 객체로 변환(body)
 // qs library 사용하지 않음
 app.use(express.urlencoded({ extended: false }));
-
 // express-session 설정
 app.use(
   session({
@@ -35,7 +35,6 @@ app.use(
     },
   })
 );
-
 // passport 초기화
 app.use(passport.initialize());
 // passport session 활성화
@@ -43,9 +42,6 @@ app.use(passport.session());
 // passport config 적용
 passportConfig(passport);
 
-app.get("/", (req, res) => {
-  return res.status(200).send(req.user);
-});
 /************ Routes *************/
 // auth route
 app.use("/auth", auth);
@@ -54,9 +50,8 @@ app.use("/post", post);
 
 // 해당하는 Router 없을시 NotFoundError 발생
 app.get("*", (_req: Request, _res: Response, _next: NextFunction) => {
-  throw new notFoundError();
+  throw new NotFoundError();
 });
-
 // Error middleware 를 사용하여 Error 처리
 app.use(errorHandler);
 

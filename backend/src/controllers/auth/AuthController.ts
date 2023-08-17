@@ -60,7 +60,7 @@ export class AuthController {
    * @returns Promise<Response> | unefined
    *
    */
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     // passport
     passport.authenticate(
       "local",
@@ -72,12 +72,12 @@ export class AuthController {
 
         if (info) {
           // console.error(info);
-          throw new ConflictError(info.message);
+          return next(new ConflictError(info.message));
         }
 
         return req.login(user, (loginError) => {
           if (loginError) {
-            throw new Error(loginError.message);
+            return next(new Error(loginError.message));
           }
           return res.status(200).send("로그인 되었습니다");
         });

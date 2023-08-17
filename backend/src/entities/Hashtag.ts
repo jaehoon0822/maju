@@ -21,11 +21,11 @@ export class Hashtag extends BaseDate {
   @JoinTable({
     name: "post_hashtag",
     joinColumn: {
-      name: "post_id",
+      name: "hashtag_id",
       referencedColumnName: "id",
     },
     inverseJoinColumn: {
-      name: "hashtag_id",
+      name: "post_id",
       referencedColumnName: "id",
     },
   })

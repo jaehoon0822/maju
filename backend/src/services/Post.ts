@@ -53,6 +53,23 @@ class PostService {
     return posts;
   }
 
+  // user 로 post 를 찾는 service
+  public async findByHashtag(params: {
+    hashtagTitle: Pick<Params, "hashtag">["hashtag"][0]["title"];
+  }) {
+    const posts = await postRepo
+      .createQueryBuilder("post")
+      .innerJoin("post.hashtag", "hashtag")
+      // db 상에서는 user_id 이지만, entity 상에서 hashtag 를 받아서
+      // 처리하므로, hashtag 값을 할당
+      .where("hashtag.title = :hashtag", { hashtag: params.hashtagTitle })
+      // 여러개의 값이 있을수 있으므로 getMany()
+      .getMany();
+
+    // 찾은 post 반환
+    return posts;
+  }
+
   // repository 를 반환하는 service
   public getRepository() {
     return postRepo;

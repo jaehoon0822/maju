@@ -8,8 +8,12 @@ const sessionUser: { [id: string]: User } | null = {};
 export const passportConfig = (passport: PassportStatic) => {
   // passport.login 시 user 를 serializeUser 로 보냄
   passport.serializeUser((user: Express.User | any, done) => {
-    // 받은 user 를 express.session 에 저장 // session 에 user.id 를 저장
-    return done(null, user.id); // <-- session 저장
+    try {
+      // 받은 user 를 express.session 에 저장 // session 에 user.id 를 저장
+      return done(null, user.id); // <-- session 저장
+    } catch (error) {
+      return done(error);
+    }
   });
   // 이후 매 요청마다 cookie 의 session.id 를
   // deserializeUser 에서 받아 처리
