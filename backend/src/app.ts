@@ -3,13 +3,13 @@ import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import "express-async-errors";
 import session from "express-session";
+import passport from "passport";
 import { passportConfig } from "./passport";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
-import passport from "passport";
-import { auth } from "./routes/auth";
-import { post } from "./routes/post";
-import { isLoggedIn } from "./middlewares/authentication";
+import { authRouter } from "./routes/auth";
+import { postRouter } from "./routes/post";
+import { userRouter } from "./routes/user";
 
 const app = express();
 // port 설정
@@ -44,8 +44,9 @@ passportConfig(passport);
 
 /************ Routes *************/
 // auth route
-app.use("/auth", auth);
-app.use("/post", post);
+app.use("/auth", authRouter);
+app.use("/post", postRouter);
+app.use("/user", userRouter);
 /************ Routes *************/
 
 // 해당하는 Router 없을시 NotFoundError 발생

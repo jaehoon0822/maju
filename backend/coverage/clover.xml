@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692272847290" clover="3.2.0">
-  <project timestamp="1692272847290" name="All files">
-    <metrics statements="386" coveredstatements="204" conditionals="75" coveredconditionals="16" methods="80" coveredmethods="31" elements="541" coveredelements="251" complexity="0" loc="386" ncloc="386" packages="11" files="28" classes="28"/>
+<coverage generated="1692273836562" clover="3.2.0">
+  <project timestamp="1692273836562" name="All files">
+    <metrics statements="405" coveredstatements="217" conditionals="76" coveredconditionals="16" methods="83" coveredmethods="32" elements="564" coveredelements="265" complexity="0" loc="405" ncloc="405" packages="12" files="30" classes="30"/>
     <package name="src">
-      <metrics statements="27" coveredstatements="26" conditionals="6" coveredconditionals="3" methods="1" coveredmethods="0"/>
+      <metrics statements="29" coveredstatements="28" conditionals="6" coveredconditionals="3" methods="1" coveredmethods="0"/>
       <file name="app.ts" path="/app/src/app.ts">
-        <metrics statements="27" coveredstatements="26" conditionals="6" coveredconditionals="3" methods="1" coveredmethods="0"/>
+        <metrics statements="29" coveredstatements="28" conditionals="6" coveredconditionals="3" methods="1" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -17,6 +17,7 @@
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="16" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="18" count="1" type="cond" truecount="1" falsecount="1"/>
@@ -29,10 +30,11 @@
         <line num="43" count="1" type="stmt"/>
         <line num="47" count="1" type="stmt"/>
         <line num="48" count="1" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="56" count="1" type="stmt"/>
-        <line num="60" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.config">
@@ -45,7 +47,7 @@
         <line num="10" count="2" type="cond" truecount="1" falsecount="0"/>
         <line num="11" count="2" type="stmt"/>
         <line num="13" count="2" type="stmt"/>
-        <line num="17" count="5" type="stmt"/>
+        <line num="17" count="6" type="stmt"/>
         <line num="21" count="8" type="cond" truecount="1" falsecount="0"/>
         <line num="22" count="8" type="stmt"/>
         <line num="23" count="8" type="stmt"/>
@@ -157,6 +159,23 @@
         <line num="123" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="126" count="0" type="cond" truecount="0" falsecount="1"/>
         <line num="127" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.controllers.user">
+      <metrics statements="11" coveredstatements="5" conditionals="1" coveredconditionals="0" methods="3" coveredmethods="1"/>
+      <file name="UserController.ts" path="/app/src/controllers/user/UserController.ts">
+        <metrics statements="11" coveredstatements="5" conditionals="1" coveredconditionals="0" methods="3" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.entities">
@@ -373,7 +392,7 @@
       </file>
     </package>
     <package name="src.routes">
-      <metrics statements="25" coveredstatements="25" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="31" coveredstatements="31" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="auth.ts" path="/app/src/routes/auth.ts">
         <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
@@ -404,6 +423,15 @@
         <line num="14" count="1" type="stmt"/>
         <line num="16" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
+      </file>
+      <file name="user.ts" path="/app/src/routes/user.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.services">
@@ -490,11 +518,11 @@
         <line num="264" count="0" type="stmt"/>
         <line num="267" count="0" type="stmt"/>
         <line num="273" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="277" count="0" type="stmt"/>
-        <line num="279" count="0" type="stmt"/>
-        <line num="284" count="0" type="stmt"/>
-        <line num="287" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="292" count="1" type="stmt"/>
+        <line num="289" count="0" type="stmt"/>
+        <line num="291" count="0" type="stmt"/>
+        <line num="296" count="0" type="stmt"/>
+        <line num="299" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="304" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.validation.auth">

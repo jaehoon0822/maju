@@ -15,4 +15,4 @@ router.get("/", isLoggedIn, post.getPosts);
 // 게시글의 hashtag 를 찾는 router
 router.get("/hashtag", post.getHashtagPosts);
 
-export { router as post };
+export { router as postRouter };

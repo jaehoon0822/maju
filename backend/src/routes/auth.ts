@@ -33,4 +33,4 @@ router.get(
   auth.kakaoLogin
 );
 
-export { router as auth };
+export { router as authRouter };

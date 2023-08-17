@@ -273,6 +273,18 @@ class UserService {
       if (error instanceof Error) throw new Error(error.message);
     }
   }
+  /***
+   *
+   * @remarks
+   * Follower 를 query 하는 서비스
+   *
+   * @param params
+   * - parmas: Pick<FollowParams, "followId">
+   * - followId: 팔로우 아이디
+   *
+   * @returns
+   * - Promise\<User[]\>
+   */
   public async getFollower(params: Pick<FollowParams, "followId">) {
     try {
       // User 에 relation 된 follower 를 쿼리
