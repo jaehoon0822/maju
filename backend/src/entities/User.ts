@@ -3,10 +3,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseDate } from "./BaseDate";
 import { Post } from "./Post";
+import { Follow } from "./Follow";
 
 @Entity()
 export class User extends BaseDate {
@@ -28,23 +30,11 @@ export class User extends BaseDate {
   @Column("varchar", { length: 255, nullable: true })
   snsId: string;
 
-  @ManyToMany(() => User, (user) => user.followers, {
-    onDelete: "CASCADE",
-  })
-  @JoinTable({
-    name: "follows",
-    joinColumn: { name: "following_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "follower_id", referencedColumnName: "id" },
-  })
-  followers: User[];
+  @OneToMany(() => Follow, (follow) => follow.follower)
+  followings: Follow[];
 
-  @ManyToMany(() => User, (user) => user.followings, { onDelete: "CASCADE" })
-  @JoinTable({
-    name: "follows",
-    joinColumn: { name: "follower_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "following_id", referencedColumnName: "id" },
-  })
-  followings: User[];
+  @OneToMany(() => Follow, (follow) => follow.following)
+  followers: Follow[];
 
   @ManyToMany(() => Post, (post) => post.id, { onDelete: "CASCADE" })
   @JoinTable({

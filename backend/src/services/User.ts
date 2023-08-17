@@ -1,5 +1,7 @@
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
+import { Follow } from "@/entities/Follow";
 import { User } from "@/entities/User";
+import { NotFoundError } from "@/errors/not-found-error";
 
 interface FollowParams {
   followId: User["id"];
@@ -9,6 +11,10 @@ interface FollowParams {
 export const UserRepo = appDataSourceManager
   .getDataSource()
   .getRepository(User);
+
+export const FollowRepo = appDataSourceManager
+  .getDataSource()
+  .getRepository(Follow);
 
 // User 를 위한 서비스 로직을 가진 Class 생성
 /** @public */
@@ -234,10 +240,23 @@ class UserService {
     try {
       // User 에 relation 된 follows 등록
       // 결과값이 Promise<void> 이므로 결과값을 받아서 반환하지 않음
-      await UserRepo.createQueryBuilder()
-        .relation(User, "follows")
-        .of(params.followId)
-        .add(params.followerId);
+      const following = await this.findById(params.followId);
+      const follower = await this.findById(params.followerId);
+
+      // following 혹은 follower 가 존재하지 않으면 Error
+      if (!follower || !following) {
+        throw new NotFoundError("리소스를 찾을수 없습니다.");
+      }
+
+      // follow 테이블에 follwer, follwing insert
+      const insertResult = await FollowRepo.createQueryBuilder()
+        .insert()
+        .into(Follow)
+        .values({ follower, following })
+        .execute();
+
+      // insertResult 반환
+      return insertResult;
     } catch (error) {
       // 예기치 못한 에러처리
       if (error instanceof Error) throw new Error(error.message);
@@ -265,7 +284,7 @@ class UserService {
       // User 에 relation 된 follows 제거
       // 결과값이 Promise<void> 이므로 결과값을 받아서 반환하지 않음
       await UserRepo.createQueryBuilder()
-        .relation(User, "follows")
+        .relation(Follow, "follower")
         .of(params.followId)
         .remove(params.followerId);
     } catch (error) {
@@ -289,7 +308,7 @@ class UserService {
     try {
       // User 에 relation 된 follower 를 쿼리
       const results: User[] = await UserRepo.createQueryBuilder()
-        .relation(User, "follows")
+        .relation(Follow, "follower")
         .of(params.followId)
         .loadMany();
 
