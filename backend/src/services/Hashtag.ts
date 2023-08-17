@@ -50,14 +50,11 @@ class HashTagService {
   // hashtag 를 find 하고 없으면 create 하는 service
   public async findOrCreate(params: Pick<Hashtag, "title">) {
     const hashtag = await this.findOneByTitle(params);
-    console.log("--------outer-------", hashtag);
     if (!hashtag) {
       const insertResult = await this.create(params);
-      console.log("--------inner-------", insertResult);
       const hashtag = await this.findOneById({
         id: insertResult.identifiers[0].id,
       });
-      console.log("--------inner-------", hashtag);
       return hashtag;
     }
     return hashtag;

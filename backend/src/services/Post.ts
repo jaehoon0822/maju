@@ -20,6 +20,7 @@ class PostService {
       .values(params)
       .execute();
 
+    // insert 한 posts 의 InsertResult 반환
     return result;
   }
 
@@ -33,7 +34,23 @@ class PostService {
       .where("post.id = :id", { id: params.id })
       .getOne();
 
+    // 찾은 post 반환
     return post;
+  }
+
+  // user 로 post 를 찾는 service
+  public async findByUser(params: Pick<Params, "user">) {
+    const posts = await postRepo
+      .createQueryBuilder("post")
+      .select("post")
+      // db 상에서는 user_id 이지만, entity 상에서 user 를 받아서
+      // 처리하므로, user 값을 할당
+      .where("post.user = :user", { user: params.user.id })
+      // 여러개의 값이 있을수 있으므로 getMany()
+      .getMany();
+
+    // 찾은 post 반환
+    return posts;
   }
 
   // repository 를 반환하는 service
