@@ -13,7 +13,7 @@ const config: DataSourceOptions = {
   database: process.env.DB_DATABASE,
   port: Number(process.env.DB_PORT),
   synchronize: process.env.DB_SYNCHRONIZE === "true",
-  logging: process.env.NODE_ENV === "test" ? false : true,
+  logging: true,
   entities: [process.env.DB_ENTITIES || ""],
   migrations: [process.env.DB_MIGRATIONS || ""],
   subscribers: [process.env.DB_SUBSCRIVERS || ""],

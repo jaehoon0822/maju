@@ -1,24 +1,21 @@
+import { v4 as uuidv4 } from "uuid";
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { Follow } from "@/entities/Follow";
 import { User } from "@/entities/User";
-import { NotFoundError } from "@/errors/not-found-error";
+import { ConflictError } from "@/errors/conflict-error";
 
 interface FollowParams {
   followId: User["id"];
   followerId: User["id"];
 }
 
-export const UserRepo = appDataSourceManager
-  .getDataSource()
-  .getRepository(User);
-
-export const FollowRepo = appDataSourceManager
-  .getDataSource()
-  .getRepository(Follow);
-
-// User 를 위한 서비스 로직을 가진 Class 생성
-/** @public */
+// User 를 위한 서비스 로직을 가진 Class 생성 /** @public */
 class UserService {
+  private userRepo = appDataSourceManager.getDataSource().getRepository(User);
+  private followRepo = appDataSourceManager
+    .getDataSource()
+    .getRepository(Follow);
+
   /***
    *
    * @remarks
@@ -37,13 +34,15 @@ class UserService {
   public async findByEmail(email: User["email"], isPassword: boolean = false) {
     try {
       if (isPassword) {
-        const result = await UserRepo.createQueryBuilder("user")
+        const result = await this.userRepo
+          .createQueryBuilder("user")
           .where("user.email = :email", { email })
           .getOne();
 
         return result;
       } else {
-        const result = await UserRepo.createQueryBuilder("user")
+        const result = await this.userRepo
+          .createQueryBuilder("user")
           .select([
             "user.id",
             "user.email",
@@ -81,13 +80,15 @@ class UserService {
   public async findById(id: User["id"], isPassword: boolean = false) {
     try {
       if (isPassword) {
-        const result = await UserRepo.createQueryBuilder("user")
+        const result = await this.userRepo
+          .createQueryBuilder("user")
           .where("user.id = :id", { id })
           .getOne();
 
         return result;
       } else {
-        const result = await UserRepo.createQueryBuilder("user")
+        const result = await this.userRepo
+          .createQueryBuilder("user")
           .select([
             "user.id",
             "user.email",
@@ -101,6 +102,47 @@ class UserService {
 
         return result;
       }
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  /***
+   *
+   * @remarks
+   * local id 로 user 를 찾는 서비스
+   *
+   * @param id
+   * - User 의 id 타입인 string
+   * @param isPassword
+   * - password 포함할지 안할지 결정할 boolean
+   *
+   * @returns Promise<User | null | undefined>
+   *  - User 를 반환 혹은 null or undefined 반환
+   *
+   */
+
+  public async findByIdWithFollow(id: User["id"]) {
+    try {
+      const result = await this.userRepo
+        .createQueryBuilder("user")
+        .select([
+          "user.id",
+          "user.email",
+          "user.nick",
+          "user.createdAt",
+          "user.updatedAt",
+          "user.deletedAt",
+          "follower.follower",
+          "following.following",
+        ])
+        .where("user.id = :id", { id })
+        .leftJoinAndSelect("user.followers", "follower")
+        .leftJoinAndSelect("user.followings", "following")
+        .getOne();
+
+      return result;
     } catch (error) {
       console.log(error);
       if (error instanceof Error) throw new Error(error.message);
@@ -132,14 +174,16 @@ class UserService {
   ) {
     try {
       if (isPassword) {
-        const result = await UserRepo.createQueryBuilder("user")
+        const result = await this.userRepo
+          .createQueryBuilder("user")
           .where("user.snsId = :snsId", { snsId })
           .andWhere("user.provider = :provider", { provider })
           .getOne();
 
         return result;
       } else {
-        const result = await UserRepo.createQueryBuilder("user")
+        const result = await this.userRepo
+          .createQueryBuilder("user")
           .select([
             "user.id",
             "user.email",
@@ -180,7 +224,8 @@ class UserService {
       | Pick<User, "email" | "password" | "nick">
   ) {
     try {
-      const result = await UserRepo.createQueryBuilder("user")
+      const result = await this.userRepo
+        .createQueryBuilder("user")
         .insert()
         .into(User)
         .values(parmas)
@@ -213,7 +258,8 @@ class UserService {
       | Pick<User, "snsId" | "provider" | "email" | "nick">
   ) {
     try {
-      const result = await UserRepo.createQueryBuilder("user")
+      const result = await this.userRepo
+        .createQueryBuilder("user")
         .insert()
         .into(User)
         .values(parmas)
@@ -238,22 +284,22 @@ class UserService {
    */
   public async follow(params: FollowParams) {
     try {
-      // User 에 relation 된 follows 등록
-      // 결과값이 Promise<void> 이므로 결과값을 받아서 반환하지 않음
-      const following = await this.findById(params.followId);
-      const follower = await this.findById(params.followerId);
-
-      // following 혹은 follower 가 존재하지 않으면 Error
-      if (!follower || !following) {
-        throw new NotFoundError("리소스를 찾을수 없습니다.");
+      if (params.followId === params.followerId) {
+        throw new ConflictError("유효한 유저가 아닙니다.");
       }
 
+      const query = `
+        INSERT INTO follow (id, following_id, follower_id, deletedAt) 
+        VALUES (?, ?, ?, null)
+        ON DUPLICATE KEY UPDATE deletedAt = NULL
+      `;
+
       // follow 테이블에 follwer, follwing insert
-      const insertResult = await FollowRepo.createQueryBuilder()
-        .insert()
-        .into(Follow)
-        .values({ follower, following })
-        .execute();
+      const insertResult = await this.followRepo.query(query, [
+        uuidv4(),
+        params.followId,
+        params.followerId,
+      ]);
 
       // insertResult 반환
       return insertResult;
@@ -279,14 +325,19 @@ class UserService {
    * @returns
    * - Promise\<void\>
    */
-  public async UnFollow(params: FollowParams) {
+  public async unFollow(params: FollowParams) {
     try {
-      // User 에 relation 된 follows 제거
-      // 결과값이 Promise<void> 이므로 결과값을 받아서 반환하지 않음
-      await UserRepo.createQueryBuilder()
-        .relation(Follow, "follower")
-        .of(params.followId)
-        .remove(params.followerId);
+      // unfollow 서비스 호출
+      const deletedResult = await this.followRepo
+        .createQueryBuilder("follow")
+        .softDelete()
+        .where("following = :following_id", { following_id: params.followId })
+        .andWhere("follower = :follower_id", { follower_id: params.followerId })
+        .execute();
+
+      // console.log(deletedResult);
+
+      return deletedResult;
     } catch (error) {
       // 예기치 못한 에러처리
       if (error instanceof Error) throw new Error(error.message);
@@ -304,19 +355,75 @@ class UserService {
    * @returns
    * - Promise\<User[]\>
    */
-  public async getFollower(params: Pick<FollowParams, "followId">) {
+  public async getFollowers(params: Pick<FollowParams, "followId">) {
     try {
-      // User 에 relation 된 follower 를 쿼리
-      const results: User[] = await UserRepo.createQueryBuilder()
-        .relation(Follow, "follower")
-        .of(params.followId)
-        .loadMany();
+      // following 유저에서 follower 유저를 쿼리
+      const followers = await this.getFollowRepository()
+        .createQueryBuilder("fw")
+        .select([
+          "fw.follower_id",
+          "followerUser.email as follower_email",
+          "followerUser.nick as follower_nick",
+          "fw.createdAt as createdAt",
+          "fw.updatedAt as updatedAt",
+          "fw.deletedAt as deletedAt",
+        ])
+        .innerJoin(User, "followingUser", "followingUser.id = fw.following_id")
+        .innerJoin(User, "followerUser", "followerUser.id = fw.follower_id")
+        .where("fw.following_id = :followingId", {
+          followingId: params.followId,
+        })
+        .getRawMany();
 
-      return results;
+      return followers;
     } catch (error) {
       // 예기치 못한 에러처리
       if (error instanceof Error) throw new Error(error.message);
     }
+  }
+  /***
+   *
+   * @remarks
+   * Follower 를 query 하는 서비스
+   *
+   * @param params
+   * - parmas: Pick<FollowParams, "followId">
+   * - followId: 팔로우 아이디
+   *
+   * @returns
+   * - Promise\<User[]\>
+   */
+  public async getFollowings(params: Pick<FollowParams, "followerId">) {
+    try {
+      // User 에 relation 된 follower 를 쿼리
+      const followings = await this.followRepo
+        .createQueryBuilder("fw")
+        .select([
+          "fw.following_id",
+          "followingUser.email as following_email",
+          "followingUser.nick as following_nick",
+          "fw.createdAt as createdAt",
+          "fw.updatedAt as updatedAt",
+          "fw.deletedAt as deletedAt",
+        ])
+        .innerJoin(User, "followingUser", "followingUser.id = fw.following_id")
+        .innerJoin(User, "followerUser", "followerUser.id = fw.follower_id")
+        .where("fw.follower_id = :id", { id: params.followerId })
+        .getRawMany();
+
+      return followings;
+    } catch (error) {
+      // 예기치 못한 에러처리
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  public getUserRepository() {
+    return this.userRepo;
+  }
+
+  public getFollowRepository() {
+    return this.followRepo;
   }
 }
 

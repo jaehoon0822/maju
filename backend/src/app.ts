@@ -41,6 +41,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 // passport config 적용
 passportConfig(passport);
+// image 경로
+app.use("/img", express.static(path.join(__dirname, "uploads")));
 
 /************ Routes *************/
 // auth route

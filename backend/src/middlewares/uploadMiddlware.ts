@@ -9,7 +9,7 @@ export const upload = multer({
     // 목적지
     destination(req, file, cb) {
       // cb(error, destination)
-      cb(null, "@/uploads/");
+      cb(null, path.join(__dirname, "../uploads/"));
     },
     // file 이름
     filename(req, file, cb) {

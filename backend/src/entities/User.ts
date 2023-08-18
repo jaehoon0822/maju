@@ -1,14 +1,7 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { BaseDate } from "./BaseDate";
-import { Post } from "./Post";
 import { Follow } from "./Follow";
+import { Likes } from "./Likes";
 
 @Entity()
 export class User extends BaseDate {
@@ -30,23 +23,12 @@ export class User extends BaseDate {
   @Column("varchar", { length: 255, nullable: true })
   snsId: string;
 
-  @OneToMany(() => Follow, (follow) => follow.follower)
+  @OneToMany(() => Follow, (follow) => follow.following)
   followings: Follow[];
 
-  @OneToMany(() => Follow, (follow) => follow.following)
+  @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];
 
-  @ManyToMany(() => Post, (post) => post.id, { onDelete: "CASCADE" })
-  @JoinTable({
-    name: "like",
-    joinColumn: {
-      name: "post_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "user_id",
-      referencedColumnName: "id",
-    },
-  })
-  posts: Post[];
+  @OneToMany(() => Likes, (likes) => likes.user)
+  likeUsers: Likes[];
 }

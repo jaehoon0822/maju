@@ -5,11 +5,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseDate } from "./BaseDate";
 import { User } from "./User";
 import { Hashtag } from "./Hashtag";
+import { Likes } from "./Likes";
 
 @Entity()
 export class Post extends BaseDate {
@@ -40,17 +42,6 @@ export class Post extends BaseDate {
   })
   hashtag: Hashtag[];
 
-  @ManyToMany(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinTable({
-    name: "like",
-    joinColumn: {
-      name: "user_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "post_id",
-      referencedColumnName: "id",
-    },
-  })
-  users: User[];
+  @OneToMany(() => Likes, (likes) => likes.post)
+  likePosts: Likes[];
 }

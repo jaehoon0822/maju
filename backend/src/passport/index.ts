@@ -24,7 +24,7 @@ export const passportConfig = (passport: PassportStatic) => {
         return done(null, sessionUser[id]);
       }
       // user.id 를 사용하여 user 정보 find
-      const user = await userService.findById(id);
+      const user = await userService.findByIdWithFollow(id);
 
       sessionUser[user!.id] = user!;
       // 찾은 user 정보를 req.user 에 저장

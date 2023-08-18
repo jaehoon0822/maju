@@ -10,18 +10,18 @@ services:
       ./env/backend/.env.dev
     volumes:
       - ./backend:/app
-      - /app/node_modules
-  backend-test:
-    build:
-      context: .
-      dockerfile: ./DockerFiles/backend/DockerFile.test
-    ports:
-      - 8081:8080
-    env_file:
-      ./env/backend/.env.test
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+      # - /app/node_modules
+  # backend-test:
+  #   build:
+  #     context: .
+  #     dockerfile: ./DockerFiles/backend/DockerFile.test
+  #   ports:
+  #     - 8081:8080
+  #   env_file:
+  #     ./env/backend/.env.test
+  #   volumes:
+  #     - ./backend:/app
+  #     - /app/node_modules
   db:
     image: mariadb
     restart: always
@@ -33,10 +33,10 @@ services:
       - ./mariadb/db/data:/var/lib/mysql
       - ./mariadb/db/config:/etc/mysql/conf.d
       - ./db/inidb.d:/docker-entrypoint-initdb.d
-  test-db:
-    image: mariadb
-    restart: always
-    ports:
-      - 11028:3306
-    env_file:
-      - "./env/mariadb/.env.test"
+  # test-db:
+  #   image: mariadb
+  #   restart: always
+  #   ports:
+  #     - 11028:3306
+  #   env_file:
+  #     - "./env/mariadb/.env.test"

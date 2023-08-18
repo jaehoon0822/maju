@@ -1,5 +1,6 @@
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { Hashtag } from "@/entities/Hashtag";
+import { Post } from "@/entities/Post";
 import { InsertResult } from "typeorm";
 
 // hashtag 서비스 클래스
@@ -23,16 +24,18 @@ class HashTagService {
   }
 
   // title 로 찾는 service
-  public async findOneByTitle(
-    params: Pick<Hashtag, "title">
-  ): Promise<null | Hashtag> {
-    const hashtag = await this.getRepository()
-      .createQueryBuilder("hashtag")
-      .select("hashtag")
-      .where("hashtag.title = :title", { title: params.title })
-      .getOne();
+  public async findOneByTitle(params: Pick<Hashtag, "title">) {
+    try {
+      const hashtag = await this.getRepository()
+        .createQueryBuilder("hashtag")
+        .select("hashtag")
+        .where("hashtag.title = :title", { title: params.title })
+        .getOne();
 
-    return hashtag;
+      return hashtag;
+    } catch (error) {
+      if (error instanceof Error) throw new Error(error.message);
+    }
   }
 
   public async findAllByTitle(
@@ -70,6 +73,22 @@ class HashTagService {
       return hashtag;
     }
     return hashtag;
+  }
+
+  // post 에서 hashtag 제거
+  public async deleteHashtag(params: {
+    postId: Post["id"];
+    hashtagId: Hashtag["id"];
+  }) {
+    try {
+      await this.hashtagRepo
+        .createQueryBuilder()
+        .relation(Hashtag, "post")
+        .of({ id: params.hashtagId })
+        .remove({ id: params.postId });
+    } catch (error) {
+      if (error instanceof Error) throw new Error(error.message);
+    }
   }
 
   // repository 를 반환하는 service
