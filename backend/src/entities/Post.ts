@@ -5,11 +5,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseDate } from "./BaseDate";
 import { User } from "./User";
 import { Hashtag } from "./Hashtag";
+import { Likes } from "./Likes";
 
 @Entity()
 export class Post extends BaseDate {
@@ -19,7 +21,7 @@ export class Post extends BaseDate {
   @Column("varchar", { length: 255 })
   content: string;
 
-  @Column("varchar", { length: 255 })
+  @Column("varchar", { length: 255, nullable: true })
   img: string;
 
   @ManyToOne(() => User, (user) => user.id, { cascade: true })
@@ -27,20 +29,19 @@ export class Post extends BaseDate {
   user: User;
 
   @ManyToMany(() => Hashtag, (hashtags) => hashtags.id)
-  @JoinColumn({ name: "hashtag_id" })
-  hashtag: Hashtag[];
-
-  @ManyToMany(() => User, (user) => user.id)
   @JoinTable({
-    name: "like",
+    name: "post_hashtag",
     joinColumn: {
-      name: "user_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
       name: "post_id",
       referencedColumnName: "id",
     },
+    inverseJoinColumn: {
+      name: "hashtag_id",
+      referencedColumnName: "id",
+    },
   })
-  users: User[];
+  hashtag: Hashtag[];
+
+  @OneToMany(() => Likes, (likes) => likes.post)
+  likePosts: Likes[];
 }

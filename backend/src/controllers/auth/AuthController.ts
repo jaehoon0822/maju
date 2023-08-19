@@ -26,9 +26,9 @@ export class AuthController {
   async signUp(req: Request, res: Response) {
     // email, password 를 request.body 에서 받음
     const { email, password, nick } = req.body;
-
     // user 검색
-    const user = await userService.findByEmail(email);
+
+    const user = await userService.findByEmail(email, true);
 
     // user 가 있다면 ConflictError 발생
     if (user) {
@@ -66,23 +66,23 @@ export class AuthController {
       "local",
       (authError: any, user: User, info?: { message: string }) => {
         if (authError) {
-          console.error(authError);
+          // console.error(authError);
           throw new ConflictError(authError.message);
         }
 
         if (info) {
-          console.error(info);
-          throw new ConflictError(info.message);
+          // console.error(info);
+          return next(new ConflictError(info.message));
         }
 
         return req.login(user, (loginError) => {
           if (loginError) {
-            throw new Error(loginError.message);
+            return next(new Error(loginError.message));
           }
           return res.status(200).send("로그인 되었습니다");
         });
       }
-    )(req, res, next);
+    )(req, res);
   }
 
   /***
@@ -106,7 +106,11 @@ export class AuthController {
       if (error) {
         throw new Error(error.message);
       }
+      return res.status(200).send("로그아웃 되었습니다.");
     });
-    return res.status(200).send("로그아웃 되었습니다.");
+  }
+
+  async kakaoLogin(req: Request, res: Response) {
+    res.status(200).send("로그인 되었습니다.");
   }
 }

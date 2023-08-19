@@ -33,7 +33,7 @@ export const local = (passport: PassportStatic) => {
       async (email, password, done) => {
         try {
           // user 가 있는지 확인
-          const user = await userService.findByEmail(email);
+          const user = await userService.findByEmail(email, true);
 
           // user 가 없다면 done 으로 error message 전달
           if (!user) {
@@ -53,10 +53,10 @@ export const local = (passport: PassportStatic) => {
           }
 
           // user 가 유효하다면 done 으로 user 전달
-          done(null, user);
+          return done(null, user);
         } catch (error) {
           console.error(error);
-          done(error);
+          return done(error);
         }
       }
     )

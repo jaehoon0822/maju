@@ -1,7 +1,10 @@
-import { getEnv } from "@/utilities/getEnv";
 import { DataSourceOptions } from "typeorm";
+import dotenv from "dotenv";
 
-getEnv();
+if (process.env.NODE_NEV) {
+  dotenv.config({ path: "@/env/.env.test" });
+}
+
 const config: DataSourceOptions = {
   type: "mariadb",
   host: process.env.DB_HOST,
@@ -10,10 +13,11 @@ const config: DataSourceOptions = {
   database: process.env.DB_DATABASE,
   port: Number(process.env.DB_PORT),
   synchronize: process.env.DB_SYNCHRONIZE === "true",
-  logging: process.env.DB_LOGGING === "true",
+  logging: true,
   entities: [process.env.DB_ENTITIES || ""],
   migrations: [process.env.DB_MIGRATIONS || ""],
   subscribers: [process.env.DB_SUBSCRIVERS || ""],
+  poolSize: 50,
 };
 
 export { config };

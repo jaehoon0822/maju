@@ -4,7 +4,7 @@ export class ConflictError extends commonError {
   statusCode: number = 409;
   message = "유효하지 않은 유저입니다.";
 
-  constructor(private msg?: string) {
+  constructor(readonly msg?: string) {
     super();
     if (msg) this.message = msg;
   }
