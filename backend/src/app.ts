@@ -4,18 +4,32 @@ import morgan from "morgan";
 import "express-async-errors";
 import session from "express-session";
 import passport from "passport";
+import helmet from "helmet";
+import cors from "cors";
 import { passportConfig } from "./passport";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 import { authRouter } from "./routes/auth";
 import { postRouter } from "./routes/post";
 import { userRouter } from "./routes/user";
+import hpp from "hpp";
 
 const app = express();
 // port 설정
 app.set("PORT", process.env.PORT || 8080);
+// cors 설정
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+// 보안관리
+if (process.env.NODE_ENV === "production") {
+  app.use(helmet({}));
+  app.use(hpp());
+}
 // morgan logger 설정
-app.use(morgan(process.env.NODE_ENV === "development" ? "combined" : ""));
+app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
 // static 폴더 설정
 app.use(express.static(path.join(__dirname, "public")));
 // http 요청 메시지 형식(body)을 JSON 으로 해석

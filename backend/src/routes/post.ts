@@ -3,6 +3,7 @@ import { Router } from "express";
 import { upload } from "@/middlewares/uploadMiddlware";
 import { isLoggedIn } from "@/middlewares/authentication";
 
+/*** @remarks - post 라우터 */
 const router = Router();
 const post = new PostController();
 

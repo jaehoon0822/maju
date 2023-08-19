@@ -1,5 +1,6 @@
 import { commonError } from "@/errors/common-error";
 import { NextFunction, Request, Response } from "express";
+import { logger } from "logger";
 
 /**
  * @remarks
@@ -20,6 +21,8 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
+  logger.info("hello");
+  logger.error(err.message);
   // CommonError class 의 instance 인지 확인
   if (err instanceof commonError) {
     // 맞다면 err.statusCode 및 err.serializeErrors 를 send
