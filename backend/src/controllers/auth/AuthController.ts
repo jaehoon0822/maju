@@ -1,17 +1,116 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { ConflictError } from "@/errors/conflict-error";
 import { userService } from "@/services/User";
+import passport from "passport";
+import { User } from "@/entities/User";
 
+/***
+ *
+ *  @remarks
+ *  - Auth 컨트롤러 클래스 생성
+ *
+ */
 export class AuthController {
+  /***
+   *
+   *  @remarks
+   *  - 회원가입 로직
+   *  @param req
+   *  - express.Request 객체
+   *  @param res
+   *  - express.Response 객체
+   *  @returns Promise<Response> | unefined
+   *
+   */
   async signUp(req: Request, res: Response) {
-    const { email, password } = req.body;
-    const user = await userService.find(email);
+    // email, password 를 request.body 에서 받음
+    const { email, password, nick } = req.body;
+    // user 검색
 
+    const user = await userService.findByEmail(email, true);
+
+    // user 가 있다면 ConflictError 발생
     if (user) {
       throw new ConflictError("이미 가입된 이메일입니다.");
     }
 
-    const hash = await bcrypt.hash(password, 12);
+    // user 가 없다면, password 해시화
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // user 생성
+    await userService.create({
+      email,
+      password: hashedPassword,
+      nick,
+    });
+
+    // 완료 response
+    return res.status(201).send("회원가입 완료");
+  }
+
+  /**
+   *
+   * @remarks
+   * - 로그인 로직
+   * @param req
+   * - express.Request 객체
+   * @param res
+   * - express.Response 객체
+   * @returns Promise<Response> | unefined
+   *
+   */
+  async login(req: Request, res: Response, next: NextFunction) {
+    // passport
+    passport.authenticate(
+      "local",
+      (authError: any, user: User, info?: { message: string }) => {
+        if (authError) {
+          // console.error(authError);
+          throw new ConflictError(authError.message);
+        }
+
+        if (info) {
+          // console.error(info);
+          return next(new ConflictError(info.message));
+        }
+
+        return req.login(user, (loginError) => {
+          if (loginError) {
+            return next(new Error(loginError.message));
+          }
+          return res.status(200).send("로그인 되었습니다");
+        });
+      }
+    )(req, res);
+  }
+
+  /***
+   *
+   * @remarks
+   * - 로그아웃 로직
+   * @param req
+   * - express.Request 객체
+   * @param res
+   * - express.Response 객체
+   * @returns Promise<Response> | unefined
+   *
+   */
+  async logout(req: Request, res: Response) {
+    req.logout((error) => {
+      if (error) {
+        throw new Error(error.message);
+      }
+    });
+    req.session.destroy((error) => {
+      if (error) {
+        throw new Error(error.message);
+      }
+      return res.status(200).send("로그아웃 되었습니다.");
+    });
+  }
+
+  async kakaoLogin(req: Request, res: Response) {
+    res.status(200).send("로그인 되었습니다.");
   }
 }
