@@ -14,13 +14,14 @@ const customJestConfig: Config = {
     "^.\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
     "^.+\\.(css|sass|scss)$": "<rootDir>/src/__mocks__/styleMock.ts",
     "^.+\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
+    "@/(.*)$": "<rootDir>/src/$1",
   },
   testPathIgnorePatterns: ["<rootDir>/node_modules", "<rootDir>/.next/"],
   collectCoverageFrom: ["**/*.[jt]s?(x)", "!**/*.stories.[jt]s?(x)"],
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    "<rootDir>/.next",
-    "<rootDir>/.swc",
+    // "<rootDir>/.next",
+    // "<rootDir>/.swc",
   ],
   coverageDirectory: "<rootDir>/src",
   coverageThreshold: {

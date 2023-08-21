@@ -4,7 +4,9 @@ import { useFormContext } from "react-hook-form";
 import module from "./Input.module.css";
 import classNames from "classnames";
 
-const Input = (props: Omit<InputProps, "name"> & { name: string }) => {
+const Input = (
+  props: Omit<InputProps, "name" | "id"> & { name: string; id: string }
+) => {
   const { register, formState } = useFormContext();
   const { errors } = formState;
   const errorMessage = errors?.[props.name]?.message || "";
@@ -14,7 +16,7 @@ const Input = (props: Omit<InputProps, "name"> & { name: string }) => {
     <div className={module.styled_input_wrapper}>
       <label
         className="opacity-0 overflow-hidden absolute left-[9999px]"
-        htmlFor={props.name}
+        htmlFor={props.id}
       >
         {props.label}
       </label>

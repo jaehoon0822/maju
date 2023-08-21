@@ -11,7 +11,7 @@ describe("<TextButton />", () => {
     expect(textButton).toBeInTheDocument();
   });
 
-  it("href text 확인", () => {
+  it("href 확인", () => {
     // <TextButton /> 렌더
     render(<TextButton lable="login 페이지로 가기" href="/login" />);
     // link Element
