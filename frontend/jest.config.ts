@@ -16,6 +16,22 @@ const customJestConfig: Config = {
     "^.+\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
   },
   testPathIgnorePatterns: ["<rootDir>/node_modules", "<rootDir>/.next/"],
+  collectCoverageFrom: ["**/*.[jt]s?(x)", "!**/*.stories.[jt]s?(x)"],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "<rootDir>/.next",
+    "<rootDir>/.swc",
+  ],
+  coverageDirectory: "<rootDir>/src",
+  coverageThreshold: {
+    global: {},
+    "./src/**/*.[jt]s?(x)": {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
+  },
 };
 
 export default createJestConfig(customJestConfig);
