@@ -20,8 +20,10 @@ const customJestConfig: Config = {
   collectCoverageFrom: ["**/*.[jt]s?(x)", "!**/*.stories.[jt]s?(x)"],
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    // "<rootDir>/.next",
-    // "<rootDir>/.swc",
+    "<rootDir>/.next",
+    "<rootDir>/.swc",
+    "<rootDir>/src/coverage",
+    "<rootDir>/src/lcov-report",
   ],
   coverageDirectory: "<rootDir>/src",
   coverageThreshold: {

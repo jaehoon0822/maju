@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -104,23 +104,21 @@
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
 <a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,30 +142,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from <span class="cstat-no" title="statement not covered" >"react";</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
 import { InputProps } from "./Input.types";
-import { useFormContext } from <span class="cstat-no" title="statement not covered" >"react-hook-form";</span>
-import module from <span class="cstat-no" title="statement not covered" >"./Input.module.css";</span>
-import classNames from <span class="cstat-no" title="statement not covered" >"classnames";</span>
+import { useFormContext } from "react-hook-form";
+import module from "./Input.module.css";
+import classNames from "classnames";
 &nbsp;
-const Input = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: Omit&lt;InputProps, "name"&gt; &amp; { name: string }) =&gt; {</span>
-  const { register, formState } = <span class="cstat-no" title="statement not covered" >useFormContext();</span>
-  const { errors } = <span class="cstat-no" title="statement not covered" >formState;</span>
-  const errorMessage = <span class="cstat-no" title="statement not covered" >errors?.[props.name]?.message || "";</span>
-  const hasError = <span class="cstat-no" title="statement not covered" >!!errorMessage;</span>
+const Input = (
+  props: Omit&lt;InputProps, "name" | "id"&gt; &amp; { name: string; id: string }
+) =&gt; {
+  const { register, formState } = useFormContext();
+  const { errors } = formState;
+  const errorMessage = errors?.[props.name]?.message || "";
+  const hasError = !!errorMessage;
 &nbsp;
   return (
     &lt;div className={module.styled_input_wrapper}&gt;
       &lt;label
         className="opacity-0 overflow-hidden absolute left-[9999px]"
-        htmlFor={props.name}
+        htmlFor={props.id}
       &gt;
         {props.label}
       &lt;/label&gt;
       &lt;input
         className={`${module.styled_input}`}
-        type={props.type !== "text" ? props.type : "text"}
+        type={props.type !== "text" ? props.type : <span class="branch-1 cbranch-no" title="branch not covered" >"text"}</span>
         {...props}
         {...register(props.name)}
       /&gt;
@@ -185,7 +191,7 @@ const Input = <span class="cstat-no" title="statement not covered" ><span class=
   );
 };
 &nbsp;
-export { <span class="cstat-no" title="statement not covered" >Input };</span>
+export { Input };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -193,7 +199,7 @@ export { <span class="cstat-no" title="statement not covered" >Input };</span>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-21T06:06:01.052Z
+                at 2023-08-21T09:27:34.298Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
