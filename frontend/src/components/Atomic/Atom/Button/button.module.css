@@ -1,0 +1,9 @@
+.btn {
+  @apply py-5 w-[25rem] cursor-pointer transition-all duration-300 disabled:opacity-50 disabled:translate-y-0 disabled:cursor-not-allowed active:translate-y-[2px];
+}
+.btn-primary {
+  @apply bg-black text-white active:bg-black hover:bg-slate-950;
+}
+.btn-kakao {
+  @apply bg-[#FAE100] text-black font-bold;
+}
