@@ -2,7 +2,7 @@ import { Config } from "jest";
 import nextjest from "next/jest";
 
 const createJestConfig = nextjest({
-  dir: "./src",
+  dir: ".",
 });
 
 const customJestConfig: Config = {
@@ -17,18 +17,24 @@ const customJestConfig: Config = {
     "@/(.*)$": "<rootDir>/src/$1",
   },
   testPathIgnorePatterns: ["<rootDir>/node_modules", "<rootDir>/.next/"],
-  collectCoverageFrom: ["**/*.[jt]s?(x)", "!**/*.stories.[jt]s?(x)"],
+  collectCoverageFrom: ["src/**/*.[jt]s?(x)", "!**/*.stories.[jt]s?(x)"],
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/.next",
     "<rootDir>/.swc",
-    "<rootDir>/src/coverage",
-    "<rootDir>/src/lcov-report",
+    "<rootDir>/src/coverage/",
+    "<rootDir>/coverage/",
+    "<rootDir>/src/lcov-report/",
   ],
   coverageDirectory: "<rootDir>/src",
   coverageThreshold: {
-    global: {},
-    "./src/**/*.[jt]s?(x)": {
+    global: {
+      // branches: 100,
+      // functions: 100,
+      // lines: 100,
+      // statements: 100,
+    },
+    "./src/**/*.ts?(x)": {
       branches: 100,
       functions: 100,
       lines: 100,

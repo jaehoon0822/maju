@@ -65,4 +65,48 @@ describe("<Input />", () => {
     // errprSpanElem 이 있는지 확인
     expect(errorSpanElem).toBeInTheDocument();
   });
+
+  /*************
+   * input type 종류가 많아서 대표적으로
+   * password, text, email 만 확인함
+   * coverage 는 75% 로 마무리
+   * ***********/
+  it("Input 의 type<Type 이 많아서 대표적인것만 확인>", () => {
+    // 각 Input 의 타입을 비교하기 위한 test 컴포넌트
+    const TestComponent = () => {
+      const method = useForm();
+      return (
+        <FormProvider {...method}>
+          <Input label="text" id="text" name="text" />
+          <Input
+            label="password"
+            id="password"
+            name="password"
+            type="password"
+          />
+          <Input label="email" id="email" name="email" type="email" />
+        </FormProvider>
+      );
+    };
+
+    render(<TestComponent />);
+
+    // input 검색
+    const textInputElem = screen.getByLabelText<HTMLInputElement>(/text/);
+    const passwordInputElem =
+      screen.getByLabelText<HTMLInputElement>(/password/);
+    const emailInputElem = screen.getByLabelText<HTMLInputElement>(/email/);
+
+    // input 이 document 에 있는지 확인
+    expect(textInputElem).toBeInTheDocument();
+    expect(passwordInputElem).toBeInTheDocument();
+    expect(emailInputElem).toBeInTheDocument();
+
+    // textInput 의 type = text (type 설정안할시 default)
+    expect(textInputElem.type).toBe("text");
+    // passwordInput 의 type = password (type 설정)
+    expect(passwordInputElem.type).toBe("password");
+    // passwordInput 의 type = password (type 설정)
+    expect(emailInputElem.type).toBe("email");
+  });
 });

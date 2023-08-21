@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --dir src --cache",
-    "test": "jest --watch",
-    "test:ci": "jest --coverage --silent --ci",
+    "test": "jest --watchAll",
+    "test:ci": "jest --coverage --silent ",
     "format": "prettier --cache --write ."
   },
   "dependencies": {
