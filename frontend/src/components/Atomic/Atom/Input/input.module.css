@@ -1,0 +1,27 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.styled_input_wrapper {
+  @apply flex flex-col flex-none relative h-[5.5rem] mb-5;
+}
+.styled_input {
+  @apply border-b-[1px] border-b-black outline-none w-[25rem] px-5 py-5 placeholder-[#8d8d8d] h-[58px];
+}
+
+.styled_input-error {
+  @apply border-none text-red-600 duration-1000 absolute top-16;
+}
+
+.styled_input-error.active {
+  @apply animate-fadeIn duration-200 ease-in-out;
+}
