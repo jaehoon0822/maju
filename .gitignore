@@ -36,3 +36,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lcov-report
+frontend/src/lcov-report
+
+# coverage
+coverage
+coverage-final.json
