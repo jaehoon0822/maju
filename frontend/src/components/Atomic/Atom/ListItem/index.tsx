@@ -6,8 +6,8 @@ import Link from "next/link";
 import MoreVert from "@mui/icons-material/MoreVert";
 
 const ListItem = ({
-  href,
-  img,
+  href = "/",
+  icon,
   title,
   active = false,
   more = false,
@@ -17,7 +17,7 @@ const ListItem = ({
       <div
         className={classNames(module.listItem_wrapper, active && module.active)}
       >
-        {img ? <div>{img}</div> : null}
+        {icon ? <div>{icon}</div> : null}
         <div className={classNames(module.listItem_title)}>
           <span>{title}</span>
         </div>

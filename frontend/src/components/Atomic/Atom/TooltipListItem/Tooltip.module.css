@@ -1,0 +1,22 @@
+.tooltipListItem_wrapper {
+  @apply w-[12.5rem] relative;
+}
+
+.tooltipListItem_list {
+  @apply py-5 px-5 shadow-xl absolute bg-white transition-all;
+}
+.tooltipListItem_list.right {
+  @apply shadow-[-5px_10px_16px_rgba(0,0,0,.15)] ml-4 top-[0] left-[100%] after:absolute after:content-[""] after:border-8 after:border-solid after:border-transparent after:border-r-white after:top-[10%] after:right-[100%];
+}
+
+.tooltipListItem_list.left {
+  @apply shadow-[5px_5px_15px_rgba(0,0,0,.15)] mr-4 top-[0] right-[100%] after:absolute after:content-[""] after:border-8 after:border-solid after:border-transparent after:border-l-white after:top-[10%] after:left-[100%];
+}
+
+.tooltipListItem_list.top {
+  @apply bottom-[100%] -left-[10%] mb-4 after:content-[""] after:absolute after:top-[100%] after:left-[50%] after:border-8 after:border-solid after:border-transparent after:border-t-white;
+}
+
+.tooltipListItem_list.bottom {
+  @apply shadow-[0px_-5px_15px_rgba(0,0,0,.15)] top-[100%] -left-[10%] mt-4 after:content-[""] after:absolute after:bottom-[100%] after:left-[50%] after:border-8 after:border-solid after:border-transparent after:border-b-white;
+}

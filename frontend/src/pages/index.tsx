@@ -4,29 +4,28 @@ import { loginSchema } from "@/common/validation/login.yup";
 import { Input } from "@/components/Atomic/Atom/Input";
 import { Form } from "@/components/Atomic/Atom/Form/Index";
 import { ListItem } from "@/components/Atomic/Atom/ListItem";
-import { CloseButton } from "@/components/Atomic/Atom/CloseButton";
 import HomeSvg from "@mui/icons-material/Home";
 import AbcSvg from "@mui/icons-material/Abc";
 import AcUnitSvg from "@mui/icons-material/AcUnitOutlined";
+import { TooltipListItem } from "@/components/Atomic/Atom/TooltipListItem";
 
 export default function Home() {
   return (
-    <main className="flex justify-center items-center h-screen">
+    <main className="flex justify-center items-center items-centerh flex-col h-screen">
       {/* <h1>hi</h1>
       <CloseButton /> */}
-      <div>
-        <ListItem img={<HomeSvg />} title="home" href="/" active={true} />
-        <ListItem img={<AbcSvg />} title="abc" href="/" />
-        <ListItem img={<AcUnitSvg />} title="ac" href="/" more />
-      </div>
-      {/* <Form
-        onSubmit={(data: { [x: string]: string }) => {
-          console.log(data);
-        }}
-        schema={loginSchema}
-      >
-        <Input label="email" id="email" name="email" placeholder="email" />
-      </Form> */}
+      <ListItem icon={<HomeSvg />} title="home" href="/" active={true} />
+
+      <TooltipListItem title="ac" icon={<HomeSvg />} direction="left">
+        {/* item 클릭시 보여줄 component */}
+        <div>
+          <ListItem icon={<AcUnitSvg />} title="ac" href="/" />
+          <ListItem icon={<AcUnitSvg />} title="ac" href="/" />
+          <ListItem icon={<AcUnitSvg />} title="ac" href="/" />
+        </div>
+      </TooltipListItem>
+
+      <ListItem icon={<AbcSvg />} title="abc" href="/" />
     </main>
   );
 }

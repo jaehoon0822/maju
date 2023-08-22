@@ -43,3 +43,8 @@ frontend/src/lcov-report
 # coverage
 coverage
 coverage-final.json
+
+# logger
+backend/combined.log
+backend/error.log
+backend/logger.ts
