@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1692615057394" clover="3.2.0">
-  <project timestamp="1692615057394" name="All files">
-    <metrics statements="52" coveredstatements="38" conditionals="9" coveredconditionals="8" methods="10" coveredmethods="5" elements="71" coveredelements="51" complexity="0" loc="52" ncloc="52" packages="8" files="10" classes="10"/>
+<coverage generated="1692629344832" clover="3.2.0">
+  <project timestamp="1692629344833" name="All files">
+    <metrics statements="52" coveredstatements="43" conditionals="9" coveredconditionals="8" methods="10" coveredmethods="6" elements="71" coveredelements="57" complexity="0" loc="52" ncloc="52" packages="9" files="11" classes="11"/>
     <package name="common.validation">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="login.yup.ts" path="/home/jh/Documents/study/social/frontend/src/common/validation/login.yup.ts">
@@ -20,6 +20,17 @@
         <line num="6" count="2" type="stmt"/>
         <line num="7" count="10" type="stmt"/>
         <line num="15" count="10" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.Atomic.Atom.CloseButton">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="index.tsx" path="/home/jh/Documents/study/social/frontend/src/components/Atomic/Atom/CloseButton/index.tsx">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
       </file>
     </package>
     <package name="components.Atomic.Atom.Form">
@@ -77,7 +88,7 @@
       </file>
     </package>
     <package name="pages">
-      <metrics statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="_app.tsx" path="/home/jh/Documents/study/social/frontend/src/pages/_app.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
@@ -89,14 +100,9 @@
         <line num="3" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/jh/Documents/study/social/frontend/src/pages/index.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="3" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
       </file>
     </package>
     <package name="pages.Login">
