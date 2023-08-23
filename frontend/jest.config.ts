@@ -11,7 +11,7 @@ const customJestConfig: Config = {
   moduleDirectories: ["node_modules", "<rootDir>"],
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
-    "^.\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+    "\\.(css|sass|scss)$": "identity-obj-proxy",
     "^.+\\.(css|sass|scss)$": "<rootDir>/src/__mocks__/styleMock.ts",
     "^.+\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
     "@/(.*)$": "<rootDir>/src/$1",

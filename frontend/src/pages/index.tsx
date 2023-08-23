@@ -8,6 +8,8 @@ import HomeSvg from "@mui/icons-material/Home";
 import AbcSvg from "@mui/icons-material/Abc";
 import AcUnitSvg from "@mui/icons-material/AcUnitOutlined";
 import { TooltipListItem } from "@/components/Atomic/Atom/TooltipListItem";
+import Star from "@mui/icons-material/Star";
+import Abc from "@mui/icons-material/Abc";
 
 export default function Home() {
   return (
@@ -26,6 +28,10 @@ export default function Home() {
       </TooltipListItem>
 
       <ListItem icon={<AbcSvg />} title="abc" href="/" />
+
+      <TooltipListItem direction="left" icon={<Star />} title="test">
+        <ListItem title="test1" icon={<Abc />} />
+      </TooltipListItem>
     </main>
   );
 }
