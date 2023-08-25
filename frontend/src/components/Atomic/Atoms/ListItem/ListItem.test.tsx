@@ -30,8 +30,30 @@ describe("<ListItem />", () => {
     render(<ListItem title="test" icon={<Star />} active={true} />);
 
     // ListItem 쿼리
-    const listItemElem = screen.getByLabelText("list-item");
+    const listItemElem = screen.queryByLabelText("list-item");
     // document 에 있는지 확인
     expect(listItemElem).toBeInTheDocument();
+  });
+
+  it("more = true 확인", () => {
+    // ListItem 렌더
+    render(<ListItem title="test" icon={<Star />} active={true} more />);
+
+    // ListItem 쿼리
+    const MoreVertIconElem = screen.getByTestId("MoreVertIcon");
+    // document 에 있는지 확인
+    expect(MoreVertIconElem).toBeInTheDocument();
+  });
+
+  it("more = false 확인", () => {
+    // ListItem 렌더
+    render(
+      <ListItem title="test" icon={<Star />} active={true} more={false} />
+    );
+
+    // ListItem 쿼리
+    const MoreVertIconElem = screen.queryByTestId("MoreVertIcon");
+    // document 에 있는지 확인
+    expect(MoreVertIconElem).toBeNull();
   });
 });

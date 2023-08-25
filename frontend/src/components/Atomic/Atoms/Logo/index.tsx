@@ -12,7 +12,7 @@ const Logo = ({ size = "M" }: LogoProps) => {
   };
 
   return (
-    <div className={classNames(sizeObj[size], "relative")}>
+    <div aria-label="logo" className={classNames(sizeObj[size], "relative")}>
       <Image
         src={`/logo/Logo.svg`}
         alt="logo"

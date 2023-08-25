@@ -1,9 +1,9 @@
 import React from "react";
 import module from "./TopbarItem.module.css";
-import { TobparItemProps } from "./TopbarItme.type";
+import { TopbarItemProps } from "./TopbarItme.type";
 import classNames from "classnames";
 
-const TopbarItem = ({ title, onClick }: TobparItemProps) => {
+const TopbarItem = ({ title, onClick }: TopbarItemProps) => {
   return (
     <div
       role="button"
