@@ -1,7 +1,7 @@
 import Star from "@mui/icons-material/Star";
 import Abc from "@mui/icons-material/Abc";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { TooltipListItem } from "@/components/Atomic/Atom/TooltipListItem";
+import { TooltipListItem } from "@/components/Atomic/Atoms/TooltipListItem";
 import { ListItem } from "../ListItem";
 import { act } from "react-dom/test-utils";
 

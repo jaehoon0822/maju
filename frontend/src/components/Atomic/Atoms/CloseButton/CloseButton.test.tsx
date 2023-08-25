@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { CloseButton } from "@/components/Atomic/Atom/CloseButton";
+import { CloseButton } from "@/components/Atomic/Atoms/CloseButton";
 import { act } from "react-dom/test-utils";
 
 describe("<CloseButton />", () => {

@@ -4,12 +4,12 @@ import Person from "@mui/icons-material/Person";
 import Link from "next/link";
 import module from "./SidMenu.module.css";
 import { SideMenuProps } from "./SideMenu.type";
-import Logo from "../../Atom/Logo";
-import { TooltipListItem } from "../../Atom/TooltipListItem";
+import Logo from "../../Atoms/Logo";
+import { TooltipListItem } from "../../Atoms/TooltipListItem";
 
 const SideMenu = ({ children }: SideMenuProps) => {
   return (
-    <div className={classNames(module.sideMenu_wrapper)}>
+    <div aria-label="side-menu" className={classNames(module.sideMenu_wrapper)}>
       <div>
         <div className="mb-4">
           <Logo size="SM" />

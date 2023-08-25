@@ -1,10 +1,10 @@
 import React from "react";
 import { FieldValues } from "react-hook-form";
 import { SearchBarProps } from "./SearchBar.type";
-import { Input } from "../../Atom/Input";
-import { Form } from "../../Atom/Form/Index";
+import { Input } from "../../Atoms/Input";
+import { Form } from "../../Atoms/Form/Index";
 import { searchBarSchema } from "@/common/validation/searchBar.yup";
-import { Button } from "../../Atom/Button";
+import { Button } from "../../Atoms/Button";
 import module from "./SearchBar.module.css";
 import classNames from "classnames";
 

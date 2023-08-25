@@ -1,6 +1,6 @@
 import React from "react";
-import SideMenu from "@/components/Atomic/Orgamisms/SideMenu";
-import { ListItem } from "@/components/Atomic/Atom/ListItem";
+import SideMenu from "@/components/Atomic/Organisms/SideMenu";
+import { ListItem } from "@/components/Atomic/Atoms/ListItem";
 import AbcSvg from "@mui/icons-material/Abc";
 
 const Login = () => {

@@ -2,10 +2,10 @@ import Image from "next/image";
 import { Noto_Sans } from "next/font/google";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
-import { ListItem } from "@/components/Atomic/Atom/ListItem";
+import { ListItem } from "@/components/Atomic/Atoms/ListItem";
 import HomeSvg from "@mui/icons-material/Home";
 import MangeSearuchSvg from "@mui/icons-material/ManageSearchOutlined";
-import SideManu from "@/components/Atomic/Orgamisms/SideMenu";
+import SideManu from "@/components/Atomic/Organisms/SideMenu";
 
 export default function Home() {
   const method = useForm();

@@ -41,7 +41,7 @@ const TooltipListItem = ({
   return (
     <div
       className={classNames(module.tooltipListItem_wrapper)}
-      // aria-label="tooltip-list-wrapper"
+      aria-label="tooltip-list-wrapper"
     >
       {/* menu 상에 보여줄 component */}
       <div
