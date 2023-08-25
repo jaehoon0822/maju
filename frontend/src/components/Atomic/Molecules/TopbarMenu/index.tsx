@@ -25,7 +25,11 @@ const TopbarMenu = ({ children, margin = 16 }: TopbarMenuProps) => {
   const topbarX = `calc((${elemWidth} + ${margin}px) * ${idx})`;
 
   return (
-    <div className={classNames(module.topbarMenu_wrapper)} ref={parentRef}>
+    <div
+      aria-label="topbar-menu"
+      className={classNames(module.topbarMenu_wrapper)}
+      ref={parentRef}
+    >
       <div className={classNames(module.topbarMenu_list)}>
         {childArr.map((child, idx) => {
           if (child) {
