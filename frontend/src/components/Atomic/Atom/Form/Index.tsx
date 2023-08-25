@@ -2,8 +2,9 @@ import React from "react";
 import { FormProps } from "./Form.type";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ObjectSchema } from "yup";
 
-const Form = <T extends FieldValues>({
+const Form = <T extends FieldValues, S extends ObjectSchema<T>>({
   children,
   onSubmit,
   defaultValues,

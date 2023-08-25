@@ -6,28 +6,67 @@ import Link from "next/link";
 import MoreVert from "@mui/icons-material/MoreVert";
 
 const ListItem = ({
-  href = "/",
+  href,
   icon,
   title,
   active = false,
   more = false,
 }: ListItemProps) => {
   return (
-    <Link href={href} aria-label="list-item">
-      <div
-        className={classNames(module.listItem_wrapper, active && module.active)}
-      >
-        {icon ? <div>{icon}</div> : null}
-        <div className={classNames(module.listItem_title)}>
-          <span>{title}</span>
-        </div>
-        {more ? (
-          <div className={classNames(module.listItem_more)}>
-            <MoreVert />
+    <>
+      {href === undefined ? (
+        <div aria-label="list-item" className="flex justify-c">
+          <div
+            className={classNames(
+              module.listItem_wrapper,
+              active && module.active
+            )}
+          >
+            {icon ? <div>{icon}</div> : null}
+            <div className={classNames(module.listItem_title)}>
+              <span>{title}</span>
+            </div>
+            {more ? (
+              <div className={classNames(module.listItem_more)}>
+                <MoreVert />
+              </div>
+            ) : null}
           </div>
-        ) : null}
-      </div>
-    </Link>
+        </div>
+      ) : (
+        <Link href={href} aria-label="list-item" className="flex justify-c">
+          <div
+            className={classNames(
+              module.listItem_wrapper,
+              active && module.active
+            )}
+          >
+            {icon ? (
+              <>
+                <div>{icon}</div>
+                <div
+                  className={classNames(
+                    module.listItem_title,
+                    "md:pl-0 md:hidden"
+                  )}
+                >
+                  <span>{title}</span>
+                </div>
+              </>
+            ) : (
+              <div className={classNames(module.listItem_title)}>
+                <span>{title}</span>
+              </div>
+            )}
+            {more ? (
+              <div className={classNames(module.listItem_more)}>
+                <MoreVert />
+              </div>
+            ) : null}
+          </div>
+        </Link>
+      )}
+    </>
   );
 };
 

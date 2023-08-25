@@ -44,8 +44,6 @@ describe("<Input />", () => {
     render(<TestComponent />);
     // input 의 라벨을 사용하여 Input element 를 찾음
     const testInputElem = screen.getByLabelText<HTMLInputElement>("test");
-    // input 이 blur 이벤트가 발생했는지 확인을 위한 mock 함수
-    const onBlurSpy = jest.spyOn(testInputElem, "blur");
     // input 이 있는지 확인
     expect(testInputElem).toBeInTheDocument();
 

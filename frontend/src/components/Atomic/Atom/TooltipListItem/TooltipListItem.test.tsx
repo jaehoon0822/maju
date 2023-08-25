@@ -32,52 +32,38 @@ describe("<TooltipListItem />", () => {
     expect(moreIconElem).toBeInTheDocument();
   });
 
-  it("TooltipListItem 클릭", async () => {
+  it("TooltipListItem 클릭시 tooltip 메뉴 확인", async () => {
     render(
       <TooltipListItem direction="bottom" icon={<Star />} title="test">
         <ListItem title="test1" icon={<Abc />} />
       </TooltipListItem>
     );
-    // aria-label 이 tooltip-list-wrapper 인 element 쿼리
-    const tooltipListWrapperElem = screen.getByLabelText(
-      "tooltip-list-wrapper"
-    );
-    // document 에 있는지 확인
-    expect(tooltipListWrapperElem).toBeInTheDocument();
 
-    // abc icon 이 있는 element 쿼리
-    const tooltipListElem = screen.getByLabelText("tooltip-list");
-
-    /*************** visibility: hidden <Warn> ***********/
-    // --> 이유를 모르겠지만, class 로는 invisible 이지만
-    //     jest 에서 visibility: "visibe" 로 확인됨...
-    //     예상으로는 tailwind 의 invisible 을 인지못하고있는듯함
-    //     이해 못할 상황: 몇시간을 소요햇지만 이유를 찾지 못함
-    //     이것관련해서 stackoverflow 도 찾아보았지만
-    //     찾지 못함
-    //
-    // expect(tooltipListElem).toHaveStyle("visibility: hidden");
-    // 위 상황에 따라 invisible class 로 확인
-    expect(tooltipListElem).toHaveClass("invisible");
-    /****************************************************/
-
+    // click 할 컴포넌트 쿼리
     const tooltipListTitleElem = screen.getByLabelText("tooltip-list-title");
+    // 해당 컴포넌트 있는지 확인
+    expect(tooltipListTitleElem).toBeInTheDocument();
+
+    // tooltip 컴포넌트 쿼리
+    const tooltipListElem = screen.getByLabelText("tooltip-list");
+    // tooltip 이 invisible 인지 확인
+    expect(tooltipListElem).toHaveClass("invisible");
 
     await act(async () => {
-      // tooltipListItemElem 클릭
+      // 컴포넌트 클릭
       fireEvent.click(tooltipListTitleElem);
     });
 
-    // class 가 visible 인지 확인
+    // tooltip 이 invisible 인지 확인
     expect(tooltipListElem).toHaveClass("visible");
 
-    // tooltipList 외의 바깥 영역 클릭
+    // tooltip 외의 영역 클릭
     await act(async () => {
-      // tooltipListItemElem 클릭
-      fireEvent.click(window.document);
+      // document 영역 클릭
+      fireEvent.click(document);
     });
 
-    // class 가 invisible 인지 확인
+    // tooltip 이 invisible 인지 확인
     expect(tooltipListElem).toHaveClass("invisible");
   });
 
@@ -141,7 +127,7 @@ describe("<TooltipListItem />", () => {
     // document 에 있는지 확인
     expect(tooltipListElem).toBeInTheDocument();
 
-    // direction 이 left 인 클래스가 있는지 확인
+    // direction 이 right 인 클래스가 있는지 확인
     expect(tooltipListElem).toHaveClass("right");
   });
 });

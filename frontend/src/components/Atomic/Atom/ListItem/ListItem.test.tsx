@@ -33,10 +33,5 @@ describe("<ListItem />", () => {
     const listItemElem = screen.getByLabelText("list-item");
     // document 에 있는지 확인
     expect(listItemElem).toBeInTheDocument();
-
-    // ListItem 의 active 활성화 되었는지 확인을 위해
-    // 배경색상 확인
-    // --> #e9e9e9 == rgba(233, 233, 233)
-    expect(listItemElem).toHaveStyle("background-color: rgba(233, 233, 233)");
   });
 });

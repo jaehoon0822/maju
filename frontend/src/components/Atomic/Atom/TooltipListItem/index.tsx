@@ -10,22 +10,27 @@ const TooltipListItem = ({
   title,
   icon,
 }: TooltipProps) => {
-  const [active, setActive] = useState<boolean>(false);
+  // tooltip 을 활성화 시키는 state
+  const [isActive, setIsActive] = useState<boolean>(false);
+  // tooltip 을 참조하는 ref
   const tooltipRef = useRef<HTMLDivElement>(null);
 
+  // tooltip 이외의 영역 클릭시 일어나는 이벤트 함수
   const onClickOutsideClick = (event: MouseEvent) => {
     if (
       tooltipRef.current &&
       !tooltipRef.current.contains(event.target as Node)
     ) {
-      setActive(false);
+      setIsActive(false);
     }
   };
 
+  // tooltip 클릭시 isActive 를 토글
   const onClickToggleActive = () => {
-    setActive((prev) => !prev);
+    setIsActive((prev) => !prev);
   };
 
+  // document 객체에 onClikcOutsideClick 이벤트 등록
   useEffect(() => {
     document.addEventListener("click", onClickOutsideClick);
     return () => {
@@ -36,7 +41,7 @@ const TooltipListItem = ({
   return (
     <div
       className={classNames(module.tooltipListItem_wrapper)}
-      aria-label="tooltip-list-wrapper"
+      // aria-label="tooltip-list-wrapper"
     >
       {/* menu 상에 보여줄 component */}
       <div
@@ -50,8 +55,8 @@ const TooltipListItem = ({
       <div
         aria-label="tooltip-list"
         className={classNames(module.tooltipListItem_list, module[direction], {
-          "opacity-100 visible": active,
-          "opacity-0 invisible": !active,
+          "opacity-100 visible": isActive,
+          "opacity-0 invisible": !isActive,
         })}
       >
         {children}

@@ -13,18 +13,17 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       keyframes: {
-        show: {
-          from: { opacity: 0 },
-          to: { opacity: 1 },
-        },
-        hide: {
-          from: { opacity: 1 },
-          to: { opacity: 0 },
+        fadeInKeyFrame: {
+          from: {
+            opacity: 0,
+          },
+          to: {
+            opacity: 1,
+          },
         },
       },
       animation: {
-        show: "show .2s ease-out",
-        hide: "hide 1s ease-in",
+        fadeIn: "fadeInKeyFrame .5s ease-in-out",
       },
     },
     screens: {

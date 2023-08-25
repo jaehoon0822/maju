@@ -26,7 +26,7 @@ beforeEach(() => {
     return (
       <Form onSubmit={mockFn} schema={testSchema}>
         <Input label="test" id="test" name="test" />
-        <Button label="test버튼" variant="primary" />
+        <Button label="test버튼" variant="primary" size="large" />
       </Form>
     );
   };
@@ -85,8 +85,8 @@ describe("<Button />", () => {
     // 각 다른 variant 버튼을 rendering
     render(
       <div>
-        <Button label="primary버튼" variant="primary" />
-        <Button label="kakao버튼" variant="kakao" />
+        <Button label="primary버튼" variant="primary" size="large" />
+        <Button label="kakao버튼" variant="kakao" size="large" />
       </div>
     );
 
