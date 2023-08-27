@@ -113,4 +113,26 @@ export class AuthController {
   async kakaoLogin(req: Request, res: Response) {
     res.status(200).send("로그인 되었습니다.");
   }
+
+  async changePassword(req: Request, res: Response) {
+    const { password, id: userId } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const result = await userService.changePassword({
+      password: hashedPassword,
+      id: userId,
+    });
+
+    if (result?.affected !== 1) {
+      throw new Error("비밀번호 변경이 되지 않았습니다.");
+    }
+
+    res.status(201).send("패스워드가 변경되었습니다.");
+    try {
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+    }
+  }
 }

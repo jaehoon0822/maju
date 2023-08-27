@@ -91,11 +91,7 @@ class PostService {
         "post.content as content",
         "post.img as img",
       ])
-      .addSelect([
-        "user.id as user_id",
-        "user.email as user_email",
-        "user.nick as user_nick",
-      ])
+      .addSelect(["user.id as user_id", "user.nick as user_nick"])
       .addSelect(["hashtag.id as hashtag_id", "hashtag.title as hashtag_title"])
       .innerJoin("post.hashtag", "hashtag")
       .innerJoin("post.user", "user")

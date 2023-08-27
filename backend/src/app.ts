@@ -13,6 +13,7 @@ import { authRouter } from "./routes/auth";
 import { postRouter } from "./routes/post";
 import { userRouter } from "./routes/user";
 import hpp from "hpp";
+import { mailRouter } from "./routes/mail";
 
 const app = express();
 // port 설정
@@ -63,6 +64,7 @@ app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use("/auth", authRouter);
 app.use("/post", postRouter);
 app.use("/user", userRouter);
+app.use("/mail", mailRouter);
 /************ Routes *************/
 
 // 해당하는 Router 없을시 NotFoundError 발생

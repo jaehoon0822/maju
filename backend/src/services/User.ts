@@ -3,6 +3,7 @@ import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { Follow } from "@/entities/Follow";
 import { User } from "@/entities/User";
 import { ConflictError } from "@/errors/conflict-error";
+import { param } from "express-validator";
 
 interface FollowParams {
   followId: User["id"];
@@ -415,6 +416,27 @@ class UserService {
     } catch (error) {
       // 예기치 못한 에러처리
       if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  public async changePassword(params: Pick<User, "password" | "id">) {
+    try {
+      const result = await this.userRepo
+        .createQueryBuilder()
+        .update()
+        .set({
+          password: params.password,
+        })
+        .where({
+          id: params.id,
+        })
+        .execute();
+
+      return result;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
   }
 
