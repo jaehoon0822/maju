@@ -1,3 +1,6 @@
+export type sizeType = "XL" | "L" | "M" | "SM";
+
 export interface LogoProps {
-  size?: "XL" | "L" | "M" | "SM";
+  size?: sizeType;
+  href?: string;
 }

@@ -1,4 +1,10 @@
-import { DefaultValues, FieldValues, SubmitHandler } from "react-hook-form";
+import { SetStateAction, useState } from "react";
+import {
+  DefaultValues,
+  FieldValues,
+  SubmitHandler,
+  UseFormReturn,
+} from "react-hook-form";
 import { ObjectSchema } from "yup";
 
 export interface FormProps<T extends FieldValues> {
@@ -6,4 +12,7 @@ export interface FormProps<T extends FieldValues> {
   onSubmit: SubmitHandler<T>;
   schema: ObjectSchema<any>;
   defaultValues?: DefaultValues<T>;
+  setUseFormReturnMethod?: React.Dispatch<
+    SetStateAction<UseFormReturn<T> | undefined>
+  >;
 }

@@ -9,13 +9,14 @@ const Input = (
 ) => {
   const { register, formState } = useFormContext();
   const { errors } = formState;
-  const errorMessage = errors?.[props.name]?.message || "";
+  const errorMessage =
+    errors?.fields?.message || errors?.[props.name]?.message || "";
   const hasError = !!errorMessage;
 
   return (
     <div className={module.styled_input_wrapper}>
       <label
-        className="opacity-0 overflow-hidden absolute left-[9999px]"
+        className="opacity-0 hidden absolute left-[9999px]"
         htmlFor={props.id}
       >
         {props.label}

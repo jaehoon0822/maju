@@ -1,23 +1,17 @@
-import Image from "next/image";
-import { Noto_Sans } from "next/font/google";
-import Head from "next/head";
-import { useForm } from "react-hook-form";
-import { ListItem } from "@/components/Atomic/Atoms/ListItem";
-import HomeSvg from "@mui/icons-material/Home";
-import MangeSearuchSvg from "@mui/icons-material/ManageSearchOutlined";
-import SideManu from "@/components/Atomic/Organisms/SideMenu";
+import TextButton from "@/components/Atomic/Atoms/TextButton";
+import VerifyEmailModal from "@/components/Atomic/Organisms/Modal/VerfiyEmailModal";
+import { VerifyCodeModal } from "@/components/Atomic/Organisms/Modal/VerifyCodeModal";
+import { useRouter } from "next/router";
+import { axiosClient } from "@/common/utils/axiosClient";
+import ChangePasswordModal from "@/components/Atomic/Organisms/Modal/ChangePasswordModal";
 
 export default function Home() {
-  const method = useForm();
-  const onSubmit = async (data: { search: string }) => {
-    console.log(data.search);
-  };
   return (
-    <main className="flex justify-center items-center items-centerh flex-col h-screen">
-      <SideManu>
-        <ListItem icon={<HomeSvg />} title="홈" href="/" active />
-        <ListItem icon={<MangeSearuchSvg />} title="로그인" href="/Login" />
-      </SideManu>
+    <main className="flex justify-center items-center">
+      <TextButton label="모달 클릭" href="/?modal=verifyEmail" />
+      <VerifyEmailModal />
+      <VerifyCodeModal />
+      <ChangePasswordModal />
     </main>
   );
 }

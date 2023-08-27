@@ -1,4 +1,4 @@
 export interface TextButtonProps {
-  lable: string;
+  label: string;
   href: string;
 }

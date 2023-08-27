@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormProps } from "./Form.type";
-import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import {
+  FieldValues,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ObjectSchema } from "yup";
 
-const Form = <T extends FieldValues, S extends ObjectSchema<T>>({
+const Form = <T extends FieldValues>({
   children,
   onSubmit,
   defaultValues,
   schema,
+  setUseFormReturnMethod,
 }: FormProps<T>) => {
   const method = useForm<T>({
     defaultValues: defaultValues || undefined,
@@ -16,10 +21,18 @@ const Form = <T extends FieldValues, S extends ObjectSchema<T>>({
     mode: "onBlur",
   });
 
+  if (setUseFormReturnMethod) {
+    setTimeout(() => {
+      setUseFormReturnMethod(method);
+    });
+  }
+
   return (
-    <FormProvider {...method}>
-      <form onSubmit={method.handleSubmit(onSubmit)}>{children}</form>
-    </FormProvider>
+    <div>
+      <FormProvider {...method}>
+        <form onSubmit={method.handleSubmit(onSubmit)}>{children}</form>
+      </FormProvider>
+    </div>
   );
 };
 
