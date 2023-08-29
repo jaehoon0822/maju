@@ -8,11 +8,12 @@ import helmet from "helmet";
 import cors from "cors";
 import { passportConfig } from "./passport";
 import { errorHandler } from "./middlewares/error-handler";
-import { NotFoundError } from "./errors/not-found-error";
+import { NotFoundError } from "./errors/Not-found-error";
 import { authRouter } from "./routes/auth";
 import { postRouter } from "./routes/post";
 import { userRouter } from "./routes/user";
 import hpp from "hpp";
+import { mailRouter } from "./routes/mail";
 
 const app = express();
 // port 설정
@@ -20,7 +21,8 @@ app.set("PORT", process.env.PORT || 8080);
 // cors 설정
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
   })
 );
 // 보안관리
@@ -63,6 +65,7 @@ app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use("/auth", authRouter);
 app.use("/post", postRouter);
 app.use("/user", userRouter);
+app.use("/mail", mailRouter);
 /************ Routes *************/
 
 // 해당하는 Router 없을시 NotFoundError 발생

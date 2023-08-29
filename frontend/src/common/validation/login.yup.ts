@@ -1,4 +1,5 @@
 import * as yup from "yup";
+<<<<<<< HEAD
 
 export const loginSchema = yup.object({
   email: yup
@@ -13,3 +14,15 @@ export const loginSchema = yup.object({
     .min(6, "최소 6자 이상 입력해주세요.")
     .max(16, "최대 16자 이상 입력해주세요."),
 });
+=======
+import { emailSchema } from "./email.yup";
+import { passwordSchema } from "./password.yup";
+
+export const loginSchema = yup
+  .object({})
+  .concat(emailSchema)
+  .concat(passwordSchema)
+  .omit(["passwordConfirm"]);
+
+export type loginSchemaType = yup.InferType<typeof loginSchema>;
+>>>>>>> feature

@@ -2,7 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { Follow } from "@/entities/Follow";
 import { User } from "@/entities/User";
-import { ConflictError } from "@/errors/conflict-error";
+import { ConflictError } from "@/errors/Conflict-error";
+import { param } from "express-validator";
 
 interface FollowParams {
   followId: User["id"];
@@ -47,11 +48,59 @@ class UserService {
             "user.id",
             "user.email",
             "user.nick",
+            "user.img",
             "user.createdAt",
             "user.updatedAt",
             "user.deletedAt",
           ])
           .where("user.email = :email", { email })
+          .getOne();
+
+        return result;
+      }
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  /***
+   *
+   * @remarks
+   * local nick 로 user 를 찾는 서비스
+   *
+   * @param nick
+   * - User 의 nick 티입인 string
+   * @param isPassword
+   * - password 포함할지 안할지 결정할 boolean
+   *
+   * @returns Promise<User | null | undefined>
+   *  - User 를 반환 혹은 null or undefined 반환
+   *
+   */
+
+  public async findByNick(nick: User["nick"], isPassword: boolean = false) {
+    try {
+      if (isPassword) {
+        const result = await this.userRepo
+          .createQueryBuilder("user")
+          .where("user.nick = :nick", { nick })
+          .getOne();
+
+        return result;
+      } else {
+        const result = await this.userRepo
+          .createQueryBuilder("user")
+          .select([
+            "user.id",
+            "user.email",
+            "user.nick",
+            "user.img",
+            "user.createdAt",
+            "user.updatedAt",
+            "user.deletedAt",
+          ])
+          .where("user.nick = :nick", { nick })
           .getOne();
 
         return result;
@@ -93,6 +142,7 @@ class UserService {
             "user.id",
             "user.email",
             "user.nick",
+            "user.img",
             "user.createdAt",
             "user.updatedAt",
             "user.deletedAt",
@@ -131,6 +181,7 @@ class UserService {
           "user.id",
           "user.email",
           "user.nick",
+          "user.img",
           "user.createdAt",
           "user.updatedAt",
           "user.deletedAt",
@@ -188,6 +239,7 @@ class UserService {
             "user.id",
             "user.email",
             "user.nick",
+            "user.img",
             "user.createdAt",
             "user.updatedAt",
             "user.deletedAt",
@@ -415,6 +467,27 @@ class UserService {
     } catch (error) {
       // 예기치 못한 에러처리
       if (error instanceof Error) throw new Error(error.message);
+    }
+  }
+
+  public async changePassword(params: Pick<User, "password" | "id">) {
+    try {
+      const result = await this.userRepo
+        .createQueryBuilder()
+        .update()
+        .set({
+          password: params.password,
+        })
+        .where({
+          id: params.id,
+        })
+        .execute();
+
+      return result;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
   }
 

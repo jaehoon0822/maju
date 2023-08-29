@@ -1,0 +1,15 @@
+.btn {
+  @apply h-10 cursor-pointer transition-all duration-300 disabled:opacity-20 disabled:translate-y-0 disabled:cursor-not-allowed active:translate-y-[1px];
+}
+.btn-primary {
+  @apply bg-black text-white active:bg-black hover:bg-slate-950;
+}
+.btn-kakao {
+  @apply bg-[#FAE100] text-black font-bold;
+}
+.btn.large {
+  @apply py-2 min-w-[25rem] px-2 sm:min-w-[12.5rem] sm:py-2;
+}
+.btn.medium {
+  @apply box-border px-2 min-w-[5.75rem] sm:min-w-[4rem];
+}

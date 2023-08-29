@@ -1,0 +1,15 @@
+.topbarMenu_wrapper {
+  @apply flex flex-col w-fit;
+}
+
+.topbarMenu_list {
+  @apply flex;
+}
+
+.topbarMenu_item {
+  @apply mr-2 last:mr-0;
+}
+
+.topbarMenu_bar {
+  @apply h-1 bg-blue-500 transition-all;
+}

@@ -1,4 +1,4 @@
-import { ForbiddenError } from "@/errors/forbidden-error";
+import { ForbiddenError } from "@/errors/Forbidden-error";
 import { NextFunction, Request, Response } from "express";
 
 /**

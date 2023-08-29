@@ -1,0 +1,14 @@
+.styled_input_wrapper {
+  @apply flex flex-col flex-none relative h-[4rem] mb-8 sm:h-[3rem] sm:mb-10;
+}
+.styled_input {
+  @apply transition-all border-b-[1px] border-b-black outline-none w-[25rem] px-5 py-5 placeholder-[#8d8d8d] h-10 sm:w-[12.5rem] sm:py-2 sm:px-[1.375rem] sm:text-sm;
+}
+
+.styled_input-error {
+  @apply px-5 border-none text-red-600 duration-1000 absolute top-[3rem] sm:text-sm;
+}
+
+.styled_input-error.active {
+  @apply animate-fadeIn duration-200 ease-in-out;
+}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Image from "next/image";
 import { Noto_Sans } from "next/font/google";
 import { loginSchema } from "@/common/validation/login.yup";
@@ -28,6 +29,16 @@ export default function Home() {
         <FormButton variant="kakao" label="로그인" />
         <TextButton lable="testtest" href={"/login"} />
       </Form>
+=======
+import TextButton from "@/components/Atomic/Atoms/TextButton";
+import LoginTemplate from "@/components/Atomic/Templates/LoginTemplate";
+
+export default function Index() {
+  return (
+    <main>
+      <LoginTemplate />
+      <TextButton href="/home" label="test" />
+>>>>>>> feature
     </main>
   );
 }

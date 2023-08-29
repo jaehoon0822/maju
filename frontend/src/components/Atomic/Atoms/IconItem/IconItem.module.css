@@ -1,0 +1,23 @@
+.IconItem_wrapper {
+  @apply transition-all w-[8.75rem] h-10 flex justify-center items-center relative md:w-[6.25rem] sm:w-[2.875rem];
+}
+
+.IconItem_tooltip {
+  @apply px-2 py-2 bg-white absolute border-[1px] border-solid border-gray-200;
+}
+
+.IconItem_tooltip.right {
+  @apply left-[80%] top-0 after:content-[""] after:absolute after:border-solid after:border-8 after:-left-[16px] after:top-[10%] after:border-transparent after:border-r-white shadow-[-8px_8px_16px_rgba(0,0,0,.15)];
+}
+
+.IconItem_tooltip.left {
+  @apply right-[80%] top-0 after:content-[""] after:absolute after:border-solid after:border-8 after:-right-[16px] after:top-[10%] after:border-transparent after:border-l-white shadow-[8px_8px_16px_rgba(0,0,0,.15)];
+}
+
+.IconItem_tooltip.top {
+  @apply -left-[25%] bottom-[150%] after:content-[""] after:absolute after:border-solid after:border-8 after:right-[50%] after:-bottom-[10%] after:border-transparent after:border-t-white shadow-[8px_8px_16px_rgba(0,0,0,.15)] md:-left-[50%] sm:-left-[50%];
+}
+
+.IconItem_tooltip.bottom {
+  @apply -right-[20%] top-[150%] after:content-[""] after:absolute after:border-solid after:border-8 after:right-[40%] after:-top-[10%] after:border-transparent after:border-b-white shadow-[0px_-8px_16px_rgba(0,0,0,.15)] md:-right-[50%] sm:-right-[50%];
+}

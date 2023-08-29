@@ -1,0 +1,11 @@
+.close_btn_wrapper {
+  @apply w-6 h-6 outline-none bg-none flex justify-center items-center relative active:translate-y-[2px] transition-transform;
+}
+
+.close_line_left {
+  @apply w-[.3rem] h-6 bg-black rotate-45 -translate-x-1/2 -translate-y-1/2  absolute top-1/2 transition-transform duration-300;
+}
+
+.close_line_right {
+  @apply w-[.3rem] h-6 bg-black -rotate-45 absolute top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300;
+}
