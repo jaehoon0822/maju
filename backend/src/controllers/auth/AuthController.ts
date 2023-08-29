@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { ConflictError } from "@/errors/conflict-error";
+import { ConflictError } from "@/errors/Conflict-error";
 import { userService } from "@/services/User";
 import passport from "passport";
 import { User } from "@/entities/User";
@@ -26,13 +26,22 @@ export class AuthController {
   async signUp(req: Request, res: Response) {
     // email, password 를 request.body 에서 받음
     const { email, password, nick } = req.body;
-    // user 검색
+    const errors = [];
 
-    const user = await userService.findByEmail(email, true);
+    // user 검색
+    const emailUser = await userService.findByEmail(email, true);
+    const nickUser = await userService.findByNick(nick, true);
 
     // user 가 있다면 ConflictError 발생
-    if (user) {
-      throw new ConflictError("이미 가입된 이메일입니다.");
+    if (emailUser) {
+      errors.push(new ConflictError("이미 존재하는 이메일입니다.", "email"));
+    }
+    if (nickUser) {
+      errors.push(new ConflictError("이미 존재하는 닉네임입니다.", "nick"));
+    }
+
+    if (errors.length > 0) {
+      throw new ConflictError().toArray(errors);
     }
 
     // user 가 없다면, password 해시화

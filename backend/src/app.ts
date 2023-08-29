@@ -8,7 +8,7 @@ import helmet from "helmet";
 import cors from "cors";
 import { passportConfig } from "./passport";
 import { errorHandler } from "./middlewares/error-handler";
-import { NotFoundError } from "./errors/not-found-error";
+import { NotFoundError } from "./errors/Not-found-error";
 import { authRouter } from "./routes/auth";
 import { postRouter } from "./routes/post";
 import { userRouter } from "./routes/user";
@@ -21,7 +21,8 @@ app.set("PORT", process.env.PORT || 8080);
 // cors 설정
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:3000",
+    credentials: true,
   })
 );
 // 보안관리

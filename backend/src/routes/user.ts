@@ -5,6 +5,8 @@ import { Router } from "express";
 /** @remarks - user 라우터 */
 const router = Router();
 
+// 유저 정보 가져오기
+router.get("/", isLoggedIn, userController.getUser);
 // 유저 비밀번호 변경요청
 router.post("/:id/unfollow", isLoggedIn, userController.unfollow);
 // 해당 id 를 가진 유저 follow

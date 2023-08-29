@@ -9,9 +9,12 @@ import { TooltipListItem } from "../../Atoms/TooltipListItem";
 
 const SideMenu = ({ children }: SideMenuProps) => {
   return (
-    <div aria-label="side-menu" className={classNames(module.sideMenu_wrapper)}>
+    <div
+      aria-label="side-menu"
+      className={classNames(module.sideMenu_wrapper, "fixed")}
+    >
       <div>
-        <div className="mb-4">
+        <div className="mb-4 flex justify-center">
           <Logo size="SM" />
         </div>
         {React.Children.map(children, (child) => {

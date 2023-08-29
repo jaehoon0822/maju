@@ -1,6 +1,7 @@
 import { SvgIconProps } from "@mui/material";
 
 export interface ListItemProps {
+  img?: string;
   title?: string;
   icon?: React.ReactElement<SvgIconProps>;
   href?: string;

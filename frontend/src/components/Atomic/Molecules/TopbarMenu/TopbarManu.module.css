@@ -1,5 +1,5 @@
 .topbarMenu_wrapper {
-  @apply flex flex-col;
+  @apply flex flex-col w-fit;
 }
 
 .topbarMenu_list {

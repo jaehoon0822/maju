@@ -9,6 +9,7 @@ const TopbarMenu = ({ children, margin = 16 }: TopbarMenuProps) => {
 
   useEffect(() => {
     if (parentRef.current) {
+      console.log(parentRef.current.offsetWidth);
       setParentWidth(parentRef.current.offsetWidth);
     }
   });

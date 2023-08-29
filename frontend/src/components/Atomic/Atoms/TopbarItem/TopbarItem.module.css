@@ -1,3 +1,3 @@
 .topbarItem_wrapper {
-  @apply flex justify-center items-center min-w-[12.5rem] min-h-[2.5rem] sm:min-w-[9.5rem] cursor-pointer transition-all;
+  @apply flex justify-center items-center min-w-[12.5rem] min-h-[2.5rem] sm:min-w-[4rem] sm:text-sm sm:ml-2  cursor-pointer transition-all;
 }

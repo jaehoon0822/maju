@@ -1,6 +1,6 @@
-import { commonError } from "./common-error";
+import { CommonError } from "./Common-error";
 
-export class DatabaseConnectionError extends commonError {
+export class DatabaseConnectionError extends CommonError {
   statusCode = 500;
   message = "데이터 베이스 connection Error";
 

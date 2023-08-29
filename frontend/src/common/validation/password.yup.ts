@@ -1,6 +1,10 @@
 import * as yup from "yup";
 export const passwordSchema = yup.object({
-  password: yup.string().required("패스워드를 입력해 주세요."),
+  password: yup
+    .string()
+    .required("패스워드를 입력해 주세요.")
+    .min(8, "8이상 20자이하로 적어주세요.")
+    .max(20, "6이상 20자이하로 적어주세요."),
   passwordConfirm: yup
     .string()
     .required("패스워들 입력해 주세요.")

@@ -1,4 +1,4 @@
-import { NotFoundError } from "@/errors/not-found-error";
+import { NotFoundError } from "@/errors/Not-found-error";
 import { userService } from "@/services/User";
 import { getRandCode } from "@/utilities/getRandCode";
 import { mailSender } from "@/utilities/mailSander";

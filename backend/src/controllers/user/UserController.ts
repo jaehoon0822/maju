@@ -9,6 +9,10 @@ class UserController {
     .getDataSource()
     .getRepository(User);
 
+  public async getUser(req: Request, res: Response) {
+    res.status(200).send({ user: req.user });
+  }
+
   public async follow(req: Request, res: Response) {
     try {
       // parmas 에서 follow 할 User Id

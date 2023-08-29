@@ -1,7 +1,7 @@
 import { ValidationError } from "express-validator";
-import { commonError } from "./common-error";
+import { CommonError } from "./Common-error";
 
-export class RequestValidationError extends commonError {
+export class RequestValidationError extends CommonError {
   statusCode = 400;
   constructor(public errors: ValidationError[]) {
     super();

@@ -26,20 +26,20 @@ const VerifyCodeModal = () => {
             <>
               <div className={classNames("mb-10 flex flex-col items-center")}>
                 <div className={classNames("mb-4")}>
-                  <span className={classNames("text-5xl sm:text-4xl")}>
+                  <span className={classNames("text-5xl sm:text-3xl")}>
                     받은{" "}
                   </span>
                   <span
                     className={classNames(
-                      "text-5xl font-extrabold sm:text-4xl"
+                      "text-5xl font-extrabold sm:text-3xl"
                     )}
                   >
                     검증코드
                   </span>
-                  <span className={classNames("text-5xl sm:text-4xl")}>를</span>
+                  <span className={classNames("text-5xl sm:text-3xl")}>를</span>
                 </div>
                 <div className={classNames("mb-4")}>
-                  <span className={classNames("text-5xl sm:text-4xl")}>
+                  <span className={classNames("text-5xl sm:text-3xl")}>
                     입력해주세요.
                   </span>
                 </div>

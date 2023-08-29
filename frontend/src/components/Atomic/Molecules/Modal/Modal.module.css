@@ -1,5 +1,5 @@
 .modal_wrapper {
-  @apply h-screen overflow-hidden absolute bg-white px-10 top-0 left-1/2 z-10 -translate-x-1/2 transition-all duration-300 md:w-screen sm:w-screen;
+  @apply h-screen overflow-hidden absolute bg-white px-10 top-0 left-1/2 z-10 -translate-x-1/2 transition-all duration-300 md:w-screen sm:w-screen sm:pb-10 sm:min-h-screen sm:overflow-auto;
 }
 
 .modal_children {

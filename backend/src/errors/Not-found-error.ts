@@ -1,6 +1,6 @@
-import { commonError } from "./common-error";
+import { CommonError } from "./Common-error";
 
-export class NotFoundError extends commonError {
+export class NotFoundError extends CommonError {
   message = "페이지를 찾을수 없습니다.";
   statusCode: number = 404;
   constructor(readonly msg?: string) {

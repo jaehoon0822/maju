@@ -13,16 +13,17 @@ const Logo = ({ size = "M", href = "/" }: LogoProps) => {
   };
 
   return (
-    <div aria-label="logo" className={classNames(sizeObj[size], "relative")}>
-      <Link href={href}>
+    <Link href={href}>
+      <div aria-label="logo" className={classNames(sizeObj[size], "relative")}>
         <Image
           src={`/logo/Logo.svg`}
           alt="logo"
           fill
+          priority
           className={classNames("object-contain")}
         />
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 

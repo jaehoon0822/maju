@@ -1,6 +1,6 @@
-import { commonError } from "./common-error";
+import { CommonError } from "./Common-error";
 
-export class UnauthorizedError extends commonError {
+export class UnauthorizedError extends CommonError {
   statusCode: number = 401;
   message = "인증되지 않았습니다.";
 
