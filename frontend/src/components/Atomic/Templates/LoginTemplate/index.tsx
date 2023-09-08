@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Cliploader from "react-spinners/ClipLoader";
 import Logo from "../../Atoms/Logo";
 import { Form } from "../../Atoms/Form/Index";
-import { Input } from "../../Atoms/Input";
+import { Input } from "../../Atoms/Inputs";
 import { Button } from "../../Atoms/Button";
 import { loginSchema } from "@/common/validation/login.yup";
 import TextButton from "../../Atoms/TextButton";
@@ -14,6 +14,7 @@ import SignupModal from "../../Organisms/Modal/SignupModal";
 import SignupComplateModal from "../../Organisms/Modal/SignupComplateModal";
 import useLogin from "@/hooks/custom/useLogin";
 import useQueryGetUser from "@/hooks/queries/useQueryGetUser";
+import Spinner from "../../Atoms/Spinner";
 
 const LoginTemplate = () => {
   const { onSubmit, push, query, setUseFormReturnMethod, useFormReturnMethod } =
@@ -30,19 +31,7 @@ const LoginTemplate = () => {
   if (isLoading) {
     return (
       <div>
-        <Cliploader
-          loading={isLoading}
-          size={100}
-          cssOverride={{
-            display: "block",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
+        <Spinner isLoading={isLoading} />
       </div>
     );
   }
@@ -80,12 +69,14 @@ const LoginTemplate = () => {
               id="email"
               label="email"
               name="email"
+              value="qqq@qqq.com"
               placeholder="이메일을 입력해주세요."
             />
             <Input
               id="password"
               label="password"
               name="password"
+              value="123123123"
               placeholder="패스워드를 입력해주세요."
             />
             <Button label="로그인하기" variant="primary" size="large" />

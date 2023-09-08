@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -12,14 +13,14 @@ import { User } from "./User";
 @Entity()
 @Unique(["post", "user"])
 export class Likes extends BaseDate {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @ManyToOne(() => Post, (post) => post.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "post_id" })
+  @JoinColumn({ name: "postId" })
   post: Post;
 
   @ManyToOne(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "user_id" })
+  @JoinColumn({ name: "userId" })
   user: User;
 }

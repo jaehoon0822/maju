@@ -1,5 +1,5 @@
 import { passwordSchema } from "@/common/validation/password.yup";
-import { Input } from "@/components/Atomic/Atoms/Input";
+import { Input } from "@/components/Atomic/Atoms/Inputs";
 import TextButton from "@/components/Atomic/Atoms/TextButton";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
 import { ModalForm } from "@/components/Atomic/Molecules/ModalForm";

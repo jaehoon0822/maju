@@ -19,13 +19,13 @@ export class Hashtag extends BaseDate {
 
   @ManyToMany(() => Post, (post) => post.id)
   @JoinTable({
-    name: "post_hashtag",
+    name: "postHashtag",
     joinColumn: {
-      name: "hashtag_id",
+      name: "hashtagId",
       referencedColumnName: "id",
     },
     inverseJoinColumn: {
-      name: "post_id",
+      name: "postId",
       referencedColumnName: "id",
     },
   })

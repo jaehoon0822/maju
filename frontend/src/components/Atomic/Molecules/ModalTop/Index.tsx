@@ -7,7 +7,7 @@ import classNames from "classnames";
 import { ModalTopProps } from "./ModalTop.type";
 import { useRouter } from "next/router";
 
-const ModalTop = ({ onClose }: ModalTopProps) => {
+const ModalTop = ({ onClose, isTop }: ModalTopProps) => {
   const { pathname } = useRouter();
   const [currentSize, setCurrentSize] = useState<sizeType>("M");
 
@@ -30,9 +30,20 @@ const ModalTop = ({ onClose }: ModalTopProps) => {
   }, [getSizeFromViewport, setCurrentSize]);
 
   return (
-    <div className={classNames(module.modalTop_wrapper)}>
+    <div
+      className={classNames(module.modalTop_wrapper, {
+        "mb-48 md:w-auto": !isTop,
+        "mb-10 md:w-auto": isTop,
+      })}
+    >
       <CloseButton onClick={onClose} />
-      <Logo size={currentSize} href={pathname} />
+      <div
+        onClick={() => {
+          document.body.style.overflow = "auto";
+        }}
+      >
+        <Logo size={currentSize} href={pathname} />
+      </div>
     </div>
   );
 };

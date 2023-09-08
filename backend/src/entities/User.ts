@@ -24,7 +24,7 @@ export class User extends BaseDate {
   @Column("varchar", { length: 255, nullable: true })
   img: string;
 
-  @Column("varchar", { length: 255, nullable: true })
+  @Column("varchar", { length: 255, nullable: true, select: false })
   password: string;
 
   @Column("varchar", { length: 255, nullable: true })
@@ -40,5 +40,5 @@ export class User extends BaseDate {
   followers: Follow[];
 
   @OneToMany(() => Likes, (likes) => likes.user)
-  likeUsers: Likes[];
+  likes: Likes[];
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MouseEvent, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import module from "./IconItem.module.css";
 import { IconItemProps } from "./IconItem.type";
@@ -7,23 +7,25 @@ const IconItem = ({
   Icon,
   variants,
   more = false,
-  diraction = "top",
+  direction = "top",
+  onClick,
   children,
+  disabled = false,
   ...props
 }: IconItemProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
-  const tooltipRef = useRef<HTMLButtonElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const bgColorVariants = {
-    red: "group-hover:bg-red-100 group-focus:bg-red-100",
+    red: "group-hover:bg-red-400 group-focus:bg-red-400",
     blue: "group-hover:bg-blue-100 group-focus:bg-blue-100",
-    green: "group-hover:bg-green-100 group-focus:bg-green-100",
+    rose: "group-hover:bg-rose-100 group-focus:bg-rose-100",
   };
 
   const fillColorVariants = {
-    red: "group-hover:fill-red-500 group-focus:fill-red-500",
+    red: "group-hover:fill-red-100 group-focus:fill-red-100",
     blue: "group-hover:fill-blue-500 group-focus:fill-blue-500",
-    green: "group-hover:fill-green-500 group-focus:fill-green-500",
+    rose: "group-hover:fill-rose-400 group-focus:fill-rose-400",
   };
 
   const onClickToggle = () => {
@@ -48,12 +50,14 @@ const IconItem = ({
   }, []);
 
   return (
-    <button
-      {...props}
-      onClick={more ? onClickToggle : undefined}
-      className={classNames(module.IconItem_wrapper, "group")}
+    <div
+      onClick={more ? onClickToggle : onClick}
+      className={classNames(module.IconItem_wrapper, "group h-10", {
+        "cursor-not-allowed": disabled,
+        "cursor-pointer": !disabled,
+      })}
       ref={tooltipRef}
-      aria-label="icon-item"
+      {...props}
     >
       <div
         data-testid="icon-wrapper"
@@ -65,7 +69,7 @@ const IconItem = ({
         {more && (
           <div
             data-testid="icon-toggle"
-            className={classNames(module.IconItem_tooltip, module[diraction], {
+            className={classNames(module.IconItem_tooltip, module[direction], {
               "opacity-0 invisible": !isActive,
               "opacity-100 visible": isActive,
               "z-10": isActive,
@@ -76,7 +80,7 @@ const IconItem = ({
           </div>
         )}
       </div>
-    </button>
+    </div>
   );
 };
 

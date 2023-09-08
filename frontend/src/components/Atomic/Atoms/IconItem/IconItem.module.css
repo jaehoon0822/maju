@@ -1,5 +1,5 @@
 .IconItem_wrapper {
-  @apply transition-all w-[8.75rem] h-10 flex justify-center items-center relative md:w-[6.25rem] sm:w-[2.875rem];
+  @apply transition-all w-[8.75rem] h-14 flex justify-center items-center relative mx-4 md:w-[6.25rem] sm:w-[2.875rem] sm:mx-1;
 }
 
 .IconItem_tooltip {

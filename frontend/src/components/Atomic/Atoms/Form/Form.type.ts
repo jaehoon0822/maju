@@ -4,15 +4,17 @@ import {
   FieldValues,
   SubmitHandler,
   UseFormReturn,
+  ValidationMode,
 } from "react-hook-form";
 import { ObjectSchema } from "yup";
 
 export interface FormProps<T extends FieldValues> {
   children: React.ReactNode;
   onSubmit: SubmitHandler<T>;
-  schema: ObjectSchema<any>;
+  schema?: ObjectSchema<T>;
   defaultValues?: DefaultValues<T>;
+  mode?: keyof ValidationMode;
   setUseFormReturnMethod?: React.Dispatch<
-    SetStateAction<UseFormReturn<T> | undefined>
+    SetStateAction<UseFormReturn<any> | undefined>
   >;
 }

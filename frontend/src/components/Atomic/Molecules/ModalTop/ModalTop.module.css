@@ -1,3 +1,3 @@
 .modalTop_wrapper {
-  @apply transition-all flex justify-between items-center py-10 w-[64rem] mb-48 md:w-auto md:mb-20 sm:mb-20;
+  @apply transition-all mb-0 flex justify-between items-center py-8 w-[64rem] md:w-auto bg-white sticky top-0 z-50;
 }

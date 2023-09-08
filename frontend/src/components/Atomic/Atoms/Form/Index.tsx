@@ -1,11 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { FormProps } from "./Form.type";
-import {
-  FieldValues,
-  FormProvider,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const Form = <T extends FieldValues>({
@@ -14,18 +9,19 @@ const Form = <T extends FieldValues>({
   defaultValues,
   schema,
   setUseFormReturnMethod,
+  mode = "onBlur",
 }: FormProps<T>) => {
   const method = useForm<T>({
     defaultValues: defaultValues || undefined,
-    resolver: yupResolver(schema),
-    mode: "onBlur",
+    resolver: schema ? yupResolver(schema) : undefined,
+    mode,
   });
 
-  if (setUseFormReturnMethod) {
-    setTimeout(() => {
+  useEffect(() => {
+    if (setUseFormReturnMethod) {
       setUseFormReturnMethod(method);
-    });
-  }
+    }
+  }, [setUseFormReturnMethod, method]);
 
   return (
     <div>

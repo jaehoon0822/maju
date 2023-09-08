@@ -28,6 +28,7 @@ export const passportConfig = (passport: PassportStatic) => {
 
       sessionUser[user!.id] = user!;
       // 찾은 user 정보를 req.user 에 저장
+      console.log(user);
       return done(null, user); // <-- req.user 에 저장
     } catch (error) {
       if (error instanceof Error) {

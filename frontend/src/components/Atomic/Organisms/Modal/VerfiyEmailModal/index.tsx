@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import { emailSchema } from "@/common/validation/email.yup";
-import { Input } from "@/components/Atomic/Atoms/Input";
+import { Input } from "@/components/Atomic/Atoms/Inputs";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
 import { ModalForm } from "@/components/Atomic/Molecules/ModalForm";
 import { useVerifyEmailModal } from "@/hooks/custom/useVerifyEmailModal";

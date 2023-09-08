@@ -29,9 +29,12 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className={classNames("transition-all duration-1000", {
+      className={classNames({
         "animate-fadeIn": !routerChange,
       })}
+      style={{
+        zIndex: 1000,
+      }}
     >
       {children}
     </div>

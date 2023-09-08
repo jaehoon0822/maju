@@ -1,26 +1,46 @@
 import classNames from "classnames";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import MenuTemplate from "./Menu";
-import TopMenu from "../Atomic/Organisms/TopMenu";
-import { TopbarItem } from "../Atomic/Atoms/TopbarItem";
+import PageWrapper from "../common/PageWrapper";
+import DeletePostModal from "../Atomic/Organisms/Modal/DeletePostModal";
+import PreviewImageModal from "../Atomic/Organisms/Modal/PreviewImageModal";
+import UpdatePostModal from "../Atomic/Organisms/Modal/UpdatePostModal";
+import { useRouter } from "next/router";
+import CommentsModal from "../Atomic/Organisms/Modal/CommentsModal.ts";
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const { query } = useRouter();
+
+  useEffect(() => {
+    if (query.modal) {
+      document.body.style.overflow = "hidden";
+    }
+  }, [query]);
+
   return (
-    <div className={classNames("flex m-auto border-r-[1px] border-solid")}>
+    <div
+      className={classNames(
+        "flex m-auto border-r-[1px] border-solid max-w-[1200px] "
+      )}
+    >
       <MenuTemplate />
       <div
-        className={classNames("flex flex-col w-full ml-[17.5rem] md:ml-[6rem]")}
+        className={classNames(
+          "flex flex-col ml-[17.5rem] md:ml-[6rem] w-[80%]"
+        )}
       >
-        <TopMenu>
-          <TopbarItem title="나의 포스트" onClick={() => {}} />
-          <TopbarItem title="팔로우 포스트" onClick={() => {}} />
-        </TopMenu>
         <div
-          className={classNames("px-20 h-full md:px-8 break-words break-all")}
+          className={classNames("px-10 h-full md:px-8 break-words break-all")}
         >
           {children}
         </div>
       </div>
+      <PageWrapper>
+        <DeletePostModal />
+        <PreviewImageModal />
+        {query.modal == "updatePost" && <UpdatePostModal />}
+        {query.modal === "comments" && <CommentsModal />}
+      </PageWrapper>
     </div>
   );
 };

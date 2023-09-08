@@ -7,9 +7,12 @@
 .btn-kakao {
   @apply bg-[#FAE100] text-black font-bold;
 }
+.btn-warn {
+  @apply bg-red-500 text-white font-bold;
+}
 .btn.large {
-  @apply py-2 min-w-[25rem] px-2 sm:min-w-[12.5rem] sm:py-2;
+  @apply py-2 w-[25rem] px-2 md:m-auto md:w-full sm:py-2;
 }
 .btn.medium {
-  @apply box-border px-2 min-w-[5.75rem] sm:min-w-[4rem];
+  @apply box-border px-2 w-[5.75rem] md:m-auto md:w-[200px];
 }

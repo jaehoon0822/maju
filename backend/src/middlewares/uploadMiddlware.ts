@@ -17,10 +17,13 @@ export const upload = multer({
       // file.originalname -> 파일 이름
       const ext = path.extname(file.originalname);
       // path.basename -> 파일의 확장자를 제외
-      cb(null, path.basename(file.originalname, ext) + new Date().valueOf());
+      cb(
+        null,
+        path.basename(file.originalname, ext) + new Date().valueOf() + ext
+      );
     },
   }),
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: 20 * 1024 * 1024,
   },
 });

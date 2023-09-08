@@ -1,4 +1,4 @@
-import Editor from "@/components/Atomic/Atoms/Editor";
+import Editor from "@/components/Atomic/Atoms/Editor/index.editor";
 import classNames from "classnames";
 import React, { useState } from "react";
 

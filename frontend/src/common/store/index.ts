@@ -4,11 +4,13 @@ import {
   useSelector as useSelectorBase,
 } from "react-redux";
 import { verifyReducer } from "./slices/verifySlice";
+import { posReducer } from "./slices/posSlice";
 
 // reducer 를 사용하여 store 생성
 export const store = configureStore({
   reducer: {
     verify: verifyReducer,
+    pos: posReducer,
   },
 });
 

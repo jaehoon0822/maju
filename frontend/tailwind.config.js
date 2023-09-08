@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: "jit",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -23,7 +24,7 @@ module.exports = {
         },
       },
       animation: {
-        fadeIn: "fadeInKeyFrame .5s ease-in-out",
+        fadeIn: "fadeInKeyFrame .5s ease-out",
       },
     },
     screens: {

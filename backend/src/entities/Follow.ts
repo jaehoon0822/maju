@@ -15,10 +15,10 @@ export class Follow extends BaseDate {
   id: string;
 
   @ManyToOne(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "following_id" })
+  @JoinColumn({ name: "followingId" })
   following: User;
 
   @ManyToOne(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "follower_id" })
+  @JoinColumn({ name: "followerId" })
   follower: User;
 }

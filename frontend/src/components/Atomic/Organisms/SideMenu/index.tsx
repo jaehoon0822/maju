@@ -15,7 +15,7 @@ const SideMenu = ({ children }: SideMenuProps) => {
     >
       <div>
         <div className="mb-4 flex justify-center">
-          <Logo size="SM" />
+          <Logo size="SM" href="/home" />
         </div>
         {React.Children.map(children, (child) => {
           if (child) {

@@ -5,12 +5,7 @@ import { TooltipProps } from "./TooltipListItem.type";
 import { ListItem } from "../ListItem";
 import useTooltipListItem from "@/hooks/custom/useTooltipListItme";
 
-const TooltipListItem = ({
-  children,
-  direction,
-  title,
-  icon,
-}: TooltipProps) => {
+const TooltipListItem = ({ children, direction, icon }: TooltipProps) => {
   const { isActive, onClickToggleActive, tooltipRef, data } =
     useTooltipListItem();
   return (
@@ -24,10 +19,10 @@ const TooltipListItem = ({
         onClick={onClickToggleActive}
         aria-label="tooltip-list-title"
       >
-        {data.user.img ? (
-          <ListItem title={data.user.nick} img="/user1.jpg" more />
+        {data?.img ? (
+          <ListItem title={data.nick} img="/user1.jpg" more />
         ) : (
-          <ListItem title={data.user.nick} icon={icon} more />
+          <ListItem title={data?.nick} icon={icon} more />
         )}
       </div>
       {/* item 클릭시 보여줄 component */}

@@ -3,7 +3,6 @@ import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { Follow } from "@/entities/Follow";
 import { User } from "@/entities/User";
 import { ConflictError } from "@/errors/Conflict-error";
-import { param } from "express-validator";
 
 interface FollowParams {
   followId: User["id"];
@@ -37,22 +36,16 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.email = :email", { email })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.email = :email", { email })
           .getOne();
 
@@ -84,22 +77,16 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.nick = :nick", { nick })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.nick = :nick", { nick })
           .getOne();
 
@@ -131,22 +118,16 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.id = :id", { id })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.id = :id", { id })
           .getOne();
 
@@ -177,18 +158,8 @@ class UserService {
     try {
       const result = await this.userRepo
         .createQueryBuilder("user")
-        .select([
-          "user.id",
-          "user.email",
-          "user.nick",
-          "user.img",
-          "user.createdAt",
-          "user.updatedAt",
-          "user.deletedAt",
-          "follower.follower",
-          "following.following",
-        ])
         .where("user.id = :id", { id })
+        .leftJoinAndSelect("user.likes", "likes")
         .leftJoinAndSelect("user.followers", "follower")
         .leftJoinAndSelect("user.followings", "following")
         .getOne();
@@ -227,23 +198,17 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.snsId = :snsId", { snsId })
           .andWhere("user.provider = :provider", { provider })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.snsId = :snsId", { snsId })
           .andWhere("user.provider = :provider", { provider })
           .getOne();
@@ -341,7 +306,7 @@ class UserService {
       }
 
       const query = `
-        INSERT INTO follow (id, following_id, follower_id, deletedAt) 
+        INSERT INTO follow (id, followingId, followerId, deletedAt) 
         VALUES (?, ?, ?, null)
         ON DUPLICATE KEY UPDATE deletedAt = NULL
       `;
@@ -383,8 +348,8 @@ class UserService {
       const deletedResult = await this.followRepo
         .createQueryBuilder("follow")
         .softDelete()
-        .where("following = :following_id", { following_id: params.followId })
-        .andWhere("follower = :follower_id", { follower_id: params.followerId })
+        .where("following = :followingId", { followingId: params.followId })
+        .andWhere("follower = :followerId", { followerId: params.followerId })
         .execute();
 
       // console.log(deletedResult);
@@ -413,16 +378,16 @@ class UserService {
       const followers = await this.getFollowRepository()
         .createQueryBuilder("fw")
         .select([
-          "fw.follower_id",
-          "followerUser.email as follower_email",
-          "followerUser.nick as follower_nick",
+          "fw.followerId",
+          "followerUser.email as followerEmail",
+          "followerUser.nick as followerNick",
           "fw.createdAt as createdAt",
           "fw.updatedAt as updatedAt",
           "fw.deletedAt as deletedAt",
         ])
-        .innerJoin(User, "followingUser", "followingUser.id = fw.following_id")
-        .innerJoin(User, "followerUser", "followerUser.id = fw.follower_id")
-        .where("fw.following_id = :followingId", {
+        .innerJoin(User, "followingUser", "followingUser.id = fw.followingId")
+        .innerJoin(User, "followerUser", "followerUser.id = fw.followerId")
+        .where("fw.followingId = :followingId", {
           followingId: params.followId,
         })
         .getRawMany();
@@ -451,16 +416,16 @@ class UserService {
       const followings = await this.followRepo
         .createQueryBuilder("fw")
         .select([
-          "fw.following_id",
-          "followingUser.email as following_email",
-          "followingUser.nick as following_nick",
+          "fw.followingId",
+          "followingUser.email as followingEmail",
+          "followingUser.nick as followingNick",
           "fw.createdAt as createdAt",
           "fw.updatedAt as updatedAt",
           "fw.deletedAt as deletedAt",
         ])
-        .innerJoin(User, "followingUser", "followingUser.id = fw.following_id")
-        .innerJoin(User, "followerUser", "followerUser.id = fw.follower_id")
-        .where("fw.follower_id = :id", { id: params.followerId })
+        .innerJoin(User, "followingUser", "followingUser.id = fw.followingId")
+        .innerJoin(User, "followerUser", "followerUser.id = fw.followerId")
+        .where("fw.followerId = :id", { id: params.followerId })
         .getRawMany();
 
       return followings;

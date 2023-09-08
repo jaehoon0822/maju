@@ -10,7 +10,7 @@ class UserController {
     .getRepository(User);
 
   public async getUser(req: Request, res: Response) {
-    res.status(200).send({ user: req.user });
+    res.status(200).send(req.user);
   }
 
   public async follow(req: Request, res: Response) {

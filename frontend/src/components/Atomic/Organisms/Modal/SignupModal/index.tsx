@@ -1,5 +1,5 @@
 import { signupSchema } from "@/common/validation/signup.yup";
-import { Input } from "@/components/Atomic/Atoms/Input";
+import { Input } from "@/components/Atomic/Atoms/Inputs";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
 import { ModalForm } from "@/components/Atomic/Molecules/ModalForm";
 import useSignupModal from "@/hooks/custom/useSignupModal";
