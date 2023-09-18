@@ -26,7 +26,7 @@ export class Post extends BaseDate {
   @JoinColumn({ name: "userId" })
   user: User;
 
-  @ManyToMany(() => Hashtag, (hashtags) => hashtags.id)
+  @ManyToMany(() => Hashtag, (hashtags) => hashtags.post)
   @JoinTable({
     name: "postHashtag",
     joinColumn: {

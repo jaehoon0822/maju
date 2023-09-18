@@ -1,7 +1,7 @@
-import React from "react";
-import { Form } from "../../Atoms/Form/Index";
+import { memo } from "react";
+import Form from "../../Atoms/Form/Index";
+import Button from "../../Atoms/Button";
 import { ModalFromProps } from "./ModalForm.type";
-import { Button } from "../../Atoms/Button";
 
 const ModalForm = ({
   onSubmit,
@@ -12,18 +12,20 @@ const ModalForm = ({
   setUseFormReturnMethod,
 }: ModalFromProps) => {
   return (
-    <Form
-      onSubmit={onSubmit}
-      schema={schema}
-      defaultValues={defaultValues}
-      setUseFormReturnMethod={setUseFormReturnMethod}
-    >
-      <div>{children}</div>
-      <div>
-        <Button label={buttonLabel} size="large" variant="primary" />
-      </div>
-    </Form>
+    <div>
+      <Form
+        onSubmit={onSubmit}
+        schema={schema}
+        defaultValues={defaultValues}
+        setUseFormReturnMethod={setUseFormReturnMethod}
+      >
+        <div>{children}</div>
+        <div>
+          <Button label={buttonLabel} size="large" variant="primary" />
+        </div>
+      </Form>
+    </div>
   );
 };
 
-export { ModalForm };
+export default memo(ModalForm);

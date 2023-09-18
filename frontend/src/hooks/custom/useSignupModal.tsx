@@ -4,8 +4,9 @@ import { useVerfiyModal } from "./useVerfiyModal";
 import { useRouter } from "next/router";
 import { SubmitHandler } from "react-hook-form";
 import { AxiosError } from "axios";
+import { Dispatch, SetStateAction } from "react";
 
-const useSignupModal = () => {
+const useSignupModal = (setIsSignup: Dispatch<SetStateAction<boolean>>) => {
   const { pathname, push, query } = useRouter();
   const mutation = useMutationPostSignup();
   const { onClose, setUseFormReturnMethod, useFormReturnMethod } =
@@ -14,9 +15,11 @@ const useSignupModal = () => {
   const onSubmit: SubmitHandler<signupSchemaType> = (data) => {
     const { passwordConfirm, ...filteredData } = data;
     mutation.mutate(filteredData, {
-      onSuccess: () => {
-        push(`${pathname}/?modal=signupComplate`);
+      onSuccess: (data) => {
+        console.log(data);
+        push(`${pathname}?modal=signupComplate&userId=${data.id}`);
         useFormReturnMethod?.reset();
+        setIsSignup(true);
       },
       onError: (error) => {
         if (error instanceof AxiosError) {

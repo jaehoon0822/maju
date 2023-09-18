@@ -7,13 +7,13 @@ const router = Router();
 // user 의 comment 찾기
 router.get("/user", isLoggedIn, commentController.findByUserId);
 
-// user 의 comment 찾기
+// user 의 특정 comment 찾기
 router.get("/:commentId", isLoggedIn, commentController.findByCommentId);
 
 // post 의 comment 찾기
 router.get("/post/:postId", isLoggedIn, commentController.findByPostId);
 
-// post 의 commnet 생성
+// post 의 comment 생성
 router.post("/post/:postId", isLoggedIn, commentController.createComment);
 
 // post 의 comment 업데이트

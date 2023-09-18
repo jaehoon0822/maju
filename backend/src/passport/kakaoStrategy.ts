@@ -10,7 +10,7 @@ export const kakao = (passport: PassportStatic) => {
         callbackURL: "/auth/kakao/callback",
       },
       async (
-        _accessToken: string,
+        accessToken: string,
         _refreshToken: string,
         profile: Profile,
         done: (error: any, user?: any, info?: any) => void
@@ -29,7 +29,7 @@ export const kakao = (passport: PassportStatic) => {
             provider: "kakao",
           });
 
-          return done(null, newUser);
+          return done(null, { ...newUser, accessToken });
         } catch (error) {
           return done(error);
         }

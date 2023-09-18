@@ -38,18 +38,6 @@ class HashTagService {
     }
   }
 
-  public async findAllByTitle(
-    params: Pick<Hashtag, "title">
-  ): Promise<null | Hashtag[]> {
-    const hashtags = await this.getRepository()
-      .createQueryBuilder("hashtag")
-      .select("hashtag")
-      .where("hashtag.title = :title", { title: params.title })
-      .getMany();
-
-    return hashtags;
-  }
-
   // hashatag 생성 service
   public async create(params: Pick<Hashtag, "title">): Promise<InsertResult> {
     const insertResult = await this.getRepository()

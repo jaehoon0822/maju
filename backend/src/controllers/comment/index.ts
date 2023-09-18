@@ -43,8 +43,11 @@ export class CommentController {
   // commnet 를 userId 로 찾는 service 로직
   public async findByUserId(req: Request, res: Response) {
     try {
+      const { limit, lastId } = req.params;
       const comments = await commentService.findByUserId({
         userId: (req.user as User).id,
+        limit: Number(limit),
+        lastId,
       });
 
       if (!comments) {
@@ -60,11 +63,13 @@ export class CommentController {
   // commnet 를 postId 로 찾는 service 로직
   public async findByPostId(req: Request, res: Response) {
     try {
-      const { postId, limit, lastId } = req.params;
+      const { postId } = req.params;
+      const { limit, lastId } = req.query;
+
       const comments = await commentService.findByPostId({
         postId,
         limit: Number(limit),
-        lastId,
+        lastId: lastId as string | undefined,
       });
 
       if (!comments) {

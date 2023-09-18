@@ -1,13 +1,18 @@
+import { Dispatch, SetStateAction } from "react";
 import { signupSchema } from "@/common/validation/signup.yup";
-import { Input } from "@/components/Atomic/Atoms/Inputs";
+import Input from "@/components/Atomic/Atoms/Inputs";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
-import { ModalForm } from "@/components/Atomic/Molecules/ModalForm";
+import ModalForm from "@/components/Atomic/Molecules/ModalForm";
 import useSignupModal from "@/hooks/custom/useSignupModal";
 import classNames from "classnames";
-import React from "react";
 
-const SignupModal = () => {
-  const { onClose, onSubmit, query, setUseFormReturnMethod } = useSignupModal();
+const SignupModal = ({
+  setIsSignup,
+}: {
+  setIsSignup: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const { onClose, onSubmit, query, setUseFormReturnMethod } =
+    useSignupModal(setIsSignup);
 
   return (
     <div
@@ -19,9 +24,7 @@ const SignupModal = () => {
       <main>
         <Modal onClose={onClose}>
           <div
-            className={classNames(
-              "-mt-20 mb-10 flex flex-col items-center sm:-mt-10"
-            )}
+            className={classNames("mb-10 flex flex-col items-center sm:-mt-10")}
           >
             <div className={classNames("mb-4")}>
               <span

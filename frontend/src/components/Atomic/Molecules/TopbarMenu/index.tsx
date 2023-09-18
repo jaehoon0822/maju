@@ -1,9 +1,21 @@
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import React, {
+  ReactElement,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import classNames from "classnames";
 import module from "./TopbarManu.module.css";
 
-const TopbarMenu = ({ children, margin = 16 }: TopbarMenuProps) => {
-  const [idx, setIdx] = useState<number>(0);
+const TopbarMenu = ({
+  children,
+  onClickSelectedIdx,
+  selectedIdx,
+  margin = 16,
+}: TopbarMenuProps) => {
   const [parentWidth, setParentWidth] = useState<number>(0);
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -13,16 +25,25 @@ const TopbarMenu = ({ children, margin = 16 }: TopbarMenuProps) => {
     }
   });
 
-  const onClickSetIdx =
+  const onClickSetIdx = useCallback(
     (ChildClick: () => Promise<void> | void, index: number) => () => {
-      setIdx((prev) => index);
+      onClickSelectedIdx(index);
       ChildClick();
-    };
-  const childArr = React.Children.toArray(children);
-  const elemWidth = `calc((${parentWidth}px - (${margin}px * ${
-    childArr.length - 1
-  })) / ${childArr.length})`;
-  const topbarX = `calc((${elemWidth} + ${margin}px) * ${idx})`;
+    },
+    []
+  );
+  const childArr = useMemo(() => React.Children.toArray(children), [children]);
+  const elemWidth = useMemo(
+    () =>
+      `calc((${parentWidth}px - (${margin}px * ${childArr.length - 1})) / ${
+        childArr.length
+      })`,
+    [parentWidth, margin, childArr]
+  );
+  const topbarX = useMemo(
+    () => `calc((${elemWidth} + ${margin}px) * ${selectedIdx})`,
+    [elemWidth, margin, selectedIdx]
+  );
 
   return (
     <div
@@ -58,4 +79,4 @@ const TopbarMenu = ({ children, margin = 16 }: TopbarMenuProps) => {
   );
 };
 
-export { TopbarMenu };
+export default memo(TopbarMenu);

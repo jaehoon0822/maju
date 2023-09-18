@@ -21,7 +21,6 @@ export class PostController {
    */
   public async createImage(req: Request, res: Response) {
     const files = req.files as Express.Multer.File[];
-    console.log(files);
     const fileNames = files?.map((file: Express.Multer.File) => {
       return `${file.filename}`;
     });
@@ -47,7 +46,8 @@ export class PostController {
       // post id 를 통해 post 를 find
       const post = await postService.findById({
         // insertResult.identifiers[0].id === post id
-        id: insertResult.identifiers[0].id,
+        postId: insertResult.identifiers[0].id,
+        userId: (req.user as User).id,
       });
 
       if (!post) {
@@ -101,7 +101,10 @@ export class PostController {
   public async getPostById(req: Request, res: Response) {
     try {
       // postService 를 통해 user 를 찾는 service
-      const post = await postService.findById({ id: req.params.id });
+      const post = await postService.findById({
+        postId: req.params.id,
+        userId: (req.user as User).id,
+      });
       if (!post) {
         throw new NotFoundError("리소스를 찾을수 없습니다.");
       }
@@ -132,7 +135,8 @@ export class PostController {
       }
 
       const posts = await postService.findByUser({
-        userId: user.id,
+        id: user.id,
+        userId: (req.user as User).id,
         limit: Number(limit),
         lastId: lastId as string | undefined,
       });
@@ -168,6 +172,7 @@ export class PostController {
         hashtagTitle: hashtag as string,
         limit: Number(limit),
         lastId: lastId as string,
+        userId: (req.user as User).id,
       });
       // hashtags 반환
       res.status(200).send(posts ?? []);
@@ -178,6 +183,28 @@ export class PostController {
       }
     }
   }
+  // followerPost 얻는 컨트롤러
+  public async getFollowerPosts(req: Request, res: Response) {
+    // path query 중 hashtag 를 가져온다
+    const { limit, lastId } = req.query;
+
+    try {
+      // hashtag 를
+      const posts = await postService.getFollowerPostByUser({
+        limit: Number(limit),
+        lastId: lastId as string,
+        userId: (req.user as User).id,
+      });
+      // hashtags 반환
+      res.status(200).send(posts ?? []);
+    } catch (error) {
+      // 예기치 못한 Error 발생
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+    }
+  }
+
   public async updatePost(
     req: Request<
       { id: string },
@@ -190,7 +217,10 @@ export class PostController {
       const { content, img } = req.body;
       const { id } = req.params;
 
-      const post = await postService.findById({ id });
+      const post = await postService.findById({
+        postId: id,
+        userId: (req.user as User).id,
+      });
 
       const regex = /#([^<>"\s]+)/g;
       const matches = req.body.content.match(regex);
@@ -235,10 +265,10 @@ export class PostController {
           )
         ).flat();
 
-        post.content = content;
         post.hashtag = hashtags;
-        await postService.getPostRepository().save(post);
       }
+      post.content = content;
+      await postService.getPostRepository().save(post);
 
       await postService.imageRepo
         .createQueryBuilder()

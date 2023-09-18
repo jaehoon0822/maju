@@ -16,6 +16,12 @@ export class Likes extends BaseDate {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column()
+  userId: string;
+
+  @Column()
+  postId: string;
+
   @ManyToOne(() => Post, (post) => post.id, { onDelete: "CASCADE" })
   @JoinColumn({ name: "postId" })
   post: Post;

@@ -1,10 +1,13 @@
-import Editor from "@/components/Atomic/Atoms/Editor/index.editor";
+import Ban from "@/components/Atomic/Atoms/Ban";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
+import PostEditor from "@/components/Atomic/Molecules/PostEditor";
 import useUpdatePostModal from "@/hooks/custom/useUpdatePostModal";
 import classNames from "classnames";
+import { memo } from "react";
 
 const UpdatePostModal = () => {
-  const { isLoading, onClose, postData, query, pos } = useUpdatePostModal();
+  const { isSuccess, onClose, onSubmit, postData, query, isMyPost } =
+    useUpdatePostModal();
 
   return (
     <div
@@ -12,28 +15,38 @@ const UpdatePostModal = () => {
         "opacity-0 invisible": query.modal !== "updatePost",
         "opacity-100 visible": query.modal == "updatePost",
       })}
-      style={{
-        top: pos,
-      }}
     >
-      <Modal onClose={onClose}>
-        <div className={classNames("flex flex-col text-2xl")}>
-          <h3>
-            <span className={classNames("mr-2")}>글을 </span>
-            <span
-              className={classNames("text-blue-500 text-4xl mr-2 font-bold")}
-            >
-              수정
-            </span>
-            <span>하실건가요?</span>
-          </h3>
-        </div>
-        {!isLoading && (
-          <Editor editData={postData} placeholder="이야기를 수정하실건가요?" />
-        )}
-      </Modal>
+      {isMyPost ? (
+        <Modal onClose={onClose}>
+          <div
+            className={classNames("w-[80%]", {
+              "left-0 opacity-100": query.modal,
+              "-left-[200px] opacity-0": !query.modal,
+            })}
+          >
+            <div className={classNames("flex flex-col items-center text-2xl")}>
+              <h3>
+                <span className={classNames("text-4xl mr-2 font-bold")}>
+                  게시물 수정
+                </span>
+              </h3>
+            </div>
+            <div className={classNames("w-full")}>
+              {isSuccess && (
+                <PostEditor
+                  post={postData}
+                  onSubmit={onSubmit}
+                  toolbarId="updateToolbar"
+                />
+              )}
+            </div>
+          </div>
+        </Modal>
+      ) : (
+        <Ban />
+      )}
     </div>
   );
 };
 
-export default UpdatePostModal;
+export default memo(UpdatePostModal);

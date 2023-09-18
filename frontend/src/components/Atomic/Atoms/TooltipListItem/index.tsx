@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo } from "react";
 import module from "./TooltipListItem.module.css";
 import classNames from "classnames";
 import { TooltipProps } from "./TooltipListItem.type";
-import { ListItem } from "../ListItem";
+import ListItem from "../ListItem";
 import useTooltipListItem from "@/hooks/custom/useTooltipListItme";
 
 const TooltipListItem = ({ children, direction, icon }: TooltipProps) => {
@@ -19,8 +19,8 @@ const TooltipListItem = ({ children, direction, icon }: TooltipProps) => {
         onClick={onClickToggleActive}
         aria-label="tooltip-list-title"
       >
-        {data?.img ? (
-          <ListItem title={data.nick} img="/user1.jpg" more />
+        {data?.profile?.avatar ? (
+          <ListItem title={data.nick} user={data} more />
         ) : (
           <ListItem title={data?.nick} icon={icon} more />
         )}
@@ -39,4 +39,4 @@ const TooltipListItem = ({ children, direction, icon }: TooltipProps) => {
   );
 };
 
-export { TooltipListItem };
+export default memo(TooltipListItem);

@@ -2,7 +2,7 @@ import { Post } from "@/common/types/index.types";
 import PhotoSizeSelectIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import classNames from "classnames";
 import Image from "next/image";
-import React, { MouseEvent, useMemo } from "react";
+import React, { MouseEvent, memo, useCallback, useMemo } from "react";
 import Img from "../Img";
 
 interface PostImageProps {
@@ -11,11 +11,15 @@ interface PostImageProps {
 }
 
 const PostImages = ({ post, onClickModal }: PostImageProps) => {
-  const onClickPosImages = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    onClickModal(post.id);
-  };
-  if (post?.img?.length === 0) {
+  const onClickPosImages = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      onClickModal(post.id);
+    },
+    [post.id]
+  );
+  const isImg = useMemo(() => post?.img?.length === 0, [post?.img?.length]);
+  if (isImg) {
     return null;
   }
 
@@ -30,30 +34,27 @@ const PostImages = ({ post, onClickModal }: PostImageProps) => {
           )}
           onClick={onClickPosImages}
         >
-          {useMemo(
-            () =>
-              post.img &&
-              post.img.length !== 0 &&
-              post.img.map((image) => {
-                return (
-                  <div
-                    key={image.id}
-                    className={classNames("relative w-1/2 h-[182px]  ")}
-                  >
-                    <Image
-                      src={`${process.env.NEXT_PUBLIC_BASE_URL}/${image.img}`}
-                      alt={"test"}
-                      fill
-                      className="object-cover object-cneter pr-2 pt-2 rounded-xl"
-                    />
-                  </div>
-                );
-              }),
-            [post.img]
-          )}
+          {post.img &&
+            post.img.length !== 0 &&
+            post.img.map((image) => {
+              return (
+                <div
+                  key={image.id}
+                  className={classNames("relative w-1/2 h-[182px]")}
+                >
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/post/${image.img}`}
+                    alt={"test"}
+                    sizes="100vw md:80vw sm:40vw"
+                    fill
+                    className="object-cover object-cneter pr-2 pt-2 rounded-xl"
+                  />
+                </div>
+              );
+            })}
           <div
             className={classNames(
-              "absolute z-10 transition-opacity",
+              "absolute transition-opacity",
               "w-full h-full",
               "bg-black bg-opacity-50",
               "group-hover:opacity-100 group-focus:opacity-100 opacity-0",
@@ -81,4 +82,4 @@ const PostImages = ({ post, onClickModal }: PostImageProps) => {
   );
 };
 
-export default PostImages;
+export default memo(PostImages);

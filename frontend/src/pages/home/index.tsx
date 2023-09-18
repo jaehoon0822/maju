@@ -1,13 +1,26 @@
+import { memo } from "react";
+import HomeFollowerPostContents from "@/components/Atomic/Organisms/HomeFollowerPostContents";
+import HomeMyPostContents from "@/components/Atomic/Organisms/HomeMyPostContents";
 import HomeTemplate from "@/components/Atomic/Templates/HomeTemplate";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 const Home = () => {
   const { query } = useRouter();
-  useEffect(() => {
-    document.body.style.overflow = "auto";
-  }, [query]);
-  return <HomeTemplate />;
+  return (
+    <>
+      <Head>
+        <title>MAJU 홈</title>
+      </Head>
+      <HomeTemplate>
+        {query.page === "followPost" ? (
+          <HomeFollowerPostContents />
+        ) : (
+          <HomeMyPostContents />
+        )}
+      </HomeTemplate>
+    </>
+  );
 };
 
-export default Home;
+export default memo(Home);

@@ -13,7 +13,8 @@ const useQueryGetUser = () => {
         throw error;
       }
     },
-    staleTime: 300000,
+    staleTime: 3000000,
+    cacheTime: 3000000,
     refetchInterval: false,
     refetchOnWindowFocus: false,
     retry: 0,

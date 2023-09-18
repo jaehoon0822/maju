@@ -1,41 +1,37 @@
 import classNames from "classnames";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 
 interface PreveiwImgProps {
   img: string;
+  type: "coverImage" | "avatar" | "post";
 }
 
 interface ImageSize {
   width: number;
-  height: number;
 }
 
-const PreviewImg = ({ img }: PreveiwImgProps) => {
+const PreviewImg = ({ img, type }: PreveiwImgProps) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [imageSize, setImageSize] = useState<ImageSize>({
     width: 0,
-    height: 0,
   });
 
   useEffect(() => {
     if (imageRef.current) {
       imageRef.current.onload = () => {
         const width = imageRef.current!.naturalWidth;
-        const height = imageRef.current!.naturalHeight;
-
         setImageSize({
           width,
-          height,
         });
       };
     }
-  });
+  }, [img]);
 
   return (
     <div
       className={classNames(
-        "relative -translate-x-1/2 -translate-y-1/2 left-1/2 top-[50vh]",
+        "relative -translate-x-1/2 -translate-y-1/2 left-[50vw] top-[50vh]",
         {
           "w-[300px] h-[300px] ": imageSize.width < 300,
           "w-[600px] h-screen md:w-[100vw] md:h-[100vh] sm:w-[100vw] sm:h-[100vh]":
@@ -47,8 +43,9 @@ const PreviewImg = ({ img }: PreveiwImgProps) => {
     >
       <Image
         ref={imageRef}
-        src={`${process.env.NEXT_PUBLIC_BASE_URL}/${img}`}
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}/${type}/${img}`}
         fill
+        sizes="lg:100vw md:80vw sm:40vw"
         alt={img}
         className={classNames("object-contain")}
       />
@@ -56,4 +53,4 @@ const PreviewImg = ({ img }: PreveiwImgProps) => {
   );
 };
 
-export default PreviewImg;
+export default memo(PreviewImg);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const Spinner = ({ isLoading }: { isLoading: boolean }) => {
@@ -21,4 +21,4 @@ const Spinner = ({ isLoading }: { isLoading: boolean }) => {
   );
 };
 
-export default Spinner;
+export default memo(Spinner);

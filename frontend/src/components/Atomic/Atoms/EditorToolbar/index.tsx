@@ -1,7 +1,9 @@
-const EditorToolbar = () => {
+import { memo } from "react";
+
+const EditorToolbar = ({ toolbarId }: { toolbarId: string }) => {
   return (
     <div
-      id="toolbar"
+      id={toolbarId}
       style={{
         border: "none",
       }}
@@ -19,4 +21,4 @@ const EditorToolbar = () => {
   );
 };
 
-export default EditorToolbar;
+export default memo(EditorToolbar);

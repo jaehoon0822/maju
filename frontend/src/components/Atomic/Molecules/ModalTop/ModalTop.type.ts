@@ -1,4 +1,5 @@
 export interface ModalTopProps {
-  onClose: () => void;
+  onClose?: () => void;
   isTop?: boolean;
+  disabledLogo?: boolean;
 }

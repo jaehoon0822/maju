@@ -17,7 +17,7 @@ export class Hashtag extends BaseDate {
   @Column("varchar", { unique: true, length: 255 })
   title: string;
 
-  @ManyToMany(() => Post, (post) => post.id)
+  @ManyToMany(() => Post, (post) => post.hashtag)
   @JoinTable({
     name: "postHashtag",
     joinColumn: {

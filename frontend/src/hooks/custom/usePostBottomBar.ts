@@ -8,35 +8,105 @@ import useMutationDeletePost from "../mutations/useMutationDeletePost";
 import { useRouter } from "next/router";
 import { useDispatch } from "@/common/store";
 import { setPos } from "@/common/store/slices/posSlice";
-import { MouseEvent, useEffect } from "react";
+import { MouseEvent, useCallback, useMemo } from "react";
+import { getPathname } from "@/common/utils/getPathname";
 
 const usePostBottomBar = (post: Post) => {
   const posDispatch = useDispatch();
   const queryClient = useQueryClient();
-  const { push, pathname } = useRouter();
+  const { push, query, asPath } = useRouter();
   const { data: userData } = useQueryGetUser();
-  const isMyPost = post.user.id === userData?.id;
   const addLikeMutation = useMutationAddLike();
   const unLikeMutation = useMutationUnLike();
   const deletePostMutation = useMutationDeletePost();
-  const likeCount = post.likeCount;
-  const isLikeUser = post.likes?.some((like) => {
-    like.userId === userData?.id;
-  });
+  const isMyPost = useMemo(
+    () => post.user.id === userData?.id,
+    [post.user.id, userData?.id]
+  );
+  const likeCount = useMemo(() => post.likeCount ?? 0, [post.likeCount]);
+  const commentCount = useMemo(
+    () => post.commentCount ?? 0,
+    [post.commentCount]
+  );
+  const queryPage = useMemo(
+    () => (query.page ? (query.page as string) : ""),
+    [query.page]
+  );
+  const isLikeUser = useMemo(
+    () =>
+      post.likes?.some((like) => {
+        return like.userId === userData?.id;
+      }),
+    [post.likes]
+  );
 
-  const onClickDeletePostModal = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    push(`/${pathname}?modal=deletePost&postId=${post.id}`);
-    posDispatch(setPos(window.scrollY));
-  };
+  const onClickDeletePostModal = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      push(
+        getPathname({
+          asPath,
+          queryPage,
+          queryString: `modal=deletePost&postId=${post.id} `,
+        })
+      );
+      posDispatch(setPos(window.scrollY));
+    },
+    [asPath, queryPage, post.id]
+  );
 
-  const onClickDeletePost = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    deletePostMutation.mutate(
+  const onClickDeletePost = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      deletePostMutation.mutate(
+        { postId: post.id },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(["/post", userData?.id]);
+            queryClient.invalidateQueries([`/hashtag`, `/posts`]);
+            queryClient.invalidateQueries([`/posts`]);
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              throw error;
+            }
+          },
+        }
+      );
+    },
+    [asPath, queryPage, post.id]
+  );
+
+  const onClickUnLike = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      unLikeMutation.mutate(
+        { postId: post.id },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(["/post", userData?.id]);
+            queryClient.invalidateQueries(["/hashtag", "/posts"]);
+            queryClient.invalidateQueries([`/posts`]);
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              throw error;
+            }
+          },
+        }
+      );
+    },
+    [asPath, post.id, userData?.id]
+  );
+
+  const onClickAddLike = useCallback(() => {
+    addLikeMutation.mutate(
       { postId: post.id },
       {
         onSuccess: () => {
           queryClient.invalidateQueries(["/post", userData?.id]);
+          queryClient.invalidateQueries(["/hashtag", "/posts"]);
+          queryClient.invalidateQueries([`/posts`]);
         },
         onError: (error) => {
           if (error instanceof AxiosError) {
@@ -45,53 +115,37 @@ const usePostBottomBar = (post: Post) => {
         },
       }
     );
-  };
+  }, [userData?.id, post.id]);
 
-  const onClickUnLike = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    unLikeMutation.mutate(
-      { postId: post.id },
-      {
-        onSuccess: (data) => {
-          queryClient.setQueryData(["/like", post.id], data);
-          queryClient.invalidateQueries(["/like", post.id, "/users"]);
-        },
-        onError: (error) => {
-          if (error instanceof AxiosError) {
-            throw error;
-          }
-        },
-      }
-    );
-  };
+  const onClickUpdatePostModal = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      push(
+        getPathname({
+          asPath,
+          queryPage,
+          queryString: `modal=updatePost&postId=${post.id} `,
+        })
+      );
+      posDispatch(setPos(window.scrollY));
+    },
+    [asPath, queryPage, post.id]
+  );
 
-  const onClickAddLike = () => {
-    addLikeMutation.mutate(
-      { postId: post.id },
-      {
-        onSuccess: (data) => {
-          queryClient.setQueryData(["/like", post.id], data);
-          queryClient.invalidateQueries(["/like", post.id, "/users"]);
-        },
-        onError: (error) => {
-          if (error instanceof AxiosError) {
-            throw error;
-          }
-        },
-      }
-    );
-  };
-
-  const onClickUpdatePostModal = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    posDispatch(setPos(window.scrollY));
-    push(`${pathname}?modal=updatePost&postId=${post.id}`);
-  };
-
-  const onClickCommentsModal = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    push(`${pathname}?modal=comments&postId=${post.id}`);
-  };
+  const onClickCommentsModal = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      push(
+        getPathname({
+          asPath,
+          queryPage,
+          queryString: `modal=comments&postId=${post.id} `,
+        })
+      );
+      posDispatch(setPos(window.scrollY));
+    },
+    [asPath, queryPage, getPathname]
+  );
 
   return {
     onClickAddLike,
@@ -102,6 +156,7 @@ const usePostBottomBar = (post: Post) => {
     onClickUpdatePostModal,
     userData,
     likeCount,
+    commentCount,
     isLikeUser,
     isMyPost,
     push,

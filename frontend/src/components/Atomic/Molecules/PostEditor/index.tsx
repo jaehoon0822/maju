@@ -1,28 +1,25 @@
-import React, { ChangeEvent, useRef, useState } from "react";
-import ReactQuill from "react-quill";
-import { InferType } from "yup";
-import {
-  FieldErrors,
-  FieldValues,
-  SubmitHandler,
-  UseFormReturn,
-} from "react-hook-form";
-import { Button } from "../../Atoms/Button";
+import Button from "../../Atoms/Button";
 import Editor from "../../Atoms/Editor";
-import { Form } from "../../Atoms/Form/Index";
-import { postSchema } from "@/common/validation/post.yup";
+import Form from "../../Atoms/Form/Index";
+import { postSchema, postType } from "@/common/validation/post.yup";
 import EditPerviewImage from "../../Atoms/EditPreviewImage";
 import classNames from "classnames";
 import EditorToolbar from "../../Atoms/EditorToolbar";
-import Post from "../../Organisms/Post";
 import usePostEditor from "@/hooks/custom/usePostEditor";
+import { toEditContent } from "@/common/utils/toEditContent";
+import { memo, useMemo } from "react";
+import { Post } from "@/common/types/index.types";
 
 const PostEditor = ({
+  toolbarId,
   onSubmit,
   post,
+  placeholder,
 }: {
-  onSubmit: (data: InferType<typeof postSchema> & { img: string[] }) => void;
+  toolbarId?: string;
+  onSubmit: (data: postType) => void;
   post?: Post;
+  placeholder?: string;
 }) => {
   const {
     onChangeImage,
@@ -30,11 +27,12 @@ const PostEditor = ({
     onRemoveImage,
     onSubmitHandler,
     setUseFormReturn,
-    editorRef,
-    errors,
-    imageInputRef,
-    images,
     setErrors,
+    editorRef,
+    imageInputRef,
+    errors,
+    images,
+    hashtags,
   } = usePostEditor(onSubmit, post);
 
   return (
@@ -44,26 +42,49 @@ const PostEditor = ({
       defaultValues={
         post
           ? {
-              content: post.content,
+              content: toEditContent(post.content),
               img: Array.from(post.img, (img) => img.img),
             }
           : { content: "", img: [] }
       }
       setUseFormReturnMethod={setUseFormReturn}
     >
-      <>
+      <div className={classNames("w-full")}>
         <Editor
           name="content"
           forwardedRef={editorRef}
           setErrors={setErrors}
-          isToolbar={true}
-          toolbar={{
-            container: "#toolbar",
-            handlers: {
-              image: onHandleImage,
-            },
-          }}
+          placeholder={placeholder ?? undefined}
+          toolbar={
+            toolbarId
+              ? useMemo(
+                  () => ({
+                    container: `#${toolbarId}`,
+                    handlers: {
+                      image: onHandleImage,
+                    },
+                  }),
+                  [toolbarId]
+                )
+              : undefined
+          }
         >
+          <div className={classNames("relative pb-4 transition-opacity")}>
+            {useMemo(
+              () =>
+                hashtags.map((hashtag, idx) => (
+                  <span
+                    key={hashtag + idx}
+                    className={classNames(
+                      "inline-block animate-fadeIn p-2 mt-2 bg-blue-500 text-white ml-2"
+                    )}
+                  >
+                    {hashtag}
+                  </span>
+                )),
+              [hashtags]
+            )}
+          </div>
           <EditPerviewImage images={images} onRemoveImage={onRemoveImage} />
           <div className={classNames("flex sm:flex-col")}>
             <input
@@ -75,22 +96,24 @@ const PostEditor = ({
               className={classNames("hidden")}
               onChange={onChangeImage}
             />
-            <EditorToolbar />
-            <div className={classNames("ml-auto py-4 sm:w-full")}>
+            {toolbarId ? <EditorToolbar toolbarId={toolbarId} /> : null}
+            <div className={classNames("ml-auto py-4 pt-8 sm:pt-4 sm:w-full")}>
               <Button
                 label="게시하기"
                 size="large"
                 variant="primary"
-                disabled={
-                  !!errors["content"]?.message || !!errors["img"]?.message
-                }
+                disabled={useMemo(
+                  () =>
+                    !!errors["content"]?.message || !!errors["img"]?.message,
+                  [errors]
+                )}
               />
             </div>
           </div>
         </Editor>
-      </>
+      </div>
     </Form>
   );
 };
 
-export default PostEditor;
+export default memo(PostEditor);

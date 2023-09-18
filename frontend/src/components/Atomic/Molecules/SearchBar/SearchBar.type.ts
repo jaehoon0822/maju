@@ -1,5 +1,6 @@
-import { FieldValues, SubmitHandler } from "react-hook-form";
+import { searchBarSchemaType } from "@/common/validation/searchBar.yup";
+import { SubmitHandler } from "react-hook-form";
 
-export interface SearchBarProps<T extends FieldValues> {
-  onSubmit: SubmitHandler<T>;
+export interface SearchBarProps {
+  onSubmit: SubmitHandler<searchBarSchemaType>;
 }

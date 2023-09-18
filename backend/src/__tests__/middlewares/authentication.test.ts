@@ -1,4 +1,4 @@
-import { commonError } from "@/errors/common-error";
+import { CommonError } from "@/errors/Common-error";
 import { isLoggedIn, isNotLoggedIn } from "@/middlewares/authentication";
 import { NextFunction } from "express";
 
@@ -25,7 +25,6 @@ describe("authentication middleware", () => {
     req.isAuthenticated = jest.fn(() => true);
 
     isLoggedIn(req, res, mockedNext);
-    console.log(isLoggedIn(req, res, mockedNext));
 
     expect(mockedNext).toHaveBeenCalledTimes(1);
   });
@@ -37,7 +36,7 @@ describe("authentication middleware", () => {
     try {
       isLoggedIn(req, res, mockedNext);
     } catch (err: any) {
-      if (err instanceof commonError) {
+      if (err instanceof CommonError) {
         expect(mockedNext).not.toHaveBeenCalled();
         expect(err.serializeErrors()).toEqual([
           { message: "로그인되지 않은 회원입니다." },
@@ -61,7 +60,7 @@ describe("authentication middleware", () => {
     try {
       isNotLoggedIn(req, res, mockedNext);
     } catch (err) {
-      if (err instanceof commonError) {
+      if (err instanceof CommonError) {
         expect(mockedNext).not.toHaveBeenCalled();
         expect(err.serializeErrors()).toEqual([
           { message: "이미 로그인된 회원입니다." },

@@ -1,4 +1,4 @@
-import { ForwardedRef, MutableRefObject } from "react";
+import { ForwardedRef } from "react";
 import ReactQuill, { ReactQuillProps } from "react-quill";
 
 export type QuillEditorFowardedRef = ReactQuillProps & {

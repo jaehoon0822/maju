@@ -1,16 +1,22 @@
 import React from "react";
-import { FieldValues } from "react-hook-form";
 import { SearchBarProps } from "./SearchBar.type";
-import { Input } from "../../Atoms/Inputs";
-import { Form } from "../../Atoms/Form/Index";
+import Input from "../../Atoms/Inputs";
+import Form from "../../Atoms/Form/Index";
+import Button from "../../Atoms/Button";
 import { searchBarSchema } from "@/common/validation/searchBar.yup";
-import { Button } from "../../Atoms/Button";
 import module from "./SearchBar.module.css";
 import classNames from "classnames";
+import useSearchBar from "@/hooks/custom/useSearchBar";
 
-const SearchBar = <T extends FieldValues>({ onSubmit }: SearchBarProps<T>) => {
+const SearchBar = ({ onSubmit }: SearchBarProps) => {
+  const { setUseFormReturnMethod } = useSearchBar();
   return (
-    <Form onSubmit={onSubmit} schema={searchBarSchema}>
+    <Form
+      onSubmit={onSubmit}
+      schema={searchBarSchema}
+      mode="onSubmit"
+      setUseFormReturnMethod={setUseFormReturnMethod}
+    >
       <div className={classNames(module.searchBar_wrapper)}>
         <Input
           label="search"
@@ -18,7 +24,9 @@ const SearchBar = <T extends FieldValues>({ onSubmit }: SearchBarProps<T>) => {
           id="search"
           placeholder="태그를 입력해주세요."
         />
-        <Button label="검색" variant="primary" size="medium" />
+        <div className={classNames("p-[1px]")}>
+          <Button label="검색" variant="primary" size="medium" />
+        </div>
       </div>
     </Form>
   );

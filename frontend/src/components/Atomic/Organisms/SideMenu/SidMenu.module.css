@@ -1,5 +1,5 @@
 .sideMenu_wrapper {
-  @apply px-10 py-10 flex flex-col justify-between items-center w-[17.5rem] h-full border-solid border-[1px] border-[#d2d2d2] md:w-24 md:px-2;
+  @apply px-10 py-10 flex flex-col justify-between items-center w-[17.5rem] h-full border-solid border-[1px] border-[#d2d2d2] md:w-24 md:px-2 z-10;
 }
 
 .sidMenu_bottom {

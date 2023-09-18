@@ -1,7 +1,7 @@
 import * as yup from "yup";
-import { Form } from "../Form/Index";
+import Form from "../Form/Index";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { Input } from "../Inputs";
+import Input from "../Inputs";
 import { act } from "react-dom/test-utils";
 import FormButton from ".";
 

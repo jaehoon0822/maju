@@ -1,10 +1,9 @@
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
-import { AppDataSource } from "@/config/AppDatasource";
+import { Follow } from "@/entities/Follow";
 import { Image } from "@/entities/Image";
 import { Likes } from "@/entities/Likes";
 import { Post } from "@/entities/Post";
 import { User } from "@/entities/User";
-import { raw } from "express";
 
 /***
  * @remarks PostService class 생성
@@ -73,19 +72,39 @@ class PostService {
     }
   }
   // id 로 post 를 찾는 service
-  public async findById(params: Pick<Post, "id">) {
-    const post = await this.postRepo
+  public async findById(params: { userId: User["id"]; postId: Post["id"] }) {
+    const rawAndEntities = await this.postRepo
       .createQueryBuilder("post")
       .select("post")
+      .addSelect((qb) => {
+        return qb
+          .subQuery()
+          .select("IF(COUNT(follow.id) = 0, false, true)")
+          .from("follow", "follow")
+          .where("follow.followingId = :followId", { followId: params.userId })
+          .andWhere("follow.followerId = user.id");
+      }, "isFollower")
       .innerJoinAndSelect("post.user", "user")
+      .leftJoinAndSelect("user.profile", "profile")
       .leftJoinAndSelect("post.img", "image")
       .leftJoinAndSelect("post.likes", "likes")
       .leftJoinAndSelect("post.hashtag", "hashtag")
       // 개인적으로 params만 사용해도 될것 같지만..
       // 어떤 이유인지 id 를 읽지 못해서 명시적으로 id 선언
-      .where("post.id = :id", { id: params.id })
+      .where("post.id = :postId", { postId: params.postId })
       .orderBy("post.createdAt", "DESC")
-      .getOne();
+      .getRawAndEntities();
+
+    const post: Post & { isFollow: boolean } = rawAndEntities.entities.map(
+      (entity) => {
+        const newPost: any = entity;
+        const rawData = rawAndEntities.raw.filter(
+          (rawData) => rawData.post_id === entity.id
+        );
+        newPost.isFollower = rawData[0].isFollower === 1;
+        return newPost;
+      }
+    )[0];
 
     // 찾은 post 반환
     return post;
@@ -98,6 +117,7 @@ class PostService {
 
   // user 로 post 를 찾는 service
   public async findByUser(params: {
+    id: User["id"];
     userId: User["id"];
     limit: number;
     lastId: Post["id"] | undefined;
@@ -105,18 +125,35 @@ class PostService {
     const postBuilder = this.postRepo
       .createQueryBuilder("post")
       .innerJoinAndSelect("post.user", "user")
+      .leftJoinAndSelect("user.profile", "profile")
       .leftJoinAndSelect("post.img", "image")
+      .leftJoinAndSelect("post.likes", "likes")
       .leftJoinAndSelect("post.hashtag", "hashtag")
       .addSelect((qb) => {
         return qb
           .subQuery()
-          .select("COUNT(likes.id)", "count")
-          .from(Likes, "likes")
-          .where("likes.postId = post.id");
+          .select("COUNT(sub_likes.id)", "likesCount")
+          .from("likes", "sub_likes")
+          .where("sub_likes.postId = post.id");
       }, "likeCount")
+      .addSelect((qb) => {
+        return qb
+          .subQuery()
+          .select("COUNT(sub_comment.id)", "commentCount")
+          .from("comment", "sub_comment")
+          .where("sub_comment.postId = post.id");
+      }, "commentCount")
+      .addSelect((qb) => {
+        return qb
+          .subQuery()
+          .select("IF(COUNT(follow.id) = 0, false, true)")
+          .from(Follow, "follow")
+          .where(`follow.followerId = :id`, { id: params.id })
+          .andWhere("follow.followingId = :userId", { userId: params.userId });
+      }, "isFollower")
       // db 상에서는 userId 이지만, entity 상에서 user 를 받아서
       // 처리하므로, user 값을 할당
-      .where("post.user = :user", { user: params.userId });
+      .where("post.user = :user", { user: params.id });
 
     // lastId 가 있다면,
     if (params.lastId) {
@@ -139,26 +176,31 @@ class PostService {
       .orderBy("post.createdAt", "DESC")
       .getRawAndEntities();
 
-    const posts: (Post & { likeCount: number })[] = rawPosts.entities.map(
-      (entity, idx) => {
+    const posts: (Post & { likeCount: number; commentCount: number })[] =
+      rawPosts.entities.map((entity) => {
         const post: any = entity;
-        post.likeCount = rawPosts.raw[idx].likeCount;
+        const rawPost = rawPosts.raw.filter(
+          (post) => post.post_id == entity.id
+        );
+        post.likeCount = rawPost[0].likeCount;
+        post.commentCount = rawPost[0].commentCount;
+        post.isFollower = rawPost[0].isFollower === 1;
 
         return post;
-      }
-    );
+      });
 
-    console.log(posts);
     // 찾은 post 반환
     return posts;
   }
 
   // hashtag 로 post 를 찾는 service
   public async findByHashtag({
+    userId,
     hashtagTitle,
     limit,
     lastId,
   }: {
+    userId: User["id"];
     hashtagTitle: string;
     limit: number;
     lastId?: User["id"];
@@ -166,12 +208,37 @@ class PostService {
     const postBuilder = this.postRepo
       .createQueryBuilder("post")
       .select()
+      .addSelect((qb) => {
+        return qb
+          .subQuery()
+          .select("COUNT(sub_likes.id)", "count")
+          .from(Likes, "sub_likes")
+          .where("sub_likes.postId = post.id");
+      }, "likeCount")
+      .addSelect((qb) => {
+        return qb
+          .subQuery()
+          .select("COUNT(sub_comment.id)", "commentCount")
+          .from("comment", "sub_comment")
+          .where("sub_comment.postId = post.id");
+      }, "commentCount")
+      .addSelect((qb) => {
+        return qb
+          .subQuery()
+          .select("IF(COUNT(follow.id) = 0, false, true)")
+          .from(Follow, "follow")
+          .where(`follow.followingId = :userId`, { userId })
+          .andWhere("follow.followerId = user.id");
+      }, "isFollower")
       .leftJoinAndSelect("post.img", "img")
+      .leftJoinAndSelect("post.likes", "likes")
       .innerJoinAndSelect("post.hashtag", "hashtag")
       .innerJoinAndSelect("post.user", "user")
+      .innerJoinAndSelect("user.profile", "profile")
       // db 상에서는 userId 이지만, entity 상에서 hashtag 를 받아서
       // 처리하므로, hashtag 값을 할당
-      .where("hashtag.title = :hashtag", { hashtag: hashtagTitle });
+      .where("hashtag.title = :hashtag", { hashtag: hashtagTitle })
+      .andWhere("post.user != :userId", { userId });
 
     if (lastId) {
       postBuilder.andWhere((qb) => {
@@ -185,14 +252,117 @@ class PostService {
       });
     }
 
-    const posts = await postBuilder
+    // 기존의 queryBuilder 에서 take 를 사용하여 limit 갯수를 지정
+    // 이후 createdAt 을 사용하여 desc 로 내림차순으로 쿼리
+    const rawPosts = await postBuilder
       .take(limit)
       .orderBy("post.createdAt", "DESC")
-      // 여러개의 값이 있을수 있으므로 getMany()
-      .getRawMany();
+      .getRawAndEntities();
+
+    const posts: (Post & {
+      likeCount: number;
+      commentCount: number;
+      isFollower: boolean;
+    })[] = rawPosts.entities.map((entity) => {
+      const post: any = entity;
+      const rawPost = rawPosts.raw.filter((post) => post.post_id == entity.id);
+      post.likeCount = rawPost[0].likeCount;
+      post.commentCount = rawPost[0].commentCount;
+      post.isFollower = rawPost[0].isFollower === 1;
+
+      return post;
+    });
 
     // 찾은 post 반환
     return posts;
+  }
+
+  // follower post 를 찾는 서비스
+  public async getFollowerPostByUser(params: {
+    userId: User["id"];
+    limit: number;
+    lastId?: User["id"];
+  }) {
+    try {
+      const { userId, limit, lastId } = params;
+      // db 상에서는 userId 이지만, entity 상에서 hashtag 를 받아서
+      // 처리하므로, hashtag 값을 할당
+
+      const followerPostQueryBuilder = this.postRepo
+        .createQueryBuilder("post")
+        .innerJoinAndSelect("post.user", "user")
+        .innerJoinAndSelect("user.profile", "profile")
+        .leftJoinAndSelect("post.img", "image")
+        .leftJoinAndSelect("post.likes", "likes")
+        .leftJoinAndSelect("post.hashtag", "hashtag")
+        .leftJoin(Follow, "follow")
+        .addSelect((qb) => {
+          return qb
+            .subQuery()
+            .select("COUNT(sub_likes.id)", "count")
+            .from(Likes, "sub_likes")
+            .where("sub_likes.postId = post.id");
+        }, "likeCount")
+        .addSelect((qb) => {
+          return qb
+            .subQuery()
+            .select("COUNT(sub_comment.id)", "commentCount")
+            .from("comment", "sub_comment")
+            .where("sub_comment.postId = post.id");
+        }, "commentCount")
+        .addSelect((qb) => {
+          return qb
+            .subQuery()
+            .select("IF(COUNT(sub_follow.id) = 0, false, true)")
+            .from(Follow, "sub_follow")
+            .where(`sub_follow.followingId = :userId`, { userId })
+            .andWhere("sub_follow.followerId = user.id");
+        }, "isFollower")
+        .andWhere("follow.followingId = :userId", { userId })
+        .andWhere("follow.followerId = user.id");
+
+      if (lastId) {
+        followerPostQueryBuilder.andWhere((qb) => {
+          const sq = qb
+            .subQuery()
+            .select("sub_post.createdAt")
+            .from(Post, "sub_post")
+            .where("sub_post.id = :lastId", { lastId });
+
+          return `post.createdAt < ${sq.getQuery()}`;
+        });
+      }
+
+      // 기존의 queryBuilder 에서 take 를 사용하여 limit 갯수를 지정
+      // 이후 createdAt 을 사용하여 desc 로 내림차순으로 쿼리
+      const rawPosts = await followerPostQueryBuilder
+        .take(limit)
+        .orderBy("post.createdAt", "DESC")
+        .getRawAndEntities();
+
+      const posts: (Post & {
+        likeCount: number;
+        commentCount: number;
+        isFollower: boolean;
+      })[] = rawPosts.entities.map((entity) => {
+        const post: any = entity;
+        const rawPost = rawPosts.raw.filter(
+          (post) => post.post_id == entity.id
+        );
+        post.likeCount = rawPost[0].likeCount;
+        post.commentCount = rawPost[0].commentCount;
+        post.isFollower = rawPost[0].isFollower === 1;
+
+        return post;
+      });
+
+      // 찾은 post 반환
+      return posts;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+    }
   }
 
   // post repository 를 반환하는 service

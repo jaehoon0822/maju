@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useQueryGetUser from "../queries/useQueryGetUser";
 
 const useTooltipListItem = () => {
@@ -9,19 +9,22 @@ const useTooltipListItem = () => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   // tooltip 이외의 영역 클릭시 일어나는 이벤트 함수
-  const onClickOutsideClick = (event: MouseEvent) => {
-    if (
-      tooltipRef.current &&
-      !tooltipRef.current.contains(event.target as Node)
-    ) {
-      setIsActive(false);
-    }
-  };
+  const onClickOutsideClick = useCallback(
+    (event: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node)
+      ) {
+        setIsActive(false);
+      }
+    },
+    [tooltipRef]
+  );
 
   // tooltip 클릭시 isActive 를 토글
-  const onClickToggleActive = () => {
+  const onClickToggleActive = useCallback(() => {
     setIsActive((prev) => !prev);
-  };
+  }, [setIsActive]);
 
   // document 객체에 onClikcOutsideClick 이벤트 등록
   useEffect(() => {

@@ -21,7 +21,6 @@ class MailController {
       const user = await userService.findByEmail(email);
       // user 가 존재하지 않는다면, error
       if (!user) {
-        console.log("hi?");
         throw new NotFoundError("존재하지 않은 이메일입니다.");
       }
 

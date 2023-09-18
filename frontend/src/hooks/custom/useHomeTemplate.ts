@@ -1,67 +1,78 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import useQueryGetUser from "../queries/useQueryGetUser";
-import useQueryGetPostByUserId from "../queries/useQueryGetPostByUserId";
-import { useDispatch, useSelector } from "@/common/store";
-import { setPos } from "@/common/store/slices/posSlice";
-import { InferType } from "yup";
-import { postSchema } from "@/common/validation/post.yup";
+import { postType } from "@/common/validation/post.yup";
 import useMutationCreatePosts from "../mutations/useMutatioCreatePosts";
 import { AxiosError } from "axios";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { SubmitHandler } from "react-hook-form";
 
 const useHomeTemplate = () => {
-  const { pos } = useSelector((state) => state.pos);
-  const posDispatch = useDispatch();
+  const [selectedIdx, setSelectedIdx] = useState<number>(0);
   const { data: userQuery, isLoading: userQueryIsLoading } = useQueryGetUser();
-  const {
-    data: postQuery,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading: postQueryIsLoading,
-  } = useQueryGetPostByUserId(userQuery!.id);
   const queryClient = useQueryClient();
   const createPostMutation = useMutationCreatePosts();
+  const posDispatch = useDispatch();
   const router = useRouter();
 
-  const onSubmit = (data: InferType<typeof postSchema> & { img: string[] }) => {
-    createPostMutation.mutate(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["/posts", userQuery?.id]);
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) {
-          throw error;
-        }
-      },
-    });
-  };
+  const onClickSelectedIdx = useCallback((idx: number) => {
+    setSelectedIdx(idx);
+  }, []);
 
-  const onClickOpenModal = (postId: string) => {
-    router.push(`/home?modal=image&postId=${postId}`);
-    posDispatch(setPos(window.scrollY));
-    window.document.body.style.overflow = "hidden";
-  };
+  const onSubmit: SubmitHandler<postType> = useCallback(
+    (data: postType) => {
+      console.log("----data----", data);
+      createPostMutation.mutate(data, {
+        onSuccess: () => {
+          queryClient.invalidateQueries(["/posts", userQuery?.id]);
+        },
+        onError: (error) => {
+          if (error instanceof AxiosError) {
+            throw error;
+          }
+        },
+      });
+    },
+    [createPostMutation, userQuery?.id, queryClient]
+  );
+
+  const onClickTest = useCallback(() => {
+    router.push(`/home?modal=image/user&userId=${userQuery?.id}`);
+  }, [userQuery]);
 
   useEffect(() => {
-    const windowScroll = () => {
-      window.scrollTo({ top: pos });
+    const page = new URLSearchParams(window.location.search).get("page");
+    if (page === "followPost") {
+      onClickSelectedIdx(1);
+    }
+  }, [router.query.pathname]);
+
+  useEffect(() => {
+    const routeChange = () => {
+      const page = new URLSearchParams(window.location.search).get("page");
+      if (page === "followPost") {
+        onClickSelectedIdx(1);
+      }
+      if (!page) {
+        onClickSelectedIdx(0);
+      }
     };
-    router.events.on("routeChangeComplete", windowScroll);
-    return () => router.events.off("routeChangeComplete", windowScroll);
-  }, [pos]);
+    router.events.on("routeChangeComplete", routeChange);
+    return () => router.events.off("routeChangeComplete", routeChange);
+  }, [router.query]);
 
   return {
-    onClickOpenModal,
-    postQuery,
-    fetchNextPage,
-    hasNextPage,
-    postQueryIsLoading,
+    onClickTest,
+    selectedIdx,
+    onClickSelectedIdx,
     userQueryIsLoading,
-    isFetchingNextPage,
     onSubmit,
+    posDispatch,
+    router,
     query: router.query,
+    push: router.push,
+    pathname: router.pathname,
   };
 };
 

@@ -7,6 +7,13 @@ export interface Hashtag extends Dates {
   id: string;
 }
 
+export interface Profile {
+  id: string;
+  coverLetter?: string;
+  avatar?: string;
+  coverImage?: string;
+}
+
 export interface Like extends Dates {
   id: string;
   userId: string;
@@ -28,9 +35,11 @@ export interface User extends Dates {
   id: string;
   email: string;
   nick: string;
-  img: string | null;
+  coverImage?: string;
+  avatar?: string;
   provider: string | null;
   snsId: string | null;
+  profile: Profile | null;
 }
 
 export interface Post extends Dates {
@@ -42,6 +51,7 @@ export interface Post extends Dates {
   hashtag: Hashtag[];
   likeCount?: number;
   commentCount?: number;
+  isFollower?: boolean;
 }
 
 export interface Comment extends Dates {

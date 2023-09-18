@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { CloseButtonProps } from "./CloseButton.type";
 import module from "./CloseButton.module.css";
 import classNames from "classnames";
@@ -43,4 +43,4 @@ const CloseButton = ({ color = "black", ...props }: CloseButtonProps) => {
   );
 };
 
-export { CloseButton };
+export default memo(CloseButton);

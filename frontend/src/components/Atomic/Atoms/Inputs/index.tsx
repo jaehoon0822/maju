@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import { InputProps } from "./Input.types";
 import { useFormContext } from "react-hook-form";
 import module from "./Input.module.css";
@@ -9,9 +9,11 @@ const Input = (
 ) => {
   const { register, formState } = useFormContext();
   const { errors } = formState;
-  const errorMessage =
-    errors?.fields?.message || errors?.[props.name]?.message || "";
-  const hasError = !!errorMessage;
+  const errorMessage = useMemo(
+    () => errors?.fields?.message || errors?.[props.name]?.message || "",
+    [errors]
+  );
+  const hasError = useMemo(() => !!errorMessage, [errorMessage]);
 
   return (
     <div className={module.styled_input_wrapper}>
@@ -41,4 +43,4 @@ const Input = (
   );
 };
 
-export { Input };
+export default memo(Input);

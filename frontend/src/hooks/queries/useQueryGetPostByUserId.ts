@@ -1,8 +1,4 @@
-import {
-  QueryFunctionContext,
-  useInfiniteQuery,
-  useQuery,
-} from "@tanstack/react-query";
+import { QueryFunctionContext, useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { axiosClient } from "@/common/utils/axiosClient";
 import { Post, User } from "@/common/types/index.types";
@@ -25,7 +21,7 @@ const getPosts = async (userId: User["id"], pageParam: string) => {
   }
 };
 
-const useQueryGetPostByUserId = (userId: string) => {
+const useQueryGetPostByUserId = (userId?: string) => {
   const {
     data,
     error,
@@ -44,6 +40,7 @@ const useQueryGetPostByUserId = (userId: string) => {
       lastPage?.[lastPage.length - 1]
         ? lastPage?.[lastPage.length - 1].id
         : undefined,
+    enabled: !!userId,
   });
 
   return {

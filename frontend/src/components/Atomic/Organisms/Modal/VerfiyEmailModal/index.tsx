@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import React from "react";
+import React, { memo } from "react";
 import { emailSchema } from "@/common/validation/email.yup";
-import { Input } from "@/components/Atomic/Atoms/Inputs";
+import ModalForm from "@/components/Atomic/Molecules/ModalForm";
+import Input from "@/components/Atomic/Atoms/Inputs";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
-import { ModalForm } from "@/components/Atomic/Molecules/ModalForm";
 import { useVerifyEmailModal } from "@/hooks/custom/useVerifyEmailModal";
 
 const VerifyEmailModal = () => {
@@ -61,4 +61,4 @@ const VerifyEmailModal = () => {
   );
 };
 
-export default VerifyEmailModal;
+export default memo(VerifyEmailModal);

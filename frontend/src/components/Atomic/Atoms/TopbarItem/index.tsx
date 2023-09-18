@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import module from "./TopbarItem.module.css";
 import { TopbarItemProps } from "./TopbarItme.type";
 import classNames from "classnames";
@@ -15,4 +15,4 @@ const TopbarItem = ({ title, onClick }: TopbarItemProps) => {
   );
 };
 
-export { TopbarItem };
+export default memo(TopbarItem);

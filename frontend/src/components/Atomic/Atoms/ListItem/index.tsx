@@ -1,23 +1,24 @@
-import React from "react";
 import classNames from "classnames";
 import module from "./ListItem.module.css";
 import { ListItemProps } from "./ListItem.type";
 import Link from "next/link";
 import MoreVert from "@mui/icons-material/MoreVert";
-import { Avatar } from "../Avator";
+import Avatar from "../Avator";
+import { memo } from "react";
 
 const ListItem = ({
   href,
   icon,
-  img,
+  user,
   title,
+  onClick,
   active = false,
   more = false,
 }: ListItemProps) => {
   return (
     <>
       {href === undefined ? (
-        <div aria-label="list-item" className="flex justify-c">
+        <div aria-label="list-item" className="flex justify-center">
           <div
             className={classNames(
               module.listItem_wrapper,
@@ -25,7 +26,7 @@ const ListItem = ({
             )}
           >
             {icon ? <div>{icon}</div> : null}
-            {img ? <Avatar avatar={img} /> : null}
+            {user ? <Avatar user={user} disableLink={true} /> : null}
             <div className={classNames(module.listItem_title)}>
               <span>{title}</span>
             </div>
@@ -37,14 +38,19 @@ const ListItem = ({
           </div>
         </div>
       ) : (
-        <Link href={href} aria-label="list-item" className="flex justify-c">
+        <Link
+          href={href}
+          onClick={onClick}
+          aria-label="list-item"
+          className="flex justify-ccenter"
+        >
           <div
             className={classNames(
               module.listItem_wrapper,
               active && module.active
             )}
           >
-            {icon || img ? (
+            {icon || user ? (
               icon ? (
                 <>
                   <div>{icon}</div>
@@ -59,7 +65,7 @@ const ListItem = ({
                 </>
               ) : (
                 <>
-                  <Avatar avatar={img} href="/" />
+                  <Avatar />
                   <div
                     className={classNames(
                       module.listItem_title,
@@ -87,4 +93,4 @@ const ListItem = ({
   );
 };
 
-export { ListItem };
+export default memo(ListItem);

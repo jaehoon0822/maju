@@ -12,16 +12,10 @@ const ImageSlider = ({
   children: ReactNode;
   img: Img[];
 }) => {
-  const { imagePosition, onClickNext, onClickPrev, idx, pos } =
-    useImageSlider(img);
+  const { imagePosition, onClickNext, onClickPrev, idx } = useImageSlider(img);
   return (
     <div>
-      <div
-        className="absolute text-white left-10 z-50"
-        style={{
-          top: `calc(${pos}px + 50%)`,
-        }}
-      >
+      <div className="absolute text-white top-[50vh] left-10 z-50">
         <button
           className={classNames(
             "p-2 rounded-full border-solid border-[1px] transition-all bg-black bg-opacity-60 hover:bg-black hover:bg-opacity-25 tourch:bg-black touch:bg-opacity-25 active:translate-y-1",
@@ -35,17 +29,10 @@ const ImageSlider = ({
           <LeftArrowIcon />
         </button>
       </div>
-      <div
-        className={classNames(
-          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40"
-        )}
-        style={{
-          top: pos === 0 ? 0 : pos ? pos : "50%",
-        }}
-      >
-        <div className="relative flex overflow-hidden h-screen w-[99vw] top-[100vh] -translate-y-1/2">
+      <div className={classNames("absolute")}>
+        <div className="absolute overflow-hidden">
           <div
-            className={classNames("relative flex transition-all")}
+            className={classNames("flex transition-all")}
             style={{
               transform: imagePosition,
             }}
@@ -55,13 +42,10 @@ const ImageSlider = ({
         </div>
       </div>
       <div
-        className={classNames("absolute text-white right-10 z-50 ", {
+        className={classNames("absolute text-white top-[50vh] right-10 z-50 ", {
           "opacity-0 invisible":
             (img && img?.length === 1) || (img && img?.length - 1 === idx!),
         })}
-        style={{
-          top: `calc(${pos}px + 50%)`,
-        }}
       >
         <button
           className={classNames(

@@ -10,7 +10,6 @@ import IsLogin from "@/components/common/IsLogin";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { pathname } = useRouter();
-  const paths = [];
   return (
     <>
       <Head>
@@ -25,9 +24,13 @@ export default function App({ Component, pageProps }: AppProps) {
           ) : (
             <IsLogin>
               <Layout>
-                <PageWrapper>
+                {pathname.startsWith("/home") ? (
                   <Component {...pageProps} />
-                </PageWrapper>
+                ) : (
+                  <PageWrapper>
+                    <Component {...pageProps} />
+                  </PageWrapper>
+                )}
               </Layout>
             </IsLogin>
           )}

@@ -4,7 +4,7 @@ import { MockRequest, MockResponse } from "node-mocks-http";
 import { AuthController } from "@/controllers/auth/AuthController";
 import { userService } from "@/services/User";
 import { User } from "@/entities/User";
-import { ConflictError } from "@/errors/conflict-error";
+import { ConflictError } from "@/errors/Conflict-error";
 
 jest.mock("bcrypt");
 jest.mock("passport");
@@ -49,12 +49,10 @@ mockedLogin.mockImplementation(
       "local",
       (authError: any, user: User, info?: { message: string }) => {
         if (authError) {
-          // console.error(authError);
           throw new ConflictError(authError.message);
         }
 
         if (info) {
-          // console.error(info);
           throw new ConflictError(info.message);
         }
 

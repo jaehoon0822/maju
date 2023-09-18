@@ -1,11 +1,15 @@
-import TextButton from "@/components/Atomic/Atoms/TextButton";
 import LoginTemplate from "@/components/Atomic/Templates/LoginTemplate";
+import Head from "next/head";
 
 export default function Index() {
   return (
-    <main>
-      <LoginTemplate />
-      <TextButton href="/home" label="test" />
-    </main>
+    <>
+      <Head>
+        <title>MAJU 로그인</title>
+      </Head>
+      <main>
+        <LoginTemplate />
+      </main>
+    </>
   );
 }

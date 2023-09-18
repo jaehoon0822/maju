@@ -3,7 +3,12 @@ import { axiosClient } from "@/common/utils/axiosClient";
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 
 const getPostByPostId = async (context: QueryFunctionContext) => {
-  const { data } = await axiosClient.get<Post>(`/post/${context.queryKey[1]}`);
+  const { data } = await axiosClient.get<Post>(`/post/${context.queryKey[1]}`, {
+    params: {
+      lastId: context.pageParam,
+      limit: 10,
+    },
+  });
   return data;
 };
 
