@@ -48,14 +48,14 @@ export class AuthController {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // user 생성
-    await userService.create({
+    const user = await userService.create({
       email,
       password: hashedPassword,
       nick,
     });
 
     // 완료 response
-    return res.status(201).send("회원가입 완료");
+    return res.status(201).send(user);
   }
 
   /**
@@ -75,12 +75,10 @@ export class AuthController {
       "local",
       (authError: any, user: User, info?: { message: string }) => {
         if (authError) {
-          // console.error(authError);
-          throw new ConflictError(authError.message);
+          next(new ConflictError(authError.message));
         }
 
         if (info) {
-          // console.error(info);
           return next(new ConflictError(info.message));
         }
 
@@ -88,7 +86,8 @@ export class AuthController {
           if (loginError) {
             return next(new Error(loginError.message));
           }
-          return res.status(200).send("로그인 되었습니다");
+          return res.status(200).send("로그인 되었되습니습다.");
+          // return res.redirect("http://localhost:3000");
         });
       }
     )(req, res);
@@ -106,6 +105,8 @@ export class AuthController {
    *
    */
   async logout(req: Request, res: Response) {
+    res.clearCookie((req.user as User).id);
+
     req.logout((error) => {
       if (error) {
         throw new Error(error.message);
@@ -120,7 +121,8 @@ export class AuthController {
   }
 
   async kakaoLogin(req: Request, res: Response) {
-    res.status(200).send("로그인 되었습니다.");
+    return res.redirect("http://localhost:3000");
+    // return res.status(200).send("로그인 되었습니다.");
   }
 
   async changePassword(req: Request, res: Response) {

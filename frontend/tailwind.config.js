@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: "jit",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -7,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      width: {
+        inherit: "inherit",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -23,7 +27,7 @@ module.exports = {
         },
       },
       animation: {
-        fadeIn: "fadeInKeyFrame .5s ease-in-out",
+        fadeIn: "fadeInKeyFrame .5s ease-out",
       },
     },
     screens: {

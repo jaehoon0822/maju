@@ -14,11 +14,11 @@ export class Follow extends BaseDate {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "following_id" })
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "followingId" })
   following: User;
 
-  @ManyToOne(() => User, (user) => user.id, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "follower_id" })
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "followerId" })
   follower: User;
 }

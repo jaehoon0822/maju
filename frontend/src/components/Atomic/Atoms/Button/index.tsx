@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import module from "./Button.module.css";
 import { ButtonProps } from "./Button.type";
 import classNames from "classnames";
@@ -16,4 +16,4 @@ const Button = ({ label, variant, size, ...buttonAttrs }: ButtonProps) => {
   );
 };
 
-export { Button };
+export default memo(Button);

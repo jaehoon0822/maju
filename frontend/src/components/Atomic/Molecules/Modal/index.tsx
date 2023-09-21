@@ -1,18 +1,36 @@
-import React from "react";
+import React, { useCallback } from "react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import module from "./Modal.module.css";
-import ModalTop from "../ModalTop/Index";
+import ModalTop from "../ModalTop";
 import { ModalTemplateProps } from "./Modal.type";
 
-const Modal = ({ children, onClose }: ModalTemplateProps) => {
-  const { query } = useRouter();
+const Modal = ({
+  children,
+  onClose,
+  id,
+  isTop,
+  scrollAuto,
+  modalRef,
+}: ModalTemplateProps) => {
+  const { query, back } = useRouter();
+  const onCloseModal = useCallback(() => {
+    back();
+  }, []);
 
   return (
     <>
-      <div aria-label="modal" className={classNames(module.modal_wrapper)}>
+      <div
+        ref={modalRef}
+        id={id}
+        aria-label="modal"
+        className={classNames(module.modal_wrapper, {
+          "overflow-auto": scrollAuto,
+          "overflow-hidden": !scrollAuto,
+        })}
+      >
         {/* 모달 닫기 및 로고 부분 */}
-        <ModalTop onClose={onClose} />
+        <ModalTop onClose={onClose ? onClose : onCloseModal} isTop={isTop} />
 
         {/* 모달 내용 부분 */}
         <div
@@ -24,15 +42,6 @@ const Modal = ({ children, onClose }: ModalTemplateProps) => {
           {children}
         </div>
       </div>
-      {/* 모달 backdrop 부분 */}
-      <div
-        aria-label="backdrop"
-        onClick={onClose}
-        className={classNames(module.modal_backdrop, {
-          "opacity-100": query.modal,
-          "opacity-0 hidden": !query.modal,
-        })}
-      ></div>
     </>
   );
 };

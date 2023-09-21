@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Image from "next/image";
 import { Noto_Sans } from "next/font/google";
 import { loginSchema } from "@/common/validation/login.yup";
@@ -31,14 +32,28 @@ export default function Home() {
       </Form>
 =======
 import TextButton from "@/components/Atomic/Atoms/TextButton";
+=======
+>>>>>>> feature
 import LoginTemplate from "@/components/Atomic/Templates/LoginTemplate";
+import Head from "next/head";
 
 export default function Index() {
   return (
+<<<<<<< HEAD
     <main>
       <LoginTemplate />
       <TextButton href="/home" label="test" />
 >>>>>>> feature
     </main>
+=======
+    <>
+      <Head>
+        <title>MAJU 로그인</title>
+      </Head>
+      <main>
+        <LoginTemplate />
+      </main>
+    </>
+>>>>>>> feature
   );
 }

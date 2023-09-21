@@ -1,7 +1,7 @@
 import React from "react";
 import { FormButtonProps } from "./FormButton.type";
 import { useFormContext } from "react-hook-form";
-import { Button } from "../Button";
+import Button from "../Button";
 
 const FormButton = ({ label, variant }: FormButtonProps) => {
   const { formState } = useFormContext();
@@ -9,6 +9,7 @@ const FormButton = ({ label, variant }: FormButtonProps) => {
 
   return (
     <Button
+      size={"large"}
       disabled={!isValid || !isDirty || isSubmitting}
       type="submit"
       label={label}

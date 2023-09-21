@@ -1,8 +1,8 @@
 import classNames from "classnames";
-import React from "react";
-import { Input } from "@/components/Atomic/Atoms/Input";
+import React, { memo } from "react";
+import ModalForm from "@/components/Atomic/Molecules/ModalForm";
+import Input from "@/components/Atomic/Atoms/Inputs";
 import { Modal } from "@/components/Atomic/Molecules/Modal";
-import { ModalForm } from "@/components/Atomic/Molecules/ModalForm";
 import { codeSchema } from "@/common/validation/code.yup";
 import { useVerifyCodeModal } from "@/hooks/custom/useVerifyCodeModal";
 import { useSelector } from "@/common/store";
@@ -89,4 +89,4 @@ const VerifyCodeModal = () => {
   );
 };
 
-export { VerifyCodeModal };
+export default memo(VerifyCodeModal);

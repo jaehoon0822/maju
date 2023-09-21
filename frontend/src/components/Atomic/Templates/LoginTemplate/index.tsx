@@ -1,24 +1,25 @@
 import classNames from "classnames";
-import { useEffect } from "react";
-import Cliploader from "react-spinners/ClipLoader";
+import { memo, useEffect, useState } from "react";
 import Logo from "../../Atoms/Logo";
-import { Form } from "../../Atoms/Form/Index";
-import { Input } from "../../Atoms/Input";
-import { Button } from "../../Atoms/Button";
+import Form from "../../Atoms/Form/Index";
+import Input from "../../Atoms/Inputs";
+import Button from "../../Atoms/Button";
 import { loginSchema } from "@/common/validation/login.yup";
 import TextButton from "../../Atoms/TextButton";
 import VerifyEmailModal from "../../Organisms/Modal/VerfiyEmailModal";
-import { VerifyCodeModal } from "../../Organisms/Modal/VerifyCodeModal";
+import VerifyCodeModal from "../../Organisms/Modal/VerifyCodeModal";
 import ChangePasswordModal from "../../Organisms/Modal/ChangePasswordModal";
 import SignupModal from "../../Organisms/Modal/SignupModal";
 import SignupComplateModal from "../../Organisms/Modal/SignupComplateModal";
 import useLogin from "@/hooks/custom/useLogin";
 import useQueryGetUser from "@/hooks/queries/useQueryGetUser";
+import RegistProfilModal from "../../Organisms/Modal/RegistProfileModal";
 
 const LoginTemplate = () => {
+  const [isSignup, setIsSignup] = useState<boolean>(false);
   const { onSubmit, push, query, setUseFormReturnMethod, useFormReturnMethod } =
     useLogin();
-  const { data, isLoading } = useQueryGetUser();
+  const { data } = useQueryGetUser();
 
   useEffect(() => {
     useFormReturnMethod?.reset();
@@ -26,26 +27,6 @@ const LoginTemplate = () => {
       push("/home");
     }
   }, [query, data]);
-
-  if (isLoading) {
-    return (
-      <div>
-        <Cliploader
-          loading={isLoading}
-          size={100}
-          cssOverride={{
-            display: "block",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
-  }
 
   return !data ? (
     <main
@@ -80,32 +61,18 @@ const LoginTemplate = () => {
               id="email"
               label="email"
               name="email"
+              // value="qqq@qqq.com"
               placeholder="이메일을 입력해주세요."
             />
             <Input
               id="password"
               label="password"
               name="password"
+              // value="123123123"
               placeholder="패스워드를 입력해주세요."
             />
             <Button label="로그인하기" variant="primary" size="large" />
           </Form>
-        </div>
-        <div className="flex justify-center w-[25rem] sm:w-[12.5rem] mb-8">
-          <div className="w-[50%] h-[1px] bg-black"></div>
-          <span className="-mt-3 px-4">or</span>
-          <div className="w-[50%] h-[1px] bg-black"></div>
-        </div>
-        <div className="mb-4">
-          <Button
-            label="카카오 로그인"
-            variant="kakao"
-            size="large"
-            onClick={() => {
-              useFormReturnMethod?.reset();
-              push("http://localhost:8080/auth/kakao");
-            }}
-          />
         </div>
         <div className="flex justify-end mb-10 w-[25rem] sm:w-[12.5rem]">
           <TextButton
@@ -125,11 +92,23 @@ const LoginTemplate = () => {
         <VerifyEmailModal />
         <VerifyCodeModal />
         <ChangePasswordModal />
-        <SignupModal />
-        <SignupComplateModal />
+        <SignupModal setIsSignup={setIsSignup} />
+        <SignupComplateModal
+          // isSignup={true}
+          isSignup={isSignup}
+          setIsSignup={setIsSignup}
+        />
+        {isSignup ? (
+          <RegistProfilModal
+            isEdit={isSignup}
+            // isPost={true}
+            // isEdit={isSignup}
+            setIsSignup={setIsSignup}
+          />
+        ) : null}
       </div>
     </main>
   ) : null;
 };
 
-export default LoginTemplate;
+export default memo(LoginTemplate);

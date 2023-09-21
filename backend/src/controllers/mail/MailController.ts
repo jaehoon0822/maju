@@ -21,7 +21,6 @@ class MailController {
       const user = await userService.findByEmail(email);
       // user 가 존재하지 않는다면, error
       if (!user) {
-        console.log("hi?");
         throw new NotFoundError("존재하지 않은 이메일입니다.");
       }
 
@@ -57,7 +56,7 @@ class MailController {
       });
 
       res.send({
-        data: { code: token, user_id: user.id },
+        data: { code: token, userId: user.id },
         message: "메시지가 전송되었습니다.",
       });
     } catch (error) {

@@ -1,9 +1,8 @@
-import { v4 as uuidv4 } from "uuid";
 import { appDataSourceManager } from "@/config/AppDataSourceManager";
 import { Follow } from "@/entities/Follow";
 import { User } from "@/entities/User";
 import { ConflictError } from "@/errors/Conflict-error";
-import { param } from "express-validator";
+import { Profile } from "@/entities/Profile";
 
 interface FollowParams {
   followId: User["id"];
@@ -12,6 +11,9 @@ interface FollowParams {
 
 // User 를 위한 서비스 로직을 가진 Class 생성 /** @public */
 class UserService {
+  private profileRepo = appDataSourceManager
+    .getDataSource()
+    .getRepository(Profile);
   private userRepo = appDataSourceManager.getDataSource().getRepository(User);
   private followRepo = appDataSourceManager
     .getDataSource()
@@ -21,7 +23,7 @@ class UserService {
    *
    * @remarks
    * local email 로 user 를 찾는 서비스
-   *
+   *      const insertProfileRestul =
    * @param email
    * - User 의 email 티입인 string
    * @param isPassword
@@ -37,29 +39,24 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.email = :email", { email })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.email = :email", { email })
           .getOne();
 
         return result;
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) throw new Error(error.message);
     }
   }
@@ -84,29 +81,24 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.nick = :nick", { nick })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.nick = :nick", { nick })
           .getOne();
 
         return result;
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) throw new Error(error.message);
     }
   }
@@ -131,29 +123,24 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.id = :id", { id })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
-        const result = await this.userRepo
+        const user = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.id = :id", { id })
           .getOne();
 
-        return result;
+        return user;
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) throw new Error(error.message);
     }
   }
@@ -161,10 +148,10 @@ class UserService {
   /***
    *
    * @remarks
-   * local id 로 user 를 찾는 서비스
+   * local nick 로 user 를 찾는 서비스
    *
-   * @param id
-   * - User 의 id 타입인 string
+   * @param nick
+   * - User 의 nick 티입인 string
    * @param isPassword
    * - password 포함할지 안할지 결정할 boolean
    *
@@ -173,29 +160,17 @@ class UserService {
    *
    */
 
-  public async findByIdWithFollow(id: User["id"]) {
+  public async findByProfileId(params: Pick<Profile, "id">) {
     try {
       const result = await this.userRepo
         .createQueryBuilder("user")
-        .select([
-          "user.id",
-          "user.email",
-          "user.nick",
-          "user.img",
-          "user.createdAt",
-          "user.updatedAt",
-          "user.deletedAt",
-          "follower.follower",
-          "following.following",
-        ])
-        .where("user.id = :id", { id })
-        .leftJoinAndSelect("user.followers", "follower")
-        .leftJoinAndSelect("user.followings", "following")
+        .leftJoinAndSelect("user.profile", "profile")
+        .leftJoinAndSelect("user.likes", "likes")
+        .where("user.profile = :id", params)
         .getOne();
 
       return result;
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) throw new Error(error.message);
     }
   }
@@ -227,23 +202,18 @@ class UserService {
       if (isPassword) {
         const result = await this.userRepo
           .createQueryBuilder("user")
+          .leftJoinAndSelect("user.profile", "profile")
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.snsId = :snsId", { snsId })
           .andWhere("user.provider = :provider", { provider })
+          .addSelect("user.password")
           .getOne();
 
         return result;
       } else {
         const result = await this.userRepo
           .createQueryBuilder("user")
-          .select([
-            "user.id",
-            "user.email",
-            "user.nick",
-            "user.img",
-            "user.createdAt",
-            "user.updatedAt",
-            "user.deletedAt",
-          ])
+          .leftJoinAndSelect("user.likes", "likes")
           .where("user.snsId = :snsId", { snsId })
           .andWhere("user.provider = :provider", { provider })
           .getOne();
@@ -251,7 +221,6 @@ class UserService {
         return result;
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) throw new Error(error.message);
     }
   }
@@ -276,16 +245,19 @@ class UserService {
       | Pick<User, "email" | "password" | "nick">
   ) {
     try {
-      const result = await this.userRepo
+      const insertUserResult = await this.userRepo
         .createQueryBuilder("user")
         .insert()
         .into(User)
         .values(parmas)
         .execute();
 
-      return result;
+      const user = await this.createProfile({
+        userId: insertUserResult.generatedMaps[0].id,
+      });
+
+      return user;
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) throw new Error(error.message);
     }
   }
@@ -310,11 +282,20 @@ class UserService {
       | Pick<User, "snsId" | "provider" | "email" | "nick">
   ) {
     try {
+      const profileInsertResult = await this.profileRepo
+        .createQueryBuilder("profile")
+        .insert()
+        .into(Profile)
+        .values({})
+        .execute();
       const result = await this.userRepo
         .createQueryBuilder("user")
         .insert()
         .into(User)
-        .values(parmas)
+        .values({
+          ...parmas,
+          profile: { id: profileInsertResult.generatedMaps[0].id },
+        })
         .execute();
 
       return result;
@@ -336,22 +317,26 @@ class UserService {
    */
   public async follow(params: FollowParams) {
     try {
-      if (params.followId === params.followerId) {
+      const { followId, followerId } = params;
+      if (followId === followerId) {
         throw new ConflictError("유효한 유저가 아닙니다.");
       }
 
-      const query = `
-        INSERT INTO follow (id, following_id, follower_id, deletedAt) 
-        VALUES (?, ?, ?, null)
-        ON DUPLICATE KEY UPDATE deletedAt = NULL
-      `;
+      // insert 쿼리 실행
+      const insertResult = await this.followRepo
+        .createQueryBuilder()
+        .insert()
+        .into(Follow)
+        .values({ follower: { id: followerId }, following: { id: followId } })
+        .orUpdate(["deletedAt"], ["null"])
+        .execute();
 
-      // follow 테이블에 follwer, follwing insert
-      const insertResult = await this.followRepo.query(query, [
-        uuidv4(),
-        params.followId,
-        params.followerId,
-      ]);
+      // 만약 생성된 id 가 없다면, error
+      if (!insertResult.generatedMaps[0].id) {
+        throw new ConflictError("follow 생성 실패");
+      }
+
+      const follower = this.findById;
 
       // insertResult 반환
       return insertResult;
@@ -383,11 +368,9 @@ class UserService {
       const deletedResult = await this.followRepo
         .createQueryBuilder("follow")
         .softDelete()
-        .where("following = :following_id", { following_id: params.followId })
-        .andWhere("follower = :follower_id", { follower_id: params.followerId })
+        .where("following = :followingId", { followingId: params.followId })
+        .andWhere("follower = :followerId", { followerId: params.followerId })
         .execute();
-
-      // console.log(deletedResult);
 
       return deletedResult;
     } catch (error) {
@@ -413,16 +396,16 @@ class UserService {
       const followers = await this.getFollowRepository()
         .createQueryBuilder("fw")
         .select([
-          "fw.follower_id",
-          "followerUser.email as follower_email",
-          "followerUser.nick as follower_nick",
+          "fw.followerId",
+          "followerUser.email as followerEmail",
+          "followerUser.nick as followerNick",
           "fw.createdAt as createdAt",
           "fw.updatedAt as updatedAt",
           "fw.deletedAt as deletedAt",
         ])
-        .innerJoin(User, "followingUser", "followingUser.id = fw.following_id")
-        .innerJoin(User, "followerUser", "followerUser.id = fw.follower_id")
-        .where("fw.following_id = :followingId", {
+        .innerJoin(User, "followingUser", "followingUser.id = fw.followingId")
+        .innerJoin(User, "followerUser", "followerUser.id = fw.followerId")
+        .where("fw.followingId = :followingId", {
           followingId: params.followId,
         })
         .getRawMany();
@@ -451,16 +434,16 @@ class UserService {
       const followings = await this.followRepo
         .createQueryBuilder("fw")
         .select([
-          "fw.following_id",
-          "followingUser.email as following_email",
-          "followingUser.nick as following_nick",
+          "fw.followingId",
+          "followingUser.email as followingEmail",
+          "followingUser.nick as followingNick",
           "fw.createdAt as createdAt",
           "fw.updatedAt as updatedAt",
           "fw.deletedAt as deletedAt",
         ])
-        .innerJoin(User, "followingUser", "followingUser.id = fw.following_id")
-        .innerJoin(User, "followerUser", "followerUser.id = fw.follower_id")
-        .where("fw.follower_id = :id", { id: params.followerId })
+        .innerJoin(User, "followingUser", "followingUser.id = fw.followingId")
+        .innerJoin(User, "followerUser", "followerUser.id = fw.followerId")
+        .where("fw.followerId = :id", { id: params.followerId })
         .getRawMany();
 
       return followings;
@@ -490,6 +473,113 @@ class UserService {
       }
     }
   }
+  public async putUserNick(params: Pick<User, "id" | "nick">) {
+    try {
+      const updateResult = await this.userRepo
+        .createQueryBuilder()
+        .update()
+        .set({ nick: params.nick })
+        .where("id = :id", { id: params.id })
+        .execute();
+
+      if (updateResult.affected === 0) {
+        throw new ConflictError("업데이트에 실패했습니다.");
+      }
+
+      const user = await this.findById(params.id);
+
+      if (!user) {
+        throw new ConflictError("존재하지 않은 user 입니다.");
+      }
+
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+    }
+  }
+
+  public async createProfile(
+    params: Partial<Omit<Profile, "id">> & { userId: User["id"] }
+  ) {
+    try {
+      // insert
+      const insertResult = await this.profileRepo
+        .createQueryBuilder()
+        .insert()
+        .into(Profile)
+        .values({
+          avatar: params.avatar,
+          coverImage: params.coverImage,
+          coverLetter: params.coverLetter,
+        })
+        .execute();
+
+      // user 에 profile 없데이트
+      const updateResult = await this.userRepo
+        .createQueryBuilder("user")
+        .update()
+        .set({
+          profile: { id: insertResult.identifiers[0].id },
+        })
+        .where("user.id = :userId", { userId: params.userId })
+        .execute();
+
+      // update 되었는지 확인, 적용안되면 error
+      if (updateResult.affected === 0) {
+        throw new ConflictError("프로필 업데이트에 실패했습니다.");
+      }
+
+      // userid 를 사용하여 user 검색
+      const user = await this.findById(params.userId);
+
+      // user 반환
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+    }
+  }
+
+  public async updateProfile(
+    params: Partial<Omit<Profile, "id">> & {
+      userId: User["id"];
+      nick?: User["nick"];
+    }
+  ) {
+    try {
+      // updateData 와 id 를 분리
+      const { userId, nick, ...updateData } = params;
+      // user query
+      const user = await this.findById(userId);
+      // profile 업데이트
+      const updateProfileResult = await this.profileRepo
+        .createQueryBuilder()
+        .update()
+        .set(updateData)
+        .where("id = :id ", { id: user?.profile.id })
+        .execute();
+
+      // updateResult 에 적용되지 않았을때,
+      if (updateProfileResult.affected === 0) {
+        throw new ConflictError("프로필 업데이트에 실패했습니다.");
+      }
+
+      // user 가 없다면, 에러
+      if (!user) {
+        throw new ConflictError("존재하지 않은 user 입니다.");
+      }
+
+      // user 반환
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+    }
+  }
 
   public getUserRepository() {
     return this.userRepo;
@@ -497,6 +587,10 @@ class UserService {
 
   public getFollowRepository() {
     return this.followRepo;
+  }
+
+  public getProfileRepository() {
+    return this.profileRepo;
   }
 }
 

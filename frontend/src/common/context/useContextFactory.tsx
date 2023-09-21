@@ -5,7 +5,6 @@ export const useContextFactory = <
 >(
   context: Context<T>
 ) => {
-  console.log(context);
   const ctx = useContext(context);
   // return ctx;
 };

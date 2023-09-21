@@ -1,6 +1,10 @@
-import { ObjectSchema } from "yup";
+import { MutableRefObject } from "react";
 
 export interface ModalTemplateProps {
   children: React.ReactNode;
-  onClose: () => void;
+  id?: string;
+  onClose?: () => void;
+  isTop?: boolean;
+  scrollAuto?: boolean;
+  modalRef?: MutableRefObject<HTMLDivElement | null>;
 }

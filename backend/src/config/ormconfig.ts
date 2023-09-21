@@ -18,6 +18,8 @@ const config: DataSourceOptions = {
   migrations: [process.env.DB_MIGRATIONS || ""],
   subscribers: [process.env.DB_SUBSCRIVERS || ""],
   poolSize: 50,
+  dateStrings: true,
+  timezone: "Z",
 };
 
 export { config };

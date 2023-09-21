@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
@@ -8,11 +8,9 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const handleStart = (url: any) => {
-      console.log("start: ", url);
       setRouterChange(true);
     };
     const handleComplate = (url: any) => {
-      console.log("complate: ", url);
       setRouterChange(false);
     };
 
@@ -29,13 +27,16 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className={classNames("transition-all duration-1000", {
+      className={classNames("w-full", {
         "animate-fadeIn": !routerChange,
       })}
+      style={{
+        zIndex: 40,
+      }}
     >
       {children}
     </div>
   );
 };
 
-export default PageWrapper;
+export default memo(PageWrapper);

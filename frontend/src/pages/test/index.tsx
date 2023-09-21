@@ -1,13 +1,8 @@
-import Editor from "@/components/Atomic/Atoms/Editor";
 import classNames from "classnames";
-import React, { useState } from "react";
+import React from "react";
 
 const Test = () => {
-  return (
-    <div className={classNames("py-10")}>
-      <Editor />
-    </div>
-  );
+  return <div className={classNames("py-10")}></div>;
 };
 
 export default Test;

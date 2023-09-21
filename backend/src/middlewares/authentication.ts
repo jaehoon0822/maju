@@ -41,7 +41,7 @@ export const isLoggedIn = (
  */
 export const isNotLoggedIn = (
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) => {
   // passport 에서 req 에 생성해준 isAuthenticated 를 사용하여
@@ -49,6 +49,7 @@ export const isNotLoggedIn = (
   if (!req.isAuthenticated()) {
     return next();
   } else {
-    throw new ForbiddenError("이미 로그인된 회원입니다.");
+    return res.redirect("http://localhost:3000");
+    // throw new ForbiddenError("이미 로그인된 회원입니다.");
   }
 };

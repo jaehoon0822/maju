@@ -1,12 +1,13 @@
 .tooltipListItem_wrapper {
-  @apply w-[12.5rem] relative md:w-auto cursor-pointer;
+  @apply w-[12.5rem] px-2 relative md:w-auto;
 }
 
 .tooltipListItem_list {
-  @apply py-2 px-2 shadow-xl absolute bg-white transition-all border-[1px] border-solid border-[#d2d2d2] w-[12.5rem];
+  @apply absolute py-2 px-2 shadow-xl bg-white transition-all border-[1px] border-solid border-[#d2d2d2] w-[12.5rem] sm:fixed sm:left-0 sm:w-full sm:rounded-t-xl sm:h-2/4;
 }
+
 .tooltipListItem_list.right {
-  @apply shadow-[-5px_10px_16px_rgba(0,0,0,.15)] ml-4 top-[0] left-[100%] after:absolute after:content-[""] after:border-8 after:border-solid after:border-transparent after:border-r-white after:top-[10%] after:right-[100%];
+  @apply shadow-[-5px_10px_16px_rgba(0,0,0,.15)] ml-4 bottom-[0] left-[100%] after:absolute after:content-[""] after:border-8 after:border-solid after:border-transparent after:border-r-white after:bottom-[10%] after:right-[100%];
 }
 
 .tooltipListItem_list.left {
