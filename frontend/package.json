@@ -13,9 +13,6 @@
     "format": "prettier --cache --write ."
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@hookform/resolvers": "^3.2.0",
-=======
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.2.0",
@@ -24,23 +21,15 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^4.33.0",
     "@tanstack/react-query-devtools": "^4.33.0",
->>>>>>> feature
     "@types/node": "20.5.1",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "@types/react-redux": "^7.1.26",
     "autoprefixer": "10.4.15",
-<<<<<<< HEAD
     "classnames": "^2.3.2",
     "eslint": "8.47.0",
-=======
     "axios": "^1.5.0",
-    "classnames": "^2.3.2",
-<<<<<<< HEAD
->>>>>>> feature
-=======
     "compression-webpack-plugin": "^10.0.0",
->>>>>>> feature
     "eslint-config-next": "13.4.19",
     "lodash": "^4.17.21",
     "next": "13.4.19",
@@ -48,29 +37,16 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
     "react-infinite-scroll-component": "^6.1.0",
->>>>>>> feature
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.2",
     "react-spinners": "^0.13.8",
->>>>>>> feature
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
     "yup": "^1.2.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@types/classnames": "^2.3.1",
-    "@types/yup": "^0.32.0"
-=======
-=======
     "@next/bundle-analyzer": "^13.4.19",
->>>>>>> feature
     "@testing-library/jest-dom": "^6.0.1",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -95,6 +71,5 @@
     "prettier": "^3.0.2",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1"
->>>>>>> feature
   }
 }
