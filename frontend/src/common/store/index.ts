@@ -1,3 +1,4 @@
+import { postActiveIconIdReducer } from "./slices/postActiveIconId";
 import { configureStore } from "@reduxjs/toolkit";
 import {
   useDispatch as useDispatchBase,
@@ -13,6 +14,7 @@ export const store = configureStore({
     verify: verifyReducer,
     pos: posReducer,
     commentModalpos: commentModalReducer,
+    posActiveIconId: postActiveIconIdReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

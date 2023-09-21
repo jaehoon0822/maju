@@ -33,14 +33,14 @@ const Post = ({
       {!isComment ? (
         <div
           className={classNames(
-            "w-[10%] mr-4 relative transition-opacity md:w-[10%] pt-1 sm:w-0 h-full br-4"
+            "w-[10%] mr-4 relative transition-opacity h-full br-4 md:w-[10%] pt-1 sm:w-[20%] sm:mr-4"
           )}
         >
           <Avatar user={post.user} disableLink={isProfile} />
         </div>
       ) : null}
 
-      <div className="min-h-[10rem] w-full md:w-[400px] sm:[100px]">
+      <div className="min-h-[10rem] w-full md:w-[80%]">
         {/* postTopbar: comment page 가 아니면 활성화 */}
         {!isComment ? <PostTopbar post={post} /> : null}
         <div

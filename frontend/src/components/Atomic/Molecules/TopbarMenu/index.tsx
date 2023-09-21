@@ -14,10 +14,11 @@ const TopbarMenu = ({
   children,
   onClickSelectedIdx,
   selectedIdx,
-  margin = 16,
+  margin = 40,
 }: TopbarMenuProps) => {
   const [parentWidth, setParentWidth] = useState<number>(0);
   const parentRef = useRef<HTMLDivElement>(null);
+  const marginStyle = `mr-[${margin}px] sm:mr-10`;
 
   useEffect(() => {
     if (parentRef.current) {
@@ -61,7 +62,10 @@ const TopbarMenu = ({
               ),
             });
             return (
-              <div key={idx} className={classNames(module.topbarMenu_item)}>
+              <div
+                key={idx}
+                className={classNames(module.topbarMenu_item, marginStyle)}
+              >
                 {childElem}
               </div>
             );

@@ -39,7 +39,7 @@ const HomeFollowerPostContents = () => {
   }
 
   return (
-    <div>
+    <div className={classNames("w-full")}>
       {postQuery &&
       Array.isArray(postQuery.pages[0]) &&
       postQuery.pages[0].length === 0 ? (

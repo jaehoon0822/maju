@@ -70,7 +70,7 @@ const PostBottomBar = ({ post }: { post: Post }) => {
             />
             <span
               className={classNames(
-                "group-hover:text-blue-500 group-focus:text-blue-500 -ml-14 md:-ml-10 sm:ml-0 sm:-mt-[.8rem]"
+                "group-hover:text-blue-500 group-focus:text-blue-500 -ml-14 md:ml-0 sm:ml-0 sm:-mt-[.8rem]"
               )}
             ></span>
           </div>

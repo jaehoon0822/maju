@@ -39,18 +39,18 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <>
       <div
         className={classNames(
-          "flex m-auto border-r-[1px] border-solid max-w-[1200px] "
+          "flex m-auto border-r-[1px] border-solid max-w-[1200px] sm:flex-col sm:border-none"
         )}
       >
         <MenuTemplate />
         <div
           className={classNames(
-            "flex flex-col ml-[17.5rem] md:ml-[6rem] w-[80%]"
+            "flex flex-col ml-[17.5rem] w-[80%] md:ml-24 md:w-full sm:w-full sm:ml-0 sm:mb-20"
           )}
         >
           <div
             className={classNames(
-              "relative px-10 h-full md:px-8 break-words break-all"
+              "relative flex flex-col flex-items items-center px-4 h-full break-words break-all md:w-full md:px-8 sm:px-4 z-0"
             )}
           >
             {children}

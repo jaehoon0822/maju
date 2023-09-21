@@ -49,7 +49,7 @@ const SearchTemplate = () => {
   }, [isClicked]);
 
   return (
-    <>
+    <div className={classNames("w-full sm:h-full sm:pb-20")}>
       <div className={classNames("flex justify-center w-full pt-10")}>
         <SearchBar
           onSubmit={(data) => {
@@ -94,7 +94,7 @@ const SearchTemplate = () => {
       ) : (
         <div
           className={classNames(
-            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all",
+            "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all sm:translate-y-1/2 sm:h-[50vh]",
             {
               "opacity-0": isClicked, // isClicked 가 true 이면, opacity 0
               "opacity-100": !isClicked, // isClicked 가 false 이면, opacity 100
@@ -115,7 +115,7 @@ const SearchTemplate = () => {
           </PageWrapper>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -7,7 +7,7 @@
 }
 
 .topbarMenu_item {
-  @apply mr-2 last:mr-0;
+  @apply last:mr-0;
 }
 
 .topbarMenu_bar {

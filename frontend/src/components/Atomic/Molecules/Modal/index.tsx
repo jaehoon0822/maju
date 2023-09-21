@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import module from "./Modal.module.css";
-import ModalTop from "../ModalTop/Index";
+import ModalTop from "../ModalTop";
 import { ModalTemplateProps } from "./Modal.type";
 
 const Modal = ({

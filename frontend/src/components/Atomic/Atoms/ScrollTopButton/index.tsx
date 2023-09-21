@@ -22,14 +22,19 @@ const ScrollTopButton = () => {
   }, [query.modal]);
 
   return (
+    // <div
+    //   className={classNames(
+    //     "fixed  justify-center items-center flex right-1/2 translate-x-1/2 bottom-8 w-[1024px] md:w-full md:right-0 md:-translate-x-10 sm:w-full sm:bottom-24 z-0"
+    //   )}
+    // >
     <div
       className={classNames(
-        "fixed justify-center items-center flex right-[20vw] bottom-8 md:right-8"
+        "fixed justify-center self-end flex bottom-10 sm:bottom-28 place-items-end z-50"
       )}
     >
       <button
         className={classNames(
-          "flex justify-center items-center rounded-full w-10 h-10 p-2 bg-black/30 transition-all duration-500 hover:bg-black"
+          "flex justify-center items-center rounded-full w-10 h-10 p-2 bg-black/30 transition-all duration-500 ml-auto hover:bg-black"
         )}
         onClick={onClick}
       >

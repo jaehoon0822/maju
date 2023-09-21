@@ -1,5 +1,5 @@
 import { postType } from "@/common/validation/post.yup";
-import ModalTop from "@/components/Atomic/Molecules/ModalTop/Index";
+import ModalTop from "@/components/Atomic/Molecules/ModalTop";
 import PostEditor from "@/components/Atomic/Molecules/PostEditor";
 import useMutationCreatePosts from "@/hooks/mutations/useMutatioCreatePosts";
 import useQueryGetUser from "@/hooks/queries/useQueryGetUser";
@@ -50,7 +50,7 @@ const CreatePostModal = () => {
     >
       <div
         className={classNames(
-          "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 max-w-[1200px] md:w-3/4 max-h-[65vh] py-4 px-4 bg-white rounded-md"
+          "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 max-w-[1200px] md:w-3/4 max-h-[65vh] py-4 px-4 bg-white rounded-md sm:max-h-[100vh]"
         )}
       >
         <ModalTop disabledLogo={true} onClose={onClose} />

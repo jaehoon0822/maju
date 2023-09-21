@@ -18,7 +18,7 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
   } = useHomeTemplate();
 
   return (
-    <div>
+    <div className={classNames("w-full")}>
       <TopMenu
         selectedIdx={selectedIdx}
         onClickSelectedIdx={onClickSelectedIdx}
@@ -40,7 +40,7 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
           }}
         />
       </TopMenu>
-      {query.page !== "followPost" && query.modal !== "updatePost" ? (
+      {query.page !== "followPost" ? (
         <div
           className={classNames(
             "break-words break-all border-solid border-b-[1px] border-b-[#d2d2d2]"

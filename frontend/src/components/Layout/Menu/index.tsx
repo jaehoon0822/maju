@@ -19,7 +19,7 @@ const MenuTemplate = () => {
   }, [dispatch]);
 
   return (
-    <div className="h-screen">
+    <div className="h-screen sm:h-auto sm:w-screen">
       <SideMenu>
         <ListItem
           title="홈"

@@ -27,11 +27,11 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className={classNames({
+      className={classNames("w-full", {
         "animate-fadeIn": !routerChange,
       })}
       style={{
-        zIndex: 1000,
+        zIndex: 40,
       }}
     >
       {children}

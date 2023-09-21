@@ -51,6 +51,7 @@ const Editor = ({
       <style jsx global={true}>{`
         #editor {
           padding-bottom: 1rem;
+          width: 100%;
         }
         .ql-container.ql-snow {
           border: none;

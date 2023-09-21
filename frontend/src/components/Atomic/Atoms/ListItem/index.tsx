@@ -42,7 +42,7 @@ const ListItem = ({
           href={href}
           onClick={onClick}
           aria-label="list-item"
-          className="flex justify-ccenter"
+          className="flex justify-center"
         >
           <div
             className={classNames(
