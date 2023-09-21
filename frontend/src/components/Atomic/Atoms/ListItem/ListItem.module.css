@@ -1,0 +1,15 @@
+.listItem_wrapper {
+  @apply flex justify-start items-center w-[12.5rem] h-12 py-2 px-2 transition-all border-b-[1px] border-transparent hover:bg-[#e9e9e9] hover:border-b-[#d2d2d2] md:w-20 md:justify-center sm:w-full;
+}
+
+.listItem_wrapper.active {
+  @apply border-b-[1px] border-b-[#d2d2d2] bg-[#e9e9e9] md:overflow-hidden;
+}
+
+.listItem_title {
+  @apply pl-5 md:py-0 md:hidden;
+}
+
+.listItem_more {
+  @apply ml-auto sm:hidden;
+}

@@ -55,7 +55,6 @@ export const local = (passport: PassportStatic) => {
           // user 가 유효하다면 done 으로 user 전달
           return done(null, user);
         } catch (error) {
-          console.error(error);
           return done(error);
         }
       }

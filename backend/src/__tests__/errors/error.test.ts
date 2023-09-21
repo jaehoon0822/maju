@@ -1,6 +1,6 @@
 import { commonError } from "@/errors/common-error";
 import { ConflictError } from "@/errors/conflict-error";
-import { ForbiddenError } from "@/errors/forbidden-error";
+import { ForbiddenError } from "@/errors/Forbidden-error";
 import { notFoundError } from "@/errors/not-found-error";
 import { RequestValidationError } from "@/errors/request-validation-error";
 

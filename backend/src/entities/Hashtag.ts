@@ -17,15 +17,15 @@ export class Hashtag extends BaseDate {
   @Column("varchar", { unique: true, length: 255 })
   title: string;
 
-  @ManyToMany(() => Post, (post) => post.id)
+  @ManyToMany(() => Post, (post) => post.hashtag)
   @JoinTable({
-    name: "post_hashtag",
+    name: "postHashtag",
     joinColumn: {
-      name: "hashtag_id",
+      name: "hashtagId",
       referencedColumnName: "id",
     },
     inverseJoinColumn: {
-      name: "post_id",
+      name: "postId",
       referencedColumnName: "id",
     },
   })

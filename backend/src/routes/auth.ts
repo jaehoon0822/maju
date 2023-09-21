@@ -18,6 +18,7 @@ router.post(
   errorValidation,
   auth.signUp
 );
+
 router.post("/login", isNotLoggedIn, auth.login);
 router.post("/logout", isLoggedIn, auth.logout);
 
@@ -32,5 +33,7 @@ router.get(
   }),
   auth.kakaoLogin
 );
+
+router.patch("/password", isNotLoggedIn, auth.changePassword);
 
 export { router as authRouter };

@@ -1,0 +1,3 @@
+.searchBar_wrapper {
+  @apply flex w-full justify-center md:flex-col;
+}

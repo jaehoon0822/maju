@@ -1,0 +1,7 @@
+.sideMenu_wrapper {
+  @apply px-10 py-10 flex flex-col justify-between items-center w-[17.5rem] h-full border-solid border-[1px] border-[#d2d2d2] bg-white md:w-24 md:px-2 z-10 sm:flex-row sm:h-auto sm:w-full sm:bottom-0 sm:justify-center sm:py-4;
+}
+
+.sidMenu_bottom {
+  @apply pt-4 border-t-[1px] border-solid border-[#d2d2d2] sm:border-none  sm:pt-0 sm:pb-0 sm:w-1/4;
+}

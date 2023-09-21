@@ -12,36 +12,37 @@ import { BaseDate } from "./BaseDate";
 import { User } from "./User";
 import { Hashtag } from "./Hashtag";
 import { Likes } from "./Likes";
+import { Image } from "./Image";
 
 @Entity()
 export class Post extends BaseDate {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column("varchar", { length: 255 })
+  @Column("text")
   content: string;
 
-  @Column("varchar", { length: 255, nullable: true })
-  img: string;
-
   @ManyToOne(() => User, (user) => user.id, { cascade: true })
-  @JoinColumn({ name: "user_id" })
+  @JoinColumn({ name: "userId" })
   user: User;
 
-  @ManyToMany(() => Hashtag, (hashtags) => hashtags.id)
+  @ManyToMany(() => Hashtag, (hashtags) => hashtags.post)
   @JoinTable({
-    name: "post_hashtag",
+    name: "postHashtag",
     joinColumn: {
-      name: "post_id",
+      name: "postId",
       referencedColumnName: "id",
     },
     inverseJoinColumn: {
-      name: "hashtag_id",
+      name: "hashtagId",
       referencedColumnName: "id",
     },
   })
   hashtag: Hashtag[];
 
   @OneToMany(() => Likes, (likes) => likes.post)
-  likePosts: Likes[];
+  likes: Likes[];
+
+  @OneToMany(() => Image, (image) => image.post)
+  img: Image[];
 }

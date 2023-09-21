@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { ConflictError } from "@/errors/conflict-error";
+import { ConflictError } from "@/errors/Conflict-error";
 import { userService } from "@/services/User";
 import passport from "passport";
 import { User } from "@/entities/User";
@@ -26,27 +26,36 @@ export class AuthController {
   async signUp(req: Request, res: Response) {
     // email, password 를 request.body 에서 받음
     const { email, password, nick } = req.body;
-    // user 검색
+    const errors = [];
 
-    const user = await userService.findByEmail(email, true);
+    // user 검색
+    const emailUser = await userService.findByEmail(email, true);
+    const nickUser = await userService.findByNick(nick, true);
 
     // user 가 있다면 ConflictError 발생
-    if (user) {
-      throw new ConflictError("이미 가입된 이메일입니다.");
+    if (emailUser) {
+      errors.push(new ConflictError("이미 존재하는 이메일입니다.", "email"));
+    }
+    if (nickUser) {
+      errors.push(new ConflictError("이미 존재하는 닉네임입니다.", "nick"));
+    }
+
+    if (errors.length > 0) {
+      throw new ConflictError().toArray(errors);
     }
 
     // user 가 없다면, password 해시화
     const hashedPassword = await bcrypt.hash(password, 12);
 
     // user 생성
-    await userService.create({
+    const user = await userService.create({
       email,
       password: hashedPassword,
       nick,
     });
 
     // 완료 response
-    return res.status(201).send("회원가입 완료");
+    return res.status(201).send(user);
   }
 
   /**
@@ -66,12 +75,10 @@ export class AuthController {
       "local",
       (authError: any, user: User, info?: { message: string }) => {
         if (authError) {
-          // console.error(authError);
-          throw new ConflictError(authError.message);
+          next(new ConflictError(authError.message));
         }
 
         if (info) {
-          // console.error(info);
           return next(new ConflictError(info.message));
         }
 
@@ -79,7 +86,8 @@ export class AuthController {
           if (loginError) {
             return next(new Error(loginError.message));
           }
-          return res.status(200).send("로그인 되었습니다");
+          return res.status(200).send("로그인 되었되습니습다.");
+          // return res.redirect("http://localhost:3000");
         });
       }
     )(req, res);
@@ -97,6 +105,8 @@ export class AuthController {
    *
    */
   async logout(req: Request, res: Response) {
+    res.clearCookie((req.user as User).id);
+
     req.logout((error) => {
       if (error) {
         throw new Error(error.message);
@@ -111,6 +121,29 @@ export class AuthController {
   }
 
   async kakaoLogin(req: Request, res: Response) {
-    res.status(200).send("로그인 되었습니다.");
+    return res.redirect("http://localhost:3000");
+    // return res.status(200).send("로그인 되었습니다.");
+  }
+
+  async changePassword(req: Request, res: Response) {
+    const { password, id: userId } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const result = await userService.changePassword({
+      password: hashedPassword,
+      id: userId,
+    });
+
+    if (result?.affected !== 1) {
+      throw new Error("비밀번호 변경이 되지 않았습니다.");
+    }
+
+    res.status(201).send("패스워드가 변경되었습니다.");
+    try {
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+    }
   }
 }

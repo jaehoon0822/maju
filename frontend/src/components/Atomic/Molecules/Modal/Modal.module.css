@@ -1,0 +1,7 @@
+.modal_wrapper {
+  @apply fixed h-screen bg-white px-10 top-0 left-[50vw] -translate-x-1/2 transition-all duration-300 md:w-screen sm:w-screen sm:pb-10 sm:min-h-screen sm:px-4 z-50;
+}
+
+.modal_children {
+  @apply transition-all duration-500 relative flex flex-col items-center break-words break-all;
+}

@@ -1,4 +1,4 @@
-import { commonError } from "@/errors/common-error";
+import { CommonError } from "@/errors/Common-error";
 import { NextFunction, Request, Response } from "express";
 import { logger } from "logger";
 
@@ -24,7 +24,7 @@ export const errorHandler = (
   logger.info("hello");
   logger.error(err.message);
   // CommonError class 의 instance 인지 확인
-  if (err instanceof commonError) {
+  if (err instanceof CommonError) {
     // 맞다면 err.statusCode 및 err.serializeErrors 를 send
     return res.status(err.statusCode).send(err.serializeErrors());
   }
