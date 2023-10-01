@@ -8,9 +8,9 @@ const Profile = () => {
       <Head>
         <title>MAJU 프로필 페이지</title>
       </Head>
-      <div>
+      <>
         <ProfileTemplate />
-      </div>
+      </>
     </>
   );
 };

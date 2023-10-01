@@ -16,8 +16,7 @@ const useSignupModal = (setIsSignup: Dispatch<SetStateAction<boolean>>) => {
     const { passwordConfirm, ...filteredData } = data;
     mutation.mutate(filteredData, {
       onSuccess: (data) => {
-        console.log(data);
-        push(`${pathname}?modal=signupComplate&userId=${data.id}`);
+        push(`${pathname}?modal=registProfile&userId=${data.id}`);
         useFormReturnMethod?.reset();
         setIsSignup(true);
       },
@@ -32,7 +31,7 @@ const useSignupModal = (setIsSignup: Dispatch<SetStateAction<boolean>>) => {
                   field: string;
                   statusCode: number;
                 }) => {
-                  useFormReturnMethod?.setError(error.field, {
+                  useFormReturnMethod?.setError("root", {
                     type: "manual",
                     message: error.message,
                   });
@@ -45,7 +44,7 @@ const useSignupModal = (setIsSignup: Dispatch<SetStateAction<boolean>>) => {
             if (Array.isArray(responseData)) {
               error.response?.data.forEach(
                 (error: { message: string; field: string }) => {
-                  useFormReturnMethod?.setError(error.field, {
+                  useFormReturnMethod?.setError("root", {
                     type: "manual",
                     message: error.message,
                   });

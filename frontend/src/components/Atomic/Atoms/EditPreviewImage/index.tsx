@@ -22,7 +22,7 @@ const EditPerviewImage = ({
             src={
               image.startsWith("data:image")
                 ? image
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/post/${image}`
+                : `${process.env.NEXT_PUBLIC_IMAGE_URL}/post/raw/${image}`
             }
             alt={image}
             sizes="lg:100vw md:80vw sm:40vw"

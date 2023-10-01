@@ -1,8 +1,7 @@
 import { Post } from "@/common/types/index.types";
 import PhotoSizeSelectIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import classNames from "classnames";
-import Image from "next/image";
-import React, { MouseEvent, memo, useCallback, useMemo } from "react";
+import React, { Fragment, MouseEvent, memo, useCallback, useMemo } from "react";
 import Img from "../Img";
 
 interface PostImageProps {
@@ -38,18 +37,9 @@ const PostImages = ({ post, onClickModal }: PostImageProps) => {
             post.img.length !== 0 &&
             post.img.map((image) => {
               return (
-                <div
-                  key={image.id}
-                  className={classNames("relative w-1/2 h-[182px]")}
-                >
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}/post/${image.img}`}
-                    alt={"test"}
-                    sizes="100vw md:80vw sm:40vw"
-                    fill
-                    className="object-cover object-cneter pr-2 pt-2 rounded-xl"
-                  />
-                </div>
+                <Fragment key={image.id}>
+                  <Img img={image.img} col="w-1/2" isHover={false} />
+                </Fragment>
               );
             })}
           <div

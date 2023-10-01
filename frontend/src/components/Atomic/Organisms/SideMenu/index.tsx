@@ -21,6 +21,7 @@ const SideMenu = ({ children }: SideMenuProps) => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
         queryClient.removeQueries(["/user"]);
+        queryClient.refetchQueries(["/isLoggedIn"]);
         push("/");
       },
       onError: (error) => {
@@ -62,7 +63,7 @@ const SideMenu = ({ children }: SideMenuProps) => {
           <div onClick={onClickLogout}>
             <div
               className={classNames(
-                "px-2 py-2 border-solid border-b-[1px] border-transparent hover:border-red-300 hover:bg-red-100 hover:border-b-[1px] "
+                "px-2 py-2 border-solid border-b-[1px] border-transparent cursor-pointer hover:border-red-300 hover:bg-red-100 hover:border-b-[1px] "
               )}
             >
               로그아웃 하기

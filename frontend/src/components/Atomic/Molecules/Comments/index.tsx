@@ -20,10 +20,6 @@ const Comments = ({ post }: CommentProps) => {
     isLoading,
   } = useQueryGetComments({ postId: post.id });
 
-  useEffect(() => {
-    console.log(hasNextPage);
-  });
-
   return (
     <div className={classNames("flex justify-center py-4 px-4 m-auto w-full")}>
       <div

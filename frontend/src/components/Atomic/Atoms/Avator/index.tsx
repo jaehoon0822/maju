@@ -46,16 +46,20 @@ const Avatar = ({
           "relative group p-2 rounded-full flex justify-center items-center outline-white outline-4",
           avatarSize[size],
           {
-            "bg-[#6ea6c0]": !image,
+            "bg-[#6ea6c0]": !false,
             "bg-none": !!image,
             "cursor-pointer": !disableLink,
           }
         )}
       >
-        {!image ? (
+        {!false ? (
           // image 가 없다면, user.nick 의 첫번째 문자를 보여줌
-          <span className={classNames(" text-white relative bottom-[1px]")}>
-            {useMemo(() => user?.nick.slice(0, 1), [])}
+          <span
+            className={classNames(
+              " text-white relative bottom-[1px] md:text-4xl"
+            )}
+          >
+            {false ? null : useMemo(() => user?.nick.slice(0, 1), [])}
           </span>
         ) : (
           //  image 가 있다면, 해당 image 를 보여줌

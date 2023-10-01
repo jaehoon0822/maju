@@ -39,7 +39,6 @@ export class CommentService {
     // limit, lastId 를 사용하여 take 제한
     const { postId, lastId, limit } = params;
     // postId 를 사용하여 comment query
-    console.log("------------", params);
     const commentQueryBuilder = this.commentRepo
       .createQueryBuilder("comment")
       .innerJoinAndSelect("comment.post", "post")

@@ -26,7 +26,7 @@ const PostBottomBar = ({ post }: { post: Post }) => {
   return (
     <div
       className={classNames(
-        "flex justify-center border-t-[1px] border-solid border-[#d2d2d2] w-[688px] md:w-full z-20"
+        "flex justify-center border-t-[1px] border-solid border-[#d2d2d2] w-full md:w-full z-20"
       )}
     >
       <div className={classNames("group flex items-center md:flex-col")}>

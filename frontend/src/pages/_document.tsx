@@ -6,7 +6,6 @@ export default function Document() {
       <Head>
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="MAJU 소셜 서비스" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="og:title" content="MAJU 소셜 서비스" />
         <meta name="og:description" content="당신과, 나 MAJU 보다." />
         <meta name="og:type" content="website" />

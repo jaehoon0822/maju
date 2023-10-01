@@ -1,5 +1,5 @@
 .modal_wrapper {
-  @apply fixed h-screen bg-white px-10 top-0 left-[50vw] -translate-x-1/2 transition-all duration-300 md:w-screen sm:w-screen sm:pb-10 sm:min-h-screen sm:px-4 z-50;
+  @apply fixed h-[90vh] bg-white px-10 top-1/2 -translate-y-1/2 left-[50vw] -translate-x-1/2 transition-all duration-300 rounded-xl md:w-[90vw] sm:w-screen sm:rounded-none sm:pb-10 sm:min-h-screen sm:px-4 z-50;
 }
 
 .modal_children {

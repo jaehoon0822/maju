@@ -8,9 +8,36 @@ import { hashTagService } from "@/services/Hashtag";
 import { postService } from "@/services/Post";
 import { Hashtag } from "@/entities/Hashtag";
 import { userService } from "@/services/User";
+import s3, { bucket, getSignedUrl } from "@/aws";
+import {
+  Bucket,
+  DeleteObjectsCommand,
+  DeleteObjectsCommandInput,
+} from "@aws-sdk/client-s3";
 
 /** @remarks post controller 클래스 */
 export class PostController {
+  /**
+   * @remarks
+   * - 이미지 presigned 서비스
+   * @param req
+   * - Express.Request
+   * @param res
+   * - Express.Response
+   */
+  public async presignedImage(req: Request, res: Response) {
+    const { contentTypes } = req.body;
+    const presignedData = await Promise.all(
+      contentTypes.map(async (contentType: string) => {
+        const imageKey = `${Date.valueOf()}.${contentType}`;
+        const key = `post/raw/${imageKey}`;
+        const presigned = await getSignedUrl({ key });
+        return { imageKey, presigned };
+      })
+    );
+
+    res.send(presignedData);
+  }
   /**
    * @remarks
    * - 이미지 생성 서비스
@@ -20,9 +47,9 @@ export class PostController {
    * - Express.Response
    */
   public async createImage(req: Request, res: Response) {
-    const files = req.files as Express.Multer.File[];
-    const fileNames = files?.map((file: Express.Multer.File) => {
-      return `${file.filename}`;
+    const files = req.files as Express.MulterS3.File[];
+    const fileNames = files?.map((file: Express.MulterS3.File) => {
+      return `${file.key.replace("post/raw/", "")}`;
     });
     res.json({ images: fileNames });
   }
@@ -205,6 +232,7 @@ export class PostController {
     }
   }
 
+  // post 업데이트
   public async updatePost(
     req: Request<
       { id: string },
@@ -214,31 +242,37 @@ export class PostController {
     res: Response
   ) {
     try {
+      // content 와 img 가져오기
       const { content, img } = req.body;
+      // request 의 params id
       const { id } = req.params;
-
+      // post 가져오기
       const post = await postService.findById({
         postId: id,
         userId: (req.user as User).id,
       });
-
+      // #으로 시작하며 <,>,",\s(공백)을 제외한 모든 문자 일치
       const regex = /#([^<>"\s]+)/g;
+      // match 되는 content 없는지 확인 (해시태그)
       const matches = req.body.content.match(regex);
-
+      // post 가 있는지 확인
       if (!post) {
         throw new ConflictError("존재하지 않은 포스트입니다.");
       }
 
       // hashtag 가 있다면
       if (matches) {
+        // 해시태그와 중복될수 있는 HAX 제거한, 해시태그 만 추출
         const tags: string[] = Array.from(matches, (match) =>
           match !== "#3b83f6" ? match : ""
         ).filter((tag) => tag !== "");
-
+        // 추출된 해시태그에서 # 제거
         const newHashtag = _.map(tags, (tag) => tag.slice(1));
+        // 기존 post 의 hashtag 를 가져옴
         const originalTags = post.hashtag.map((tag) => tag.title);
-
+        // 기존 post 의 hashtag 와 새로운 해시태그가 틀리다면, 조건문 실행
         if (difference(newHashtag, originalTags)) {
+          // 기존의 해시태그를 제거
           const promisesPosts = originalTags.map(async (hashtagTitle) => {
             const hashtag = await hashTagService.findOneByTitle({
               title: hashtagTitle,
@@ -252,7 +286,7 @@ export class PostController {
           });
           await Promise.all(promisesPosts);
         }
-
+        // 새로운 해시태그를 생성
         const hashtags = (
           await Promise.all(
             newHashtag.map(async (title) => {
@@ -264,25 +298,60 @@ export class PostController {
             })
           )
         ).flat();
-
+        // 만들어진 hashtags 를 post 의 hashtag 에 할당
         post.hashtag = hashtags;
       }
+      // post 에 변경된 content 할당
       post.content = content;
+      // post 적용
       await postService.getPostRepository().save(post);
-
-      await postService.imageRepo
+      // image 삭제를 위한 querybuilder
+      const deleteImageQb = postService.imageRepo
         .createQueryBuilder()
         .delete()
-        .where("postId = :id", { id: post.id })
-        .execute();
+        .where("postId = :id", { id: post.id });
 
+      // body.img 의 length 가 0 보다 크면,
+      // 해당 img 는 제외하고 삭제처리 하기 윈한 조건문
+      if (img.length > 0) {
+        deleteImageQb.andWhere("img NOT IN (:...img)", { img });
+      }
+      // delete 쿼리빌더 실행
+      await deleteImageQb.execute();
+
+      // S3 삭제를 위한 DeleteCommend 객체 생성
+      const deleteS3ImageCommend = post.img.reduce(
+        (input, key) => {
+          // img 에 post 의 img 가 포함되면 기존의 input 반환
+          if (img.includes(key.img)) return input;
+          // 그렇지 않다면, Objects 에 Key 를 생성하여 push
+          input.Delete?.Objects?.push({ Key: `post/raw/${key.img}` });
+          // 변경된 input return
+          return input;
+        },
+        // DeleteObjectsCommendInput 명령 객체
+        {
+          Bucket: bucket,
+          Delete: {
+            Objects: [] as Bucket,
+          },
+        } as DeleteObjectsCommandInput
+      );
+
+      // delteS3ImageCommend 의 Objects 객체의 length 가 0이 아니면,
+      if (deleteS3ImageCommend?.Delete?.Objects?.length !== 0) {
+        // s3 에 DeleteObjectsCommend 명령실행
+        await s3.send(new DeleteObjectsCommand(deleteS3ImageCommend));
+      }
+      // img 가 있다면,
       if (img) {
-        await postService.createPostImage({
+        // 해당 img 가 있다면 찾고, 아니면 생성하는 service 실행
+        await postService.createAndFindPostImage({
           img,
           postId: post.id,
         });
       }
-
+      // 만들어진 post 반환
       res.status(201).send({ post });
     } catch (error) {
       // 예기치 못한 Error 발생
@@ -295,6 +364,28 @@ export class PostController {
   public async removePost(req: Request<{ id: Post["id"] }>, res: Response) {
     try {
       const { id } = req.params;
+      const post = await postService.findById({
+        postId: id,
+        userId: (req.user as User).id,
+      });
+
+      const commendInput = post.img.reduce(
+        (input, key) => {
+          input.Delete?.Objects?.push({ Key: `post/raw/${key}` });
+          input.Delete?.Objects?.push({ Key: `post/w140/${key}` });
+          input.Delete?.Objects?.push({ Key: `post/w600/${key}` });
+          return input;
+        },
+        {
+          Bucket: "maju-bucket",
+          Delete: {
+            Objects: [] as Bucket,
+          },
+        } as DeleteObjectsCommandInput
+      );
+
+      await s3.send(new DeleteObjectsCommand(commendInput));
+
       const deletedResult = await postService.removePost({
         postId: id,
         userId: (req.user as User).id,

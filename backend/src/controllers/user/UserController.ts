@@ -9,13 +9,13 @@ class UserController {
     .getRepository(User);
 
   public async createAvatarImage(req: Request, res: Response) {
-    const file = req.file as Express.Multer.File;
-    res.json({ image: file.filename });
+    const file = req.file as Express.MulterS3.File;
+    res.json({ image: file.key.replace("avatar/raw/", "") });
   }
 
   public async createCoverImage(req: Request, res: Response) {
-    const file = req.file as Express.Multer.File;
-    res.json({ image: file.filename });
+    const file = req.file as Express.MulterS3.File;
+    res.json({ image: file.key.replace("coverImage/raw/", "") });
   }
 
   public async getUser(req: Request, res: Response) {

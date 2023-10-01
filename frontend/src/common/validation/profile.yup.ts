@@ -2,8 +2,8 @@ import * as yup from "yup";
 
 // profileSchema 의 yup 객체 생성
 export const profileSchema = yup.object({
-  coverImage: yup.string(),
-  avatar: yup.string(),
+  coverImage: yup.string().notRequired(),
+  avatar: yup.string().notRequired(),
   coverLetter: yup
     .string()
     .test("maxline", "10줄 이하로 작성해주세요.", (value) => {
@@ -28,7 +28,8 @@ export const profileSchema = yup.object({
         return innerText.length < 255;
       }
       return true;
-    }),
+    })
+    .required("자기소개를 해주세요"),
   nick: yup
     .string()
     .max(30, "30자 이하로 작성해주세요.")

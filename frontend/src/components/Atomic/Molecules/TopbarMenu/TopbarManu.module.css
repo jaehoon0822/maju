@@ -1,9 +1,9 @@
 .topbarMenu_wrapper {
-  @apply flex flex-col w-fit;
+  @apply flex flex-col items-center w-full;
 }
 
 .topbarMenu_list {
-  @apply flex;
+  @apply flex w-fit flex-col;
 }
 
 .topbarMenu_item {

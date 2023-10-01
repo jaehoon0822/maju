@@ -6,7 +6,7 @@
 }
 
 .styled_input-error {
-  @apply px-5 border-none text-red-600 duration-1000 absolute top-[3rem] sm:text-sm;
+  @apply px-5 border-none text-red-600 duration-1000 absolute top-[3rem] sm:text-xs;
 }
 
 .styled_input-error.active {

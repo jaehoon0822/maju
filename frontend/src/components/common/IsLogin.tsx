@@ -1,19 +1,29 @@
-import useQueryGetUser from "@/hooks/queries/useQueryGetUser";
 import TextButton from "../Atomic/Atoms/TextButton";
 import Logo from "../Atomic/Atoms/Logo";
 import { memo, useEffect } from "react";
 import Spinner from "../Atomic/Atoms/Spinner";
+import { useRouter } from "next/router";
+import useQueryGetIsLoggedIn from "@/hooks/queries/useQueryGetIsLoggedIn";
+import Layout from "../Layout";
 
 const IsLogin = ({ children }: { children: React.ReactNode }) => {
-  const { isLoading, isError } = useQueryGetUser();
+  const { pathname, ...router } = useRouter();
+  const { data: isLoggedIn, isLoading } = useQueryGetIsLoggedIn();
 
   useEffect(() => {
-    if (isError) {
-      setTimeout(() => {
+    if (isLoggedIn && pathname === "/") {
+      window.location.href = "/home";
+    }
+
+    if (!isLoggedIn && pathname !== "/") {
+      const timeoutId = setTimeout(() => {
         window.location.href = "/";
       }, 5000);
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
-  }, [isError]);
+  }, [pathname, isLoggedIn]);
 
   if (isLoading) {
     return (
@@ -23,7 +33,15 @@ const IsLogin = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (isError) {
+  if (isLoggedIn && pathname !== "/") {
+    return (
+      <>
+        <Layout>{children}</Layout>
+      </>
+    );
+  }
+
+  if (!isLoggedIn && pathname !== "/") {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
         <div className="mb-10">
@@ -50,7 +68,7 @@ const IsLogin = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  return <div>{children}</div>;
+  return children;
 };
 
 export default memo(IsLogin);

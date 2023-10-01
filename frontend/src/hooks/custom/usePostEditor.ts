@@ -98,10 +98,13 @@ const usePostEditor = (onSubmit: (data: postType) => void, post?: Post) => {
     [useFormReturn, setImages]
   );
 
+  console.log("---test", images, useFormReturn?.getValues("img"));
+
   const onSubmitHandler: SubmitHandler<postType> = useCallback(
     async (data) => {
-      let imageUrls: string[] =
-        post && post.img ? Array.from(post.img, (img) => img.img) : [];
+      // let imageUrls: string[] =
+      //   post && post.img ? Array.from(post.img, (img) => img.img) : [];
+      let imageUrls: string[] = data.img;
       if (data.img.length !== 0) {
         const fileImages = data.img.filter((file) =>
           /image\/\w+/g.test(file.type)
@@ -115,6 +118,8 @@ const usePostEditor = (onSubmit: (data: postType) => void, post?: Post) => {
             .images,
         ];
       }
+
+      console.log("----imageUrls", imageUrls);
 
       const content = toContent(data.content, hashtags);
       onSubmit({ content, img: imageUrls });

@@ -19,7 +19,7 @@ const useVerifyEmailModal = () => {
       onSuccess: ({ data }) => {
         dispatch(
           set({
-            userId: data.user_id,
+            userId: data.userId,
             code: String(data.code),
             certified: false,
           })
@@ -29,7 +29,7 @@ const useVerifyEmailModal = () => {
       },
       onError: (error) => {
         if (error instanceof AxiosError)
-          useFormReturnMethod?.setError("email", {
+          useFormReturnMethod?.setError("root", {
             type: "manual",
             message: error.response?.data.message,
           });
@@ -37,7 +37,13 @@ const useVerifyEmailModal = () => {
     });
   };
 
-  return { onClose, setUseFormReturnMethod, onSubmit, query, pathname };
+  return {
+    onClose,
+    setUseFormReturnMethod,
+    onSubmit,
+    query,
+    pathname,
+  };
 };
 
 export { useVerifyEmailModal };

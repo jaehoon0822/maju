@@ -46,7 +46,7 @@ const Editor = ({
   }, [setErrors, errors]);
 
   return (
-    <div className="flex flex-col pt-8 relative">
+    <div className="flex flex-col pt-8 relative w-full">
       {/* QuillEditor 기본 style 변경 */}
       <style jsx global={true}>{`
         #editor {

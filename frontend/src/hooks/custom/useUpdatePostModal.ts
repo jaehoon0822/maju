@@ -29,11 +29,12 @@ const useUpdatePostModal = () => {
 
   const onSubmit: SubmitHandler<InferType<typeof postSchema>> = (data) => {
     updatePostMutation.mutate(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["/user"]);
-        queryClient.invalidateQueries(["/post", postData?.id]);
-        queryClient.invalidateQueries(["/posts", userData?.id]);
-        queryClient.invalidateQueries(["/profile", userData?.nick]);
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["/user"]);
+        await queryClient.invalidateQueries(["/posts"]);
+        await queryClient.invalidateQueries(["/post", postData?.id]);
+        await queryClient.invalidateQueries(["/profile", userData?.nick]);
+        back();
       },
       onError: (error) => {
         if (error instanceof AxiosError) {
@@ -41,7 +42,6 @@ const useUpdatePostModal = () => {
         }
       },
     });
-    back();
   };
 
   return {

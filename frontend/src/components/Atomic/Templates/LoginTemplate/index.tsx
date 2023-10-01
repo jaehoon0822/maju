@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import Logo from "../../Atoms/Logo";
 import Form from "../../Atoms/Form/Index";
 import Input from "../../Atoms/Inputs";
@@ -12,23 +12,20 @@ import ChangePasswordModal from "../../Organisms/Modal/ChangePasswordModal";
 import SignupModal from "../../Organisms/Modal/SignupModal";
 import SignupComplateModal from "../../Organisms/Modal/SignupComplateModal";
 import useLogin from "@/hooks/custom/useLogin";
-import useQueryGetUser from "@/hooks/queries/useQueryGetUser";
 import RegistProfilModal from "../../Organisms/Modal/RegistProfileModal";
+import Backdrop from "../../Atoms/Backdrop";
 
 const LoginTemplate = () => {
-  const [isSignup, setIsSignup] = useState<boolean>(false);
-  const { onSubmit, push, query, setUseFormReturnMethod, useFormReturnMethod } =
-    useLogin();
-  const { data } = useQueryGetUser();
+  const {
+    onSubmit,
+    setUseFormReturnMethod,
+    resError,
+    setResError,
+    isSignup,
+    setIsSignup,
+  } = useLogin();
 
-  useEffect(() => {
-    useFormReturnMethod?.reset();
-    if (data) {
-      push("/home");
-    }
-  }, [query, data]);
-
-  return !data ? (
+  return (
     <main
       className={classNames(
         "flex flex-col justify-center items-center h-screen bg-gray-100 md:bg-white"
@@ -55,23 +52,36 @@ const LoginTemplate = () => {
           <Form
             onSubmit={onSubmit}
             schema={loginSchema}
+            setErrors={setResError}
             setUseFormReturnMethod={setUseFormReturnMethod}
           >
             <Input
               id="email"
               label="email"
               name="email"
-              // value="qqq@qqq.com"
               placeholder="이메일을 입력해주세요."
             />
             <Input
               id="password"
               label="password"
               name="password"
-              // value="123123123"
+              type="password"
               placeholder="패스워드를 입력해주세요."
             />
-            <Button label="로그인하기" variant="primary" size="large" />
+            <div className={classNames("relative flex flex-col sm:mt-4")}>
+              <Button label="로그인하기" variant="primary" size="large" />
+              <div
+                className={classNames(
+                  "absolute flex justify-end bottom-12 px-5 text-red-500 transition-all duration-500 sm:text-xs sm:bottom-10",
+                  {
+                    "opacity-0 invisible": !resError?.root?.message,
+                    "opacity-100 visible": resError?.root?.message,
+                  }
+                )}
+              >
+                <span>{resError?.root?.message as string}</span>
+              </div>
+            </div>
           </Form>
         </div>
         <div className="flex justify-end mb-10 w-[25rem] sm:w-[12.5rem]">
@@ -93,22 +103,14 @@ const LoginTemplate = () => {
         <VerifyCodeModal />
         <ChangePasswordModal />
         <SignupModal setIsSignup={setIsSignup} />
-        <SignupComplateModal
-          // isSignup={true}
-          isSignup={isSignup}
-          setIsSignup={setIsSignup}
-        />
         {isSignup ? (
-          <RegistProfilModal
-            isEdit={isSignup}
-            // isPost={true}
-            // isEdit={isSignup}
-            setIsSignup={setIsSignup}
-          />
+          <RegistProfilModal isEdit={isSignup} setIsSignup={setIsSignup} />
         ) : null}
+        <SignupComplateModal isSignup={isSignup} setIsSignup={setIsSignup} />
+        <Backdrop />
       </div>
     </main>
-  ) : null;
+  );
 };
 
 export default memo(LoginTemplate);

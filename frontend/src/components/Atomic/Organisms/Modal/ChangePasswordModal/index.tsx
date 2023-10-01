@@ -55,12 +55,14 @@ const ChangePasswordModal = () => {
                   id="password"
                   label="password"
                   name="password"
+                  type="password"
                   placeholder="패스워드를 입력해주세요."
                 />
                 <Input
                   id="passwordConfirm"
                   label="passwordConfirm"
                   name="passwordConfirm"
+                  type="password"
                   placeholder="패스워드를 재확인 해주세요."
                 />
               </ModalForm>

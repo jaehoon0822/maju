@@ -10,7 +10,6 @@ const useQueryGetComments = ({
   limit?: number;
 }) => {
   const getComments = async (context: QueryFunctionContext) => {
-    console.log("---pageParam----", context.pageParam);
     const { data } = await axiosClient.get<Comment[]>(
       `/comment/post/${context.queryKey[1]}`,
       {

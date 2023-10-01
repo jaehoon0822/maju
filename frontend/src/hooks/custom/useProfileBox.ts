@@ -18,8 +18,6 @@ const useProfileBox = (user: User) => {
   const isComment = useMemo(() => query.modal === "comments", [query.modal]);
   // profile page 인지 확인
   const isProfile = useMemo(() => asPath.startsWith("/profile"), [asPath]);
-  // pathname 추출
-  const pathname = useMemo(() => asPath.split("?")[0], [asPath]);
   // queryClient
   const queryClient = useQueryClient();
   // followMutation
@@ -28,8 +26,11 @@ const useProfileBox = (user: User) => {
   const unFollowMutation = useMutationUnFollow();
   // profile update 모달 활성화
   const onClickUpdateProfile = useCallback(() => {
-    push(`${pathname}?modal=registProfile&userId=${user.id}`);
-  }, [user]);
+    push({
+      pathname: "/profile/[nick]",
+      query: { modal: "registProfile", userId: user.id, nick: user.nick },
+    });
+  }, [user, query]);
   // follow 클릭 이벤트
   const onClickFollow = useCallback(() => {
     followMutation.mutate(

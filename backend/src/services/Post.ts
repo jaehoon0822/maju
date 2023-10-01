@@ -34,6 +34,36 @@ class PostService {
     }
   }
 
+  public async createAndFindPostImage(params: {
+    img: Image["img"][];
+    postId: Post["id"];
+  }) {
+    if (params.img && params.img.length !== 0) {
+      const imagePromises = params.img.map(async (url) => {
+        const img = await this.findByImg({ img: url });
+        if (img) return null;
+        else {
+          const image = this.imageRepo
+            .createQueryBuilder()
+            .insert()
+            .values({ img: url, post: { id: params.postId } })
+            .execute();
+          return image;
+        }
+      });
+      return await Promise.all(imagePromises);
+    }
+  }
+
+  public async findByImg(params: { img: Image["img"] }) {
+    const result = await this.imageRepo
+      .createQueryBuilder()
+      .where("img = :img", { img: params.img })
+      .getOne();
+
+    return result;
+  }
+
   public async createPost(
     params: Pick<Post, "content" | "user"> & { img: Image["img"][] }
   ) {

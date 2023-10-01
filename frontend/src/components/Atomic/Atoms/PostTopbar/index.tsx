@@ -28,28 +28,30 @@ const PostTopbar = ({ post }: PostTopbarProps) => {
       )}
     >
       <div className={classNames("flex mr-auto sm:flex-col")}>
-        <span
-          className={classNames(
-            "-mt-[2px] pr-6 text-blue-500 font-bold sm:pr-2 sm:text-sm"
-          )}
-        >
-          {post.user.nick}
-        </span>
-        <PostDate post={post} />
-        {post.isFollower ? (
-          <div
+        <div className="relative pr-8 sm:pr-1 sm:w-[130px]">
+          <span
             className={classNames(
-              "flex justify-center items-center p-1 w-4 h-4 mt-1 rounded-full bg-blue-500 ml-4 sm:absolute sm:left-5 sm:bottom-12"
+              "inline-block -mt-[2px] text-blue-500 font-bold sm:pr-2 sm:text-sm"
             )}
           >
-            <CheckIcon
-              className={classNames("text-white")}
-              style={{
-                fontSize: 10,
-              }}
-            />
-          </div>
-        ) : null}
+            {post.user.nick}
+          </span>
+          {post.isFollower ? (
+            <div
+              className={classNames(
+                "absolute top-[2px] right-3 flex justify-center items-center p-1 w-4 h-4 mt-1 rounded-full bg-blue-500 ml-4 sm:right-10 sm:top-6"
+              )}
+            >
+              <CheckIcon
+                className={classNames("text-white")}
+                style={{
+                  fontSize: 10,
+                }}
+              />
+            </div>
+          ) : null}
+        </div>
+        <PostDate post={post} />
       </div>
       {!isMyPost ? (
         <div ref={modalRef} className={classNames("ml-auto md:w-fit")}>

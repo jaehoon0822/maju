@@ -9,11 +9,21 @@ import { useDispatch, useSelector } from "@/common/store";
 import { setPos } from "@/common/store/slices/posSlice";
 import { setCommentModalPos } from "@/common/store/slices/commentModalPosSlice";
 
-const useCoverImage = ({ user, isEdit }: { user?: User; isEdit?: boolean }) => {
+const useCoverImage = ({
+  user,
+  isEdit = false,
+}: {
+  user?: User;
+  isEdit?: boolean;
+}) => {
   // dispatch
   const { commentModalRef } = useSelector((state) => state.commentModalpos);
   // push 가져옴
   const { push, query } = useRouter();
+  // path 가져옴
+  const { pathname } = useGetPathname({
+    queryString: `modal=image/user&userId=${user?.id}`,
+  });
   // disptach
   const dispatch = useDispatch();
   // input 의 ref
@@ -25,10 +35,6 @@ const useCoverImage = ({ user, isEdit }: { user?: User; isEdit?: boolean }) => {
   const { setValue } = isEdit ? useFormContext() : { setValue: undefined };
   // CoverImage 요청 mutation
   const createCoverImageMutation = useMutationCreateCoverImage();
-  // path 가져옴
-  const { pathname } = useGetPathname({
-    queryString: `modal=image/user&userId=${user?.id}`,
-  });
   // inputRef 클릭 이벤트
   const onClickEdit = () => {
     if (inputRef.current) {

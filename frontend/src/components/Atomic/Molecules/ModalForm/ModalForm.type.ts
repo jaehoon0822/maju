@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { SubmitHandler, UseFormReturn } from "react-hook-form";
+import { FieldErrors, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { ObjectSchema } from "yup";
 
 export interface ModalFromProps {

@@ -22,7 +22,6 @@ const useHomeTemplate = () => {
 
   const onSubmit: SubmitHandler<postType> = useCallback(
     (data: postType) => {
-      console.log("----data----", data);
       createPostMutation.mutate(data, {
         onSuccess: () => {
           queryClient.invalidateQueries(["/posts", userQuery?.id]);

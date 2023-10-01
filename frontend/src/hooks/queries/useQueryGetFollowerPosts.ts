@@ -25,7 +25,6 @@ const useQueryGetFollowerPosts = () => {
     queryKey: ["/posts", "/follower"],
     queryFn: getFollowerPosts,
     getNextPageParam: (lastPage, _allParam) => {
-      console.log(lastPage.length);
       const lastPostIdx = lastPage.length - 1;
       return lastPage[lastPostIdx] ? lastPage[lastPostIdx].id : undefined;
     },

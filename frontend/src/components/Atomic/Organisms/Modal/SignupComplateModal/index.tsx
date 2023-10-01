@@ -3,7 +3,7 @@ import { Modal } from "@/components/Atomic/Molecules/Modal";
 import { useVerfiyModal } from "@/hooks/custom/useVerfiyModal";
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 
 const SignupComplateModal = ({
   isSignup,
@@ -12,12 +12,16 @@ const SignupComplateModal = ({
   isSignup: boolean;
   setIsSignup: Dispatch<SetStateAction<boolean>>;
 }) => {
-  console.log(isSignup);
   // query string 을 얻기위한 query 가져오기
   const { query } = useRouter();
   // 공용으로 사용가능한 virifyModal 에서 onClose 함수 가져오기
   const { onClose } = useVerfiyModal();
   // signup 되었는지 확인
+  useEffect(() => {
+    if (setIsSignup) {
+      setIsSignup(false);
+    }
+  }, [setIsSignup]);
 
   return (
     // query.modal 이 signupComplate 이면 화면에 보여줌, 아니면 보여주지 않음
@@ -39,7 +43,7 @@ const SignupComplateModal = ({
           }}
         >
           {/* query.userId 가 있고, isSignup 이 true 이어야 활성화*/}
-          {query.userId && isSignup ? (
+          {query.userId ? (
             <div
               className={classNames(
                 "flex flex-col items-center justify-center"
@@ -71,10 +75,7 @@ const SignupComplateModal = ({
                 </span>
               </div>
               <div>
-                <TextButton
-                  label="프로필 설정하러가기"
-                  href={`/?modal=registProfile&userId=${query.userId}`}
-                />
+                <TextButton label="로그인 하러가기" href={`/`} />
               </div>
             </div>
           ) : (

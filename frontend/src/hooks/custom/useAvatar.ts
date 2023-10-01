@@ -14,7 +14,13 @@ import { User } from "@/common/types/index.types";
 import { useDispatch } from "@/common/store";
 import { setPos } from "@/common/store/slices/posSlice";
 
-const useAvatar = ({ user, isEdit }: { user?: User; isEdit?: boolean }) => {
+const useAvatar = ({
+  user,
+  isEdit = false,
+}: {
+  user?: User;
+  isEdit?: boolean;
+}) => {
   // input 참조 Ref
   const inputRef = useRef<HTMLInputElement | null>(null);
   // image update 및 생성시 미리보기로 보여줄 dataUrl
@@ -32,7 +38,7 @@ const useAvatar = ({ user, isEdit }: { user?: User; isEdit?: boolean }) => {
     () =>
       /^data:image\/*/g.test(image)
         ? `${image}`
-        : `${process.env.NEXT_PUBLIC_BASE_URL}/avatar/${image}`,
+        : `${process.env.NEXT_PUBLIC_IMAGE_URL}/avatar/raw/${image}`,
     [image]
   );
 

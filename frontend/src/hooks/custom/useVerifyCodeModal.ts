@@ -21,12 +21,14 @@ const useVerifyCodeModal = () => {
         })
       );
       useFormReturnMethod?.reset();
+      useFormReturnMethod?.clearErrors();
       push(`${pathname}?modal=changePassword`);
+    } else {
+      useFormReturnMethod?.setError("root", {
+        type: "manual",
+        message: "코드가 일치하지 않아요. 다시 확인해주세요.",
+      });
     }
-    useFormReturnMethod?.setError("code", {
-      type: "manual",
-      message: "코드가 일치하지 않아요. 다시 확인해주세요.",
-    });
   };
   return {
     onClose,

@@ -50,35 +50,36 @@ const TopbarMenu = ({
     <div
       aria-label="topbar-menu"
       className={classNames(module.topbarMenu_wrapper)}
-      ref={parentRef}
     >
-      <div className={classNames(module.topbarMenu_list)}>
-        {childArr.map((child, idx) => {
-          if (child) {
-            const childElem = React.cloneElement(child as ReactElement, {
-              onClick: onClickSetIdx(
-                (child as ReactElement).props.onClick,
-                idx
-              ),
-            });
-            return (
-              <div
-                key={idx}
-                className={classNames(module.topbarMenu_item, marginStyle)}
-              >
-                {childElem}
-              </div>
-            );
-          }
-        })}
+      <div className={classNames(module.topbarMenu_list)} ref={parentRef}>
+        <div className="flex">
+          {childArr.map((child, idx) => {
+            if (child) {
+              const childElem = React.cloneElement(child as ReactElement, {
+                onClick: onClickSetIdx(
+                  (child as ReactElement).props.onClick,
+                  idx
+                ),
+              });
+              return (
+                <div
+                  key={idx}
+                  className={classNames(module.topbarMenu_item, marginStyle)}
+                >
+                  {childElem}
+                </div>
+              );
+            }
+          })}
+        </div>
+        <div
+          className={classNames(module.topbarMenu_bar)}
+          style={{
+            width: elemWidth,
+            transform: `translateX(${topbarX})`,
+          }}
+        ></div>
       </div>
-      <div
-        className={classNames(module.topbarMenu_bar)}
-        style={{
-          width: elemWidth,
-          transform: `translateX(${topbarX})`,
-        }}
-      ></div>
     </div>
   );
 };

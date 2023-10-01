@@ -19,6 +19,8 @@ router.post(
   auth.signUp
 );
 
+router.get("/isLoggedIn", auth.isLoggedIn);
+
 router.post("/login", isNotLoggedIn, auth.login);
 router.post("/logout", isLoggedIn, auth.logout);
 

@@ -43,7 +43,10 @@ const useTooltipListItem = () => {
   // document 객체가 sm 사이즈 라면,
   useEffect(() => {
     setIsSM(window.innerWidth <= 576);
-  }, [setIsSM, window.innerWidth]);
+  }, [
+    setIsSM,
+    // window.innerWidth
+  ]);
 
   return { isActive, isSM, tooltipRef, onClickToggleActive, data };
 };

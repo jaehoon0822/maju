@@ -29,7 +29,7 @@ const CoverImage = ({
           src={
             /^data:image\/*/g.test(image)
               ? image
-              : `${process.env.NEXT_PUBLIC_BASE_URL}/coverImage/${image}`
+              : `${process.env.NEXT_PUBLIC_IMAGE_URL}/coverImage/raw/${image}`
           }
           alt={`${user?.nick}님의 배경이미지`}
           sizes="lg:100vw md:80vw sm:40vw"

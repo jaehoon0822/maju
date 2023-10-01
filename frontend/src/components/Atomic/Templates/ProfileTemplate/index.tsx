@@ -27,7 +27,7 @@ const ProfileTemplate = () => {
   if (postData && userData) {
     return (
       <>
-        <div>
+        <div className="w-full">
           <div className={classNames("pb-4")}>
             <ProfileBox user={userData} />
           </div>

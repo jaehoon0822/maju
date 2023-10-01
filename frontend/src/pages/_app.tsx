@@ -4,12 +4,9 @@ import Head from "next/head";
 import { Providers } from "@/components/common/Providers";
 import { Hydrate } from "@tanstack/react-query";
 import PageWrapper from "@/components/common/PageWrapper";
-import { useRouter } from "next/router";
-import Layout from "@/components/Layout";
 import IsLogin from "@/components/common/IsLogin";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { pathname } = useRouter();
   return (
     <>
       <Head>
@@ -17,23 +14,11 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <Providers>
         <Hydrate state={pageProps.dehydratedState}>
-          {pathname === "/" ? (
-            <PageWrapper>
-              <Component {...pageProps} />
-            </PageWrapper>
-          ) : (
+          <PageWrapper>
             <IsLogin>
-              <Layout>
-                {pathname.startsWith("/home") ? (
-                  <Component {...pageProps} />
-                ) : (
-                  <PageWrapper>
-                    <Component {...pageProps} />
-                  </PageWrapper>
-                )}
-              </Layout>
+              <Component {...pageProps} />
             </IsLogin>
-          )}
+          </PageWrapper>
         </Hydrate>
       </Providers>
     </>

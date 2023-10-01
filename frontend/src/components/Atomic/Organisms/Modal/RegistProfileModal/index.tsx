@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, memo, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { FieldErrors, SubmitHandler } from "react-hook-form";
 import {
   profileSchema,
@@ -22,7 +22,6 @@ import { useQueryClient } from "@tanstack/react-query";
 const RegistProfilModal = ({
   isEdit = true,
   isPost = false,
-  setIsSignup,
 }: {
   isEdit?: boolean;
   isPost?: boolean;
@@ -31,7 +30,7 @@ const RegistProfilModal = ({
   // queryClient
   const queryClient = useQueryClient();
   // router
-  const { query, back } = useRouter();
+  const { query, push, pathname, back } = useRouter();
   // editor 의 Ref
   const editorRef = useRef<ReactQuill | null>(null);
   // user 의 정보를 가져옴
@@ -43,28 +42,37 @@ const RegistProfilModal = ({
 
   // onPostSubmit
   const onPostSubmit: SubmitHandler<profileSchemaType> = async (data) => {
-    if (setIsSignup) {
-      setIsSignup(false);
-    }
+    console.log(data);
     if (userData) {
       profileMutation!.mutate(
         {
           userId: query.userId as string,
-          avatar: data.avatar,
-          coverImage: data.coverImage,
+          avatar: data.avatar as string | undefined,
+          coverImage: data.coverImage as string | undefined,
           coverLetter: data.coverLetter,
         },
         {
-          onSuccess: () => {
-            queryClient.invalidateQueries(["/user"]);
-            queryClient.invalidateQueries(["/profile", userData.nick]);
-            back();
+          onSuccess: async () => {
+            await queryClient.invalidateQueries(["/user"]);
+            await queryClient.invalidateQueries(["/profile", userData.nick]);
+            if (pathname === "/") {
+              await push({
+                pathname: "/",
+                query: {
+                  modal: "signupComplate",
+                  userId: userData.id,
+                },
+              });
+            } else {
+              back();
+            }
           },
           onError: (error) => {
             if (error instanceof AxiosError) throw error;
           },
         }
       );
+      // push(`${pathname}?modal=signupComplate&userId=${userData?.id}`);
     }
   };
 
@@ -125,14 +133,14 @@ const RegistProfilModal = ({
                       />
                     </div>
                     <div
-                      className={classNames("absolute w-fit right-0 bottom-0")}
+                      className={classNames("absolute w-fit right-0 -bottom-4")}
                     >
                       <span className={classNames("text-red-500")}>
                         {errors && catchError(errors)}
                       </span>
                     </div>
                   </div>
-                  <div className={classNames("w-fit md:w-full ml-auto ")}>
+                  <div className={classNames("w-fit mt-4 md:w-full ml-auto ")}>
                     <Button label="등록하기" size="large" variant="primary" />
                   </div>
                 </Form>
@@ -170,4 +178,4 @@ const RegistProfilModal = ({
   );
 };
 
-export default memo(RegistProfilModal);
+export default RegistProfilModal;

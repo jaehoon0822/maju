@@ -23,7 +23,10 @@ app.set("PORT", process.env.PORT || 8080);
 // cors 설정
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      // , process.env.PUBLIC_IMAGE_URL || ""
+    ],
     credentials: true,
   })
 );

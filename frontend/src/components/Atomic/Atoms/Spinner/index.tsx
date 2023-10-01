@@ -1,16 +1,25 @@
 import React, { memo } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const Spinner = ({ isLoading }: { isLoading: boolean }) => {
+const Spinner = ({
+  isLoading,
+  color = "black",
+  size = 40,
+}: {
+  isLoading: boolean;
+  color?: string;
+  size?: number;
+}) => {
   return (
     <div>
       <ClipLoader
         loading={isLoading}
-        size={100}
+        color={color}
+        size={size}
         cssOverride={{
           display: "block",
           position: "absolute",
-          top: "50%",
+          top: "40%",
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
