@@ -30,6 +30,7 @@ const PostEditor = ({
     setErrors,
     editorRef,
     imageInputRef,
+    isSubmiting,
     errors,
     images,
     hashtags,
@@ -104,8 +105,10 @@ const PostEditor = ({
                 variant="primary"
                 disabled={useMemo(
                   () =>
-                    !!errors["content"]?.message || !!errors["img"]?.message,
-                  [errors]
+                    !!errors["content"]?.message ||
+                    !!errors["img"]?.message ||
+                    isSubmiting,
+                  [errors, isSubmiting]
                 )}
               />
             </div>

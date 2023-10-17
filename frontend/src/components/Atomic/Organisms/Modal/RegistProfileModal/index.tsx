@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { FieldErrors, SubmitHandler } from "react-hook-form";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { FieldErrors, SubmitHandler, UseFormReturn } from "react-hook-form";
 import {
   profileSchema,
   profileSchemaType,
@@ -16,8 +16,10 @@ import TextButton from "@/components/Atomic/Atoms/TextButton";
 import Editor from "@/components/Atomic/Atoms/Editor";
 import ReactQuill from "react-quill";
 import useMutationPostProfile from "@/hooks/mutations/useMutationPostProfile";
-import { AxiosError } from "axios";
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import path from "path";
+import { getPathname } from "@/common/utils/getPathname";
 
 const RegistProfilModal = ({
   isEdit = true,
@@ -30,19 +32,24 @@ const RegistProfilModal = ({
   // queryClient
   const queryClient = useQueryClient();
   // router
-  const { query, push, pathname, back } = useRouter();
+  const { query, push, pathname, back, asPath } = useRouter();
   // editor 의 Ref
   const editorRef = useRef<ReactQuill | null>(null);
   // user 의 정보를 가져옴
   const { data: userData } = useQueryGetUserById(query.userId as string);
   // profile 생성을 위한 mutation
   const profileMutation = useMutationPostProfile();
+  // useFormReturn
+  const [useFormReturn, setUseFormReturn] = useState<UseFormReturn>();
   // error 세팅
   const [errors, setErrors] = useState<FieldErrors>();
+  // image 가 Loading 중인지 확인하는 state
+  const [isCoverimageLoading, setIsCoverImageLoading] =
+    useState<boolean>(false);
+  const [isAvatarLoading, setIsAvatarLoading] = useState<boolean>(false);
 
   // onPostSubmit
   const onPostSubmit: SubmitHandler<profileSchemaType> = async (data) => {
-    console.log(data);
     if (userData) {
       profileMutation!.mutate(
         {
@@ -53,10 +60,17 @@ const RegistProfilModal = ({
         },
         {
           onSuccess: async () => {
-            await queryClient.invalidateQueries(["/user"]);
-            await queryClient.invalidateQueries(["/profile", userData.nick]);
+            await queryClient.invalidateQueries({
+              queryKey: ["/user"],
+            });
+            await queryClient.invalidateQueries({
+              queryKey: ["/profile", userData!.nick],
+            });
+            await queryClient.invalidateQueries({
+              queryKey: ["/posts"],
+            });
             if (pathname === "/") {
-              await push({
+              push({
                 pathname: "/",
                 query: {
                   modal: "signupComplate",
@@ -64,6 +78,9 @@ const RegistProfilModal = ({
                 },
               });
             } else {
+              // push({
+              //   pathname: `${asPath.split("?")[0]}`,
+              // });
               back();
             }
           },
@@ -72,7 +89,6 @@ const RegistProfilModal = ({
           },
         }
       );
-      // push(`${pathname}?modal=signupComplate&userId=${userData?.id}`);
     }
   };
 
@@ -99,31 +115,43 @@ const RegistProfilModal = ({
                 {isPost ? "프로필 수정" : "프로필 등록"}
               </h3>
               <div className={classNames("w-full flex flex-col")}>
-                <Form
-                  onSubmit={onPostSubmit}
-                  schema={profileSchema}
-                  setErrors={setErrors}
-                  defaultValues={
-                    userData
-                      ? {
-                          ...userData.profile,
-                        }
-                      : undefined
-                  }
-                >
-                  <div className={classNames("relative w-full")}>
-                    <div className={classNames("w-full h-48 ")}>
-                      <CoverImage user={userData} isEdit={isEdit} />
+                <div className={classNames("relative w-full")}>
+                  <div className={classNames("w-full h-48 ")}>
+                    <CoverImage
+                      user={userData}
+                      isEdit={isEdit}
+                      setIsLoading={setIsCoverImageLoading}
+                      useFormReturn={useFormReturn}
+                    />
+                  </div>
+                  <div className={classNames("relative px-10 md:px-4")}>
+                    <div
+                      className={classNames(
+                        "absolute -bottom-14 p-1 bg-white rounded-full"
+                      )}
+                    >
+                      <Avatar
+                        user={userData}
+                        size={"L"}
+                        isEdit={isEdit}
+                        setIsLoading={setIsAvatarLoading}
+                        useFormReturn={useFormReturn}
+                      />
                     </div>
-                    <div className={classNames("relative px-10 md:px-4")}>
-                      <div
-                        className={classNames(
-                          "absolute -bottom-14 p-1 bg-white rounded-full"
-                        )}
-                      >
-                        <Avatar user={userData} size={"L"} isEdit={isEdit} />
-                      </div>
-                    </div>
+                  </div>
+                  <Form
+                    onSubmit={onPostSubmit}
+                    schema={profileSchema}
+                    setErrors={setErrors}
+                    setUseFormReturnMethod={setUseFormReturn}
+                    defaultValues={
+                      userData
+                        ? {
+                            ...userData.profile,
+                          }
+                        : undefined
+                    }
+                  >
                     <div className={classNames("pt-10")}>
                       <Editor
                         name="coverLetter"
@@ -133,17 +161,24 @@ const RegistProfilModal = ({
                       />
                     </div>
                     <div
-                      className={classNames("absolute w-fit right-0 -bottom-4")}
+                      className={classNames("w-fit mt-8 md:w-full ml-auto ")}
                     >
-                      <span className={classNames("text-red-500")}>
-                        {errors && catchError(errors)}
-                      </span>
+                      <Button
+                        label="등록하기"
+                        size="large"
+                        variant="primary"
+                        disabled={isCoverimageLoading || isAvatarLoading}
+                      />
                     </div>
+                  </Form>
+                  <div
+                    className={classNames("absolute w-fit right-0 -bottom-4")}
+                  >
+                    <span className={classNames("text-red-500")}>
+                      {errors && catchError(errors)}
+                    </span>
                   </div>
-                  <div className={classNames("w-fit mt-4 md:w-full ml-auto ")}>
-                    <Button label="등록하기" size="large" variant="primary" />
-                  </div>
-                </Form>
+                </div>
               </div>
             </>
           ) : (

@@ -22,11 +22,6 @@ const ScrollTopButton = () => {
   }, [query.modal]);
 
   return (
-    // <div
-    //   className={classNames(
-    //     "fixed  justify-center items-center flex right-1/2 translate-x-1/2 bottom-8 w-[1024px] md:w-full md:right-0 md:-translate-x-10 sm:w-full sm:bottom-24 z-0"
-    //   )}
-    // >
     <div
       className={classNames(
         "fixed justify-center self-end flex bottom-10 sm:bottom-28 place-items-end z-50"

@@ -11,22 +11,13 @@ const Spinner = ({
   size?: number;
 }) => {
   return (
-    <div>
-      <ClipLoader
-        loading={isLoading}
-        color={color}
-        size={size}
-        cssOverride={{
-          display: "block",
-          position: "absolute",
-          top: "40%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-    </div>
+    <ClipLoader
+      loading={isLoading}
+      color={color}
+      size={size}
+      aria-label="Loading Spinner"
+      data-testid="loader"
+    />
   );
 };
 

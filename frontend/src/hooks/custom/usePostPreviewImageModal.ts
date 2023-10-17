@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import useQueryGetPostByPostId from "../queries/useQueryGetPostByPostId";
 import { useDispatch } from "react-redux";
 import { setPos } from "@/common/store/slices/posSlice";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const usePostPreviewImageModal = () => {
   const imageModalRef = useRef<HTMLDivElement | null>(null);

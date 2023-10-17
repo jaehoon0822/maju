@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { OnLoadingComplete } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import ImageNotSupport from "@mui/icons-material/ImageNotSupported";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useRef, useState } from "react";
 import Spinner from "../Spinner";
 
 interface PreveiwImgProps {
@@ -61,6 +61,7 @@ const PreviewImg = ({ img, type }: PreveiwImgProps) => {
           height={imageSize.height}
           sizes="(min-width:1200px) 1200px, (max-width:1200px) 960px (max-width:960px) 576px (max-width:576px) 100vw"
           loader={imageLoader}
+          priority={true}
           alt={img}
           className={classNames("object-contain transition-all", {
             "opacity-0 invisible": isLoading,
@@ -73,7 +74,7 @@ const PreviewImg = ({ img, type }: PreveiwImgProps) => {
       {isLoading && retryCount < 3 ? (
         <div className="flex justify-center items-center fixed bg-black/70 w-screen h-screen animate-fadeIn">
           <div className="relative bottom-20">
-            <div className="absolute w-max -left-12 bottom-4">
+            <div className="absolute w-max -left-12 top-16">
               <span className="text-white block">이미지 불러오는중...</span>
             </div>
             <Spinner color="white" isLoading={isLoading} />

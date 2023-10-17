@@ -1,4 +1,4 @@
-import { MouseEvent } from "react";
+import { MouseEvent, useEffect } from "react";
 import classNames from "classnames";
 import Image from "next/image";
 import PhotoSizeSelectIcon from "@mui/icons-material/PhotoSizeSelectActual";
@@ -15,7 +15,7 @@ const Img = ({
   img: string;
   isHover?: boolean;
   onClick?: (e: MouseEvent<HTMLDivElement>) => void;
-  col?: "w-1/2" | "w-1/4" | "w-full";
+  col?: "w-1/2" | "w-full";
 }) => {
   const {
     imgRef,
@@ -44,11 +44,13 @@ const Img = ({
       {retryCount < 3 ? (
         <>
           <Image
+            key={imageUrl}
             src={imageUrl}
             alt={img}
             ref={imgRef}
             fill
-            sizes="lg:100vw"
+            loading="lazy"
+            sizes="lg:100vw md:80vw sm:40vw"
             blurDataURL={imageBlur}
             placeholder="blur"
             onLoadingComplete={onLoadignComplateHandler}
@@ -57,8 +59,8 @@ const Img = ({
               "object-left pr-2 pt-2",
               "object-cover rounded-xl transition-all",
               {
-                "opacity-0 invisible": isLoading,
-                "opacity-100 visible": !isLoading,
+                "scale-100 blur-sm grayscale": isLoading,
+                "scale-100 blur-0 grayscale-0": !isLoading,
               }
             )}
           />
@@ -86,13 +88,13 @@ const Img = ({
             </div>
           ) : null}
           <div
-            className={classNames("relative rounded-xl mt-2", {
-              "bg-black/5": isLoading,
-            })}
-            style={{
-              width: "calc(100% - 8px)",
-              height: "calc(100% - 8px)",
-            }}
+            className={classNames(
+              "absolute top-0 flex justify-center items-center w-full h-full",
+              {
+                "blur-sm bg-gray-100 scale-105 opacity-100": isLoading,
+                "opacity-0": !isLoading,
+              }
+            )}
           >
             <Spinner isLoading={isLoading} color="#3f3f3f" />
           </div>

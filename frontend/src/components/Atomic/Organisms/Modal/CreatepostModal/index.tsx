@@ -50,7 +50,7 @@ const CreatePostModal = () => {
     >
       <div
         className={classNames(
-          "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 max-w-[1200px] md:w-3/4 max-h-[65vh] py-4 px-4 bg-white rounded-md sm:max-h-[100vh]"
+          "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-scroll z-50 max-w-[1200px] max-h-[65vh] md:w-3/4 py-4 px-4 bg-white rounded-md sm:min-h-[100vh] sm:w-[100vw]"
         )}
       >
         <ModalTop disabledLogo={true} onClose={onClose} />

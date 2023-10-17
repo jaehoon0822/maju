@@ -1,5 +1,6 @@
 import { useDispatch } from "@/common/store";
 import { setCommentModalPos } from "@/common/store/slices/commentModalPosSlice";
+import { setPos } from "@/common/store/slices/posSlice";
 import useGetPathname from "@/hooks/custom/useGetPathname";
 import classNames from "classnames";
 import { useRouter } from "next/router";
@@ -16,7 +17,11 @@ const Backdrop = ({
   const dispatch = useDispatch();
   const onClose = useCallback(() => {
     back();
-    if (query.modal === "comments") dispatch(setCommentModalPos(0));
+    if (query.modal === "comments") {
+      dispatch(setCommentModalPos(0));
+    } else {
+      dispatch(setPos(window.scrollTo));
+    }
   }, [query.modal]);
 
   const isVisible = isActive !== undefined ? isActive : query.modal;

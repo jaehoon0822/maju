@@ -35,10 +35,9 @@ const Editor = ({
       // 수정된 값을 상태에 저장
       // react hook form 을 사용하므로,
       // 변경된 data 를 react hook from 에서 인식할수 있도록
-      // field.onChange 로 값을 넘김
       field.onChange(data);
     },
-    [field.value]
+    [field, errors, clearErrors]
   );
 
   useEffect(() => {

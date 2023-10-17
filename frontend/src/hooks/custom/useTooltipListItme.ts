@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useQueryGetUser from "../queries/useQueryGetUser";
+import { useRouter } from "next/router";
 
 const useTooltipListItem = () => {
+  const route = useRouter();
   const { data } = useQueryGetUser();
   // sm szie 인지 확인하는 state
   const [isSM, setIsSM] = useState<boolean>(false);
@@ -32,6 +34,16 @@ const useTooltipListItem = () => {
     [setIsActive]
   );
 
+  useEffect(() => {
+    const onChangeRoute = () => {
+      setIsActive(false);
+    };
+    route.events.on("routeChangeComplete", onChangeRoute);
+    return () => {
+      route.events.off("routeChangeComplete", onChangeRoute);
+    };
+  }, []);
+
   // document 객체에 onClikcOutsideClick 이벤트 등록
   useEffect(() => {
     document.addEventListener("click", onClickOutsideClick);
@@ -43,10 +55,7 @@ const useTooltipListItem = () => {
   // document 객체가 sm 사이즈 라면,
   useEffect(() => {
     setIsSM(window.innerWidth <= 576);
-  }, [
-    setIsSM,
-    // window.innerWidth
-  ]);
+  }, [setIsSM, window.innerWidth]);
 
   return { isActive, isSM, tooltipRef, onClickToggleActive, data };
 };

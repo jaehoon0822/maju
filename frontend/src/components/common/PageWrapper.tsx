@@ -7,10 +7,10 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   const [routerChange, setRouterChange] = useState(false);
 
   useEffect(() => {
-    const handleStart = (url: any) => {
+    const handleStart = () => {
       setRouterChange(true);
     };
-    const handleComplate = (url: any) => {
+    const handleComplate = () => {
       setRouterChange(false);
     };
 

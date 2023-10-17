@@ -3,23 +3,28 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./DockerFiles/backend/DockerFile.dev
+      dockerfile: ./infra/DockerFiles/backend/DockerFile.dev
     ports:
       - 8080:8080
-    env_file:
-      ./env/backend/.env.dev
+    env_file: ./env/backend/.env.dev
     volumes:
       - ./backend:/app
+      # production 환경
+      #- ./backend
       # - /app/node_modules
   frontend:
     build:
       context: .
-      dockerfile: ./DockerFiles/frontend/DockerFile.dev
+      dockerfile: ./infra/DockerFiles/frontend/DockerFile.prod
     ports:
       - 3000:3000
     volumes:
       - ./frontend:/app
+      # production 환경
+      #- ./backend
       # - /app/node_modules
+  nginx:
+    image: nginx
   db:
     image: mariadb
     restart: always

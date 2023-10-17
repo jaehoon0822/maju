@@ -9,6 +9,8 @@ const useQueryGetIsLoggedIn = () => {
   const { data, error, isError, isFetched, isLoading, isSuccess } = useQuery({
     queryKey: ["/isLoggedIn"],
     queryFn: isLoggedIn,
+    retry: 3,
+    retryDelay: 500,
   });
 
   return { data, error, isError, isFetched, isLoading, isSuccess };

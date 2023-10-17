@@ -2,9 +2,9 @@
   "name": "lambda",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc ./index.tsx"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

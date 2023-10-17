@@ -5,13 +5,16 @@ const useMutationCreateAvatar = () => {
   const creatAvatar = async (data: File) => {
     const formData = new FormData();
     formData.append("avatar", data);
-    const { data: avatar } = await axiosClient.post(
+    const { data: avatar } = await axiosClient.post<{ image: string }>(
       "/user/profile/avatar",
       formData
     );
     return avatar;
   };
-  const mutation = useMutation(creatAvatar);
+  const mutation = useMutation(creatAvatar, {
+    retry: 5,
+    retryDelay: 1500,
+  });
   return mutation;
 };
 

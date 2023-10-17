@@ -35,6 +35,8 @@ const ProfileBox = ({
     );
   }
 
+  console.log("nick data", user);
+
   return (
     <div className={classNames("w-full")}>
       {/*  coverImage */}

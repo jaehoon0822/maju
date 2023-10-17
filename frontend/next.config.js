@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 /** @type {import('@next/bundle-analyzer')} */
 /** @type {import('@plaiceholder/next')} */
+const path = require("path");
 
 // withBundleAnalyzer({
 //   enabled: process.env.ANALYZE === "true",
@@ -10,8 +11,8 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {},
   images: {
-    deviceSizes: [1200, 960, 576, 348, 140],
-    imageSizes: [1200, 960, 576, 348, 140],
+    deviceSizes: [1200, 960, 576, 348],
+    imageSizes: [1200, 960, 576, 348],
     remotePatterns: [
       {
         protocol: "http",
@@ -20,14 +21,19 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "maju-bucket.s3.ap-northeast-2.amazonaws.com",
+        hostname: "d3o99mc8r0f091.cloudfront.net",
       },
     ],
   },
-  webpack(config) {
-    return {
-      ...config,
-    };
+  // webpack(config) {
+  //   return {
+  //     ...config,
+  //   };
+  // },
+  webpack(config, { defaultLoaders }) {
+    config.resolve.modules.push(__dirname);
+    config.resolve.modules.push(path.resolve("./src"));
+    return config;
   },
 };
 

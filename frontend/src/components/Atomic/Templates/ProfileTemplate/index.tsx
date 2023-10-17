@@ -71,4 +71,4 @@ const ProfileTemplate = () => {
   }
 };
 
-export default memo(ProfileTemplate);
+export default ProfileTemplate;

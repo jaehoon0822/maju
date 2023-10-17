@@ -9,19 +9,22 @@ import CommentsModal from "../Atomic/Organisms/Modal/CommentsModal.ts";
 import PostPreviewImageModal from "../Atomic/Organisms/Modal/PostPreviewImageModal";
 import UserPreviewCoverImageModal from "../Atomic/Organisms/Modal/UserPreviewCoverImageModal";
 import RegistProfilModal from "../Atomic/Organisms/Modal/RegistProfileModal";
-import { useSelector } from "@/common/store";
+import { useDispatch, useSelector } from "@/common/store";
 import Backdrop from "../Atomic/Atoms/Backdrop";
 import ScrollTopButton from "../Atomic/Atoms/ScrollTopButton";
 import DeleteCommentModal from "../Atomic/Organisms/Modal/DeleteCommentModal";
 import CreatePostModal from "../Atomic/Organisms/Modal/CreatepostModal";
+import { setPos } from "@/common/store/slices/posSlice";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const { query, ...router } = useRouter();
   const { pos } = useSelector((state) => state.pos);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const windowScroll = () => {
       window.scrollTo({ top: pos });
+      dispatch(setPos(0));
     };
     router.events.on("routeChangeComplete", windowScroll);
     return () => router.events.off("routeChangeComplete", windowScroll);

@@ -4,7 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 const createImage = async (data: File[]) => {
   const formData = new FormData();
   data.map((file) => formData.append("img", file));
-  const { data: imageData } = await axiosClient.post("/post/img", formData);
+  const { data: imageData } = await axiosClient.post("/post/img", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return imageData;
 };
 

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import multerS3 from "multer-s3";
 import path from "path";
 import s3, { bucket } from "@/aws";
-import { convertImageToWebp } from "@/utilities/convertImageToWebp";
+import { convertImage } from "@/utilities/convertImage";
 import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 
 // S3 post storage 연결
@@ -11,17 +11,10 @@ export const postStorage = multerS3({
   s3: s3,
   bucket,
   key: async (_req, file, cb) => {
-    const convertFile = await convertImageToWebp({ file });
-    const fileName = `post/raw/${uuidv4()}.webp`;
-
-    const uploadInput: PutObjectCommandInput = {
-      Bucket: bucket,
-      Key: fileName,
-      Body: convertFile,
-    };
-
-    s3.send(new PutObjectCommand(uploadInput));
-    cb(null, fileName);
+    const ext = file.mimetype.split("/")[1];
+    const fileName = uuidv4();
+    const key = `post/raw/${fileName}.webp`;
+    cb(null, key);
   },
 });
 
@@ -29,9 +22,11 @@ export const postStorage = multerS3({
 export const avatarStorage = multerS3({
   s3: s3,
   bucket: "maju-bucket",
-  key: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `avatar/raw/${uuidv4()}${ext}`);
+  key: async (_req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    const fileName = uuidv4();
+    const key = `avatar/raw/${fileName}.webp`;
+    cb(null, key);
   },
 });
 
@@ -39,9 +34,11 @@ export const avatarStorage = multerS3({
 export const coverImageStorage = multerS3({
   s3: s3,
   bucket: "maju-bucket",
-  key: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `coverImage/raw/${uuidv4()}${ext}`);
+  key: async (_req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    const fileName = uuidv4();
+    const key = `coverImage/raw/${fileName}.webp`;
+    cb(null, key);
   },
 });
 

@@ -148,7 +148,6 @@ export class AuthController {
   }
 
   async isLoggedIn(req: Request, res: Response) {
-    console.log("------user", req.user);
     return res.status(200).send((req.user as User) ? true : false);
   }
 }

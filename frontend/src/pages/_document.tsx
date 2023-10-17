@@ -37,7 +37,11 @@ export default function Document() {
           color="#5bbad5"
         />
       </Head>
-      <body>
+      <body
+        style={{
+          overflowY: "scroll",
+        }}
+      >
         <Main />
         <NextScript />
       </body>

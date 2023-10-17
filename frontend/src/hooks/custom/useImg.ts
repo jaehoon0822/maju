@@ -3,17 +3,18 @@ import { useEffect, useRef, useState } from "react";
 
 const useImg = ({ img }: { img: string }) => {
   const imgRef = useRef<HTMLImageElement>(null);
-  const [deviceWidth, setDiviceWidth] = useState<number>(0);
+  const isMp4 = img.split(".")[1] === "mp4";
+  const [deviceWidth, setDeviceWidth] = useState<number>(0);
   const [retryCount, setRetryCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const onLoadignComplateHandler: OnLoadingComplete = (img) => {
+  const onLoadignComplateHandler: OnLoadingComplete = () => {
     setIsLoading(false);
   };
 
   const onErrorHanlder = () => {
     setIsLoading(true);
-    if (retryCount < 3) {
+    if (retryCount < 10) {
       setTimeout(() => {
         setRetryCount((prev) => prev + 1);
       }, 1500);
@@ -28,11 +29,12 @@ const useImg = ({ img }: { img: string }) => {
     "data:image/;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAcAAA0ACbYD1v4AAAAASUVORK5CYII=";
 
   useEffect(() => {
-    setDiviceWidth(window.innerWidth);
-  }, [window]);
+    setDeviceWidth(window.innerWidth);
+  });
 
   return {
     imgRef,
+    isMp4,
     onErrorHanlder,
     onLoadignComplateHandler,
     isLoading,

@@ -1,0 +1,68 @@
+#-------- Install dependencies ------
+
+# import node:16 image
+FROM node:16-alpine as deps
+# workdir 은 /app
+WORKDIR /app
+# package.json, package.lock.json 복사 -> /app
+COPY ./frontend/package* ./
+# npm ci --production 
+RUN npm ci --production
+
+#-------- Build Nextjs ------
+
+# import node:16 image
+FROM node:16-alpine as builder
+# https://github.com/nodejs/docker-node#nodealpine
+RUN apk add --no-cache libc6-compat
+# workdir 은 /app
+WORKDIR /app
+
+# system 에 user, group 추가 
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# frontend 복사 
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --chown=nextjs:nodejs ./frontend ./
+
+RUN ls -al
+
+RUN npm run build
+
+RUN ls -al ./.next/cache
+
+#-------- runner Nextjs ------
+
+# import node:16 image
+FROM node:16-alpine as runner
+# Env production 설정
+WORKDIR /app
+
+ENV NODE_ENV production
+
+# system 에 user, group 추가 
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# builder 에서 copy
+# --chown 을 사용하여 permision 변경
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+# node_modules 복사 
+COPY --from=builder /app/node_modules ./node_modules
+# package.json 복사
+COPY --from=builder /app/package.json ./package.json
+
+# user 를 nextjs 로 변경
+# permisstion 해결
+USER nextjs
+
+# 3000 포트 expose
+EXPOSE 3000
+
+# 환경변수 PORT = 3000
+ENV PORT 3000
+
+# npm start 를 실행
+CMD [ "npm", "start" ]
+

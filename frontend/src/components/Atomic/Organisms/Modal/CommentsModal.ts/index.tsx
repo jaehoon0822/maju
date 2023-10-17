@@ -20,12 +20,13 @@ import {
 } from "@/common/store/slices/commentModalPosSlice";
 import { Post as PostType } from "@/common/types/index.types";
 import Post from "../../Post";
+import { setPos } from "@/common/store/slices/posSlice";
 
 const CommentsModal = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const commentsModalRef = useRef<HTMLDivElement | null>(null);
-  const { pos } = useSelector((state) => state.pos);
+  const posDispatch = useDispatch();
   const { commentModalPos } = useSelector((state) => state.commentModalpos);
   const { query, back, push, asPath } = useRouter();
   const { data: postData, isSuccess } = useQueryGetPostByPostId(
@@ -42,13 +43,14 @@ const CommentsModal = () => {
   const onClickImageModal = () => {
     if (commentsModalRef.current) {
       dispatch(setCommentModalPos(commentsModalRef.current.scrollTop));
+      posDispatch(setPos(window.scrollY));
     }
     push(`${pathname}/?modal=image/post&postId=${query.postId}`);
   };
 
   // CommentModal 클릭시, scroll 위치 지정이후, 뒤로가기
   const onClose = () => {
-    window.scrollTo({ top: pos });
+    posDispatch(setPos(window.scrollY));
     dispatch(setCommentModalPos(0));
     back();
   };

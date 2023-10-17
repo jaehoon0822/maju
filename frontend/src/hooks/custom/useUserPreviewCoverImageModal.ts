@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
 import { useRef } from "react";
-import { useSelector } from "@/common/store";
+import { useDispatch, useSelector } from "@/common/store";
 import useQueryGetUserById from "../queries/useQueryGetUserById";
+import { setPos } from "@/common/store/slices/posSlice";
 
 const useUserPreviewCoverImageModal = () => {
   const imageModalRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useDispatch();
   const { commentModalRef, commentModalPos } = useSelector(
     (state) => state.commentModalpos
   );
@@ -18,6 +20,9 @@ const useUserPreviewCoverImageModal = () => {
     back();
     if (query.modal === "comments" && commentModalRef) {
       commentModalRef.scrollTo({ top: commentModalPos });
+      dispatch(setPos(window.scrollTo));
+    } else {
+      dispatch(setPos(window.scrollTo));
     }
     document.body.style.overflow = "auto";
   };

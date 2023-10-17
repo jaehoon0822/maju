@@ -369,22 +369,27 @@ export class PostController {
         userId: (req.user as User).id,
       });
 
-      const commendInput = post.img.reduce(
-        (input, key) => {
-          input.Delete?.Objects?.push({ Key: `post/raw/${key}` });
-          input.Delete?.Objects?.push({ Key: `post/w140/${key}` });
-          input.Delete?.Objects?.push({ Key: `post/w600/${key}` });
-          return input;
-        },
-        {
-          Bucket: "maju-bucket",
-          Delete: {
-            Objects: [] as Bucket,
+      if (post.img.length > 0) {
+        const commendInput = post.img.reduce(
+          (input, key) => {
+            input.Delete?.Objects?.push({ Key: `post/raw/${key.img}` });
+            input.Delete?.Objects?.push({ Key: `post/w348/${key.img}` });
+            input.Delete?.Objects?.push({ Key: `post/w576/${key.img}` });
+            input.Delete?.Objects?.push({ Key: `post/w960/${key.img}` });
+            return input;
           },
-        } as DeleteObjectsCommandInput
-      );
+          {
+            Bucket: "maju-bucket",
+            Delete: {
+              Objects: [] as Bucket,
+            },
+          } as DeleteObjectsCommandInput
+        );
 
-      await s3.send(new DeleteObjectsCommand(commendInput));
+        const s3DeletedResult = await s3.send(
+          new DeleteObjectsCommand(commendInput)
+        );
+      }
 
       const deletedResult = await postService.removePost({
         postId: id,

@@ -17,7 +17,7 @@ const UpdatePostModal = () => {
       })}
     >
       {isMyPost ? (
-        <Modal onClose={onClose}>
+        <Modal onClose={onClose} scrollAuto={true}>
           <div
             className={classNames("w-[80%]", {
               "left-0 opacity-100": query.modal,

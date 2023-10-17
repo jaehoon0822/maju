@@ -5,6 +5,7 @@ import Spinner from "../Atomic/Atoms/Spinner";
 import { useRouter } from "next/router";
 import useQueryGetIsLoggedIn from "@/hooks/queries/useQueryGetIsLoggedIn";
 import Layout from "../Layout";
+import classNames from "classnames";
 
 const IsLogin = ({ children }: { children: React.ReactNode }) => {
   const { pathname, ...router } = useRouter();
@@ -27,7 +28,11 @@ const IsLogin = ({ children }: { children: React.ReactNode }) => {
 
   if (isLoading) {
     return (
-      <div>
+      <div
+        className={classNames(
+          "fixed w-full h-full flex justify-center items-center"
+        )}
+      >
         <Spinner isLoading={isLoading} />
       </div>
     );

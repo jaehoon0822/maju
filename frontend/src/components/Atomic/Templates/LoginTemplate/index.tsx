@@ -59,6 +59,7 @@ const LoginTemplate = () => {
               id="email"
               label="email"
               name="email"
+              defaultValue={"qqq@qqq.com"}
               placeholder="이메일을 입력해주세요."
             />
             <Input
@@ -66,6 +67,7 @@ const LoginTemplate = () => {
               label="password"
               name="password"
               type="password"
+              defaultValue={"123456qwe!"}
               placeholder="패스워드를 입력해주세요."
             />
             <div className={classNames("relative flex flex-col sm:mt-4")}>
